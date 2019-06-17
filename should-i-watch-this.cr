@@ -31,11 +31,16 @@ channels = {
   tomato: Channel(Nil).new
 }
 
+meta_critic_score = nil
 imdb_rating = nil
 spawn do
   # omdb
   json = Crest.get("http://www.omdbapi.com/?t=captive%20state&apikey=af8f7bfb").body
-  imdb_id = JSON.parse(json)["imdbID"]
+  omdb = JSON.parse(json)
+  imdb_id = omdb["imdbID"]
+
+  # metacritic from omdb
+  meta_critic_score = omdb["Metascore"]
 
   # imdb
   imdb_html = html("https://www.imdb.com/title/#{imdb_id}")
@@ -79,4 +84,8 @@ puts <<-DOC
    # imdb
 
    rating:   #{imdb_rating}
+
+   # metacritic
+
+   score:    #{meta_critic_score}
 DOC
