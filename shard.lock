@@ -1,0 +1,10 @@
+version: 1.0
+shards:
+  crest:
+    github: mamantoha/crest
+    version: 0.20.0
+
+  myhtml:
+    github: kostya/myhtml
+    version: 1.4.2
+
