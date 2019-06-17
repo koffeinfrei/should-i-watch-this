@@ -64,6 +64,7 @@ end
 
 progress_text = "Fetching movie 'Captive State'"
 done_text = "Movie 'Captive State':"
+
 spawn do
   progress(progress_text)
   channels[:imdb].receive
@@ -73,6 +74,15 @@ spawn do
 end
 
 channels[:progress].receive
+
+recommendation_text, recommendation_emoji =
+  if score[:imdb] > 7 && score[:tomato] > 70 && score[:tomato_audience] > 70 && score[:meta] > 70
+    ["Go ahead, you'll probably enjoy this!", ":+1:"]
+  elsif score[:imdb] < 5 && score[:tomato] > 50 && score[:tomato_audience] > 50 && score[:meta] > 50
+    ["Be prepared for something aweful.", ":-1:"]
+  else
+    ["Not sure, you may fall asleep.", ":zzz:"]
+  end
 
 puts <<-DOC
 \r   Movie 'Captive State' #{" " * (progress_text.size - done_text.size)}
@@ -89,4 +99,12 @@ puts <<-DOC
    #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
 
        score:        #{score[:meta]}/100
+
+
+
+   Should I watch this?
+
+       #{Emoji.emojize(recommendation_emoji)}  #{recommendation_text}
+
+
 DOC
