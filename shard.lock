@@ -4,6 +4,10 @@ shards:
     github: mamantoha/crest
     version: 0.20.0
 
+  emoji:
+    github: veelenga/emoji.cr
+    commit: 808f66db7078200a69a1a01998b8a12cc802764b
+
   myhtml:
     github: kostya/myhtml
     version: 1.4.2

@@ -2,6 +2,7 @@ require "json"
 
 require "crest"
 require "myhtml"
+require "emoji"
 
 def html(url)
   html = Crest.get(url).body
@@ -43,6 +44,8 @@ spawn do
   meta_critic_score = omdb["Metascore"]
 
   # imdb
+  # we scrape the score from the imdb website, as the value in omdb is not
+  # really up-to-date
   imdb_html = html("https://www.imdb.com/title/#{imdb_id}")
   imdb_rating = css(imdb_html, %{[itemprop="ratingValue"]})
 
@@ -76,16 +79,16 @@ channels[:progress].receive
 puts <<-DOC
 \r   Movie 'Captive State' #{" " * (progress_text.size - done_text.size)}
 
-   # rotten tomatoes
+   #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
 
-   score:    #{tomato_score}
-   audience: #{tomato_audience}
+       score:        #{tomato_score}
+       audience:     #{tomato_audience}
 
-   # imdb
+   #{Emoji.emojize(":clapper:")}  IMDb
 
-   rating:   #{imdb_rating}
+       rating:       #{imdb_rating}
 
-   # metacritic
+   #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
 
-   score:    #{meta_critic_score}
+       score:        #{meta_critic_score}
 DOC

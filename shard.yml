@@ -12,5 +12,8 @@ dependencies:
     github: kostya/myhtml
   crest:
     github: mamantoha/crest
+  emoji:
+    github: veelenga/emoji.cr
+    branch: master
 
 license: GPL-3.0
