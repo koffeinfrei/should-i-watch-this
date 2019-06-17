@@ -11,7 +11,7 @@ def html(url)
 end
 
 def css(html, expression)
-  html.css(expression).first.inner_text.strip
+  html.css(expression).first.inner_text.strip.gsub(/[^0-9.]/, "")
 end
 
 SPINNER_CHARACTERS = %w(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
@@ -32,8 +32,8 @@ channels = {
   tomato: Channel(Nil).new
 }
 
-meta_critic_score = nil
-imdb_rating = nil
+score = {} of Symbol => Float64 | Int32
+
 spawn do
   # omdb
   json = Crest.get("http://www.omdbapi.com/?t=captive%20state&apikey=af8f7bfb").body
@@ -41,25 +41,23 @@ spawn do
   imdb_id = omdb["imdbID"]
 
   # metacritic from omdb
-  meta_critic_score = omdb["Metascore"]
+  score[:meta] = omdb["Metascore"].to_s.to_i
 
   # imdb
   # we scrape the score from the imdb website, as the value in omdb is not
   # really up-to-date
   imdb_html = html("https://www.imdb.com/title/#{imdb_id}")
-  imdb_rating = css(imdb_html, %{[itemprop="ratingValue"]})
+  score[:imdb] = css(imdb_html, %{[itemprop="ratingValue"]}).to_f
 
   channels[:imdb].send(nil)
 end
 
-tomato_score = nil
-tomato_audience = nil
 # tomato
 spawn do
   tomato_html = html("https://www.rottentomatoes.com/m/captive_state")
 
-  tomato_score = css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage")
-  tomato_audience = css(tomato_html, ".audience-score .mop-ratings-wrap__percentage")
+  score[:tomato] = css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage").to_i
+  score[:tomato_audience] = css(tomato_html, ".audience-score .mop-ratings-wrap__percentage").to_i
 
   channels[:tomato].send(nil)
 end
@@ -81,14 +79,14 @@ puts <<-DOC
 
    #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
 
-       score:        #{tomato_score}
-       audience:     #{tomato_audience}
+       score:        #{score[:tomato]}%
+       audience:     #{score[:tomato_audience]}%
 
    #{Emoji.emojize(":clapper:")}  IMDb
 
-       rating:       #{imdb_rating}
+       rating:       #{score[:imdb]}/10
 
    #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
 
-       score:        #{meta_critic_score}
+       score:        #{score[:meta]}/100
 DOC
