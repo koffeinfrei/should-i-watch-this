@@ -7,10 +7,48 @@ require "cli"
 require "string_inflection"
 require "inflector/core_ext"
 
-class Fetcher
+class Progress
   SPINNER_CHARACTERS = %w(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
 
-	@title : String
+  def initialize(title : String)
+    @title = title
+  end
+
+  def start
+    show_spinner
+  end
+
+  def stop(result_text)
+    puts <<-DOC
+      \r   Movie '#{@title}' #{" " * (progress_text.size - done_text.size)}
+
+      #{result_text}
+
+
+      DOC
+  end
+
+  def progress_text
+    "Fetching movie '#{@title}'"
+  end
+
+  def done_text
+    "Movie '#{@title}':"
+  end
+
+  def show_spinner
+    while
+      0.upto(SPINNER_CHARACTERS.size - 1) do |index|
+        STDOUT << "\r"
+        STDOUT << "#{SPINNER_CHARACTERS[index]}  #{progress_text}"
+        sleep 0.1
+      end
+    end
+  end
+end
+
+class Fetcher
+  @title : String
 
   def initialize(title : String)
     @title = title.titleize
@@ -26,17 +64,9 @@ class Fetcher
     html.css(expression).first.inner_text.strip.gsub(/[^0-9.]/, "")
   end
 
-  def progress(text)
-    while
-      0.upto(SPINNER_CHARACTERS.size - 1) do |index|
-        STDOUT << "\r"
-        STDOUT << "#{SPINNER_CHARACTERS[index]}  #{text}"
-        sleep 0.1
-      end
-    end
-  end
-
   def run
+    progress = Progress.new(@title)
+
     channels = {
       progress: Channel(Nil).new,
       imdb: Channel(Nil).new,
@@ -44,6 +74,7 @@ class Fetcher
     }
 
     score = {} of Symbol => Float64 | Int32
+    error = nil
 
     spawn do
       # omdb
@@ -52,6 +83,16 @@ class Fetcher
         params: { :t => @title, :apikey => "af8f7bfb" }
       ).body
       omdb = JSON.parse(json)
+
+      if omdb["Response"] == "False"
+        error = json["Error"]
+
+        # cancel all requests
+        channels.each_value do |channel|
+          channel.send(nil)
+        end
+      end
+
       imdb_id = omdb["imdbID"]
 
       # metacritic from omdb
@@ -76,11 +117,9 @@ class Fetcher
       channels[:tomato].send(nil)
     end
 
-    progress_text = "Fetching movie '#{@title}'"
-    done_text = "Movie '#{@title}':"
-
     spawn do
-      progress(progress_text)
+      progress.start
+
       channels[:imdb].receive
       channels[:tomato].receive
 
@@ -89,39 +128,41 @@ class Fetcher
 
     channels[:progress].receive
 
-    recommendation_text, recommendation_emoji =
-      if score[:imdb] > 7 && score[:tomato] > 70 && score[:tomato_audience] > 70 && score[:meta] > 70
-        ["Go ahead, you'll probably enjoy this!", ":+1:"]
-      elsif score[:imdb] < 5 && score[:tomato] > 50 && score[:tomato_audience] > 50 && score[:meta] > 50
-        ["Be prepared for something aweful.", ":-1:"]
-      else
-        ["Not sure, you may fall asleep.", ":zzz:"]
-      end
+    if error.nil?
+      recommendation_text, recommendation_emoji =
+        if score[:imdb] > 7 && score[:tomato] > 70 && score[:tomato_audience] > 70 && score[:meta] > 70
+          ["Go ahead, you'll probably enjoy this!", ":+1:"]
+        elsif score[:imdb] < 5 && score[:tomato] > 50 && score[:tomato_audience] > 50 && score[:meta] > 50
+          ["Be prepared for something aweful.", ":-1:"]
+        else
+          ["Not sure, you may fall asleep.", ":zzz:"]
+        end
 
-    puts <<-DOC
-    \r   Movie 'Captive State' #{" " * (progress_text.size - done_text.size)}
+      progress.stop <<-DOC
+         #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
 
-       #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
+             score:        #{score[:tomato]}%
+             audience:     #{score[:tomato_audience]}%
 
-           score:        #{score[:tomato]}%
-           audience:     #{score[:tomato_audience]}%
+         #{Emoji.emojize(":clapper:")}  IMDb
 
-       #{Emoji.emojize(":clapper:")}  IMDb
+             rating:       #{score[:imdb]}/10
 
-           rating:       #{score[:imdb]}/10
+         #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
 
-       #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
-
-           score:        #{score[:meta]}/100
-
+             score:        #{score[:meta]}/100
 
 
-       Should I watch this?
 
-           #{Emoji.emojize(recommendation_emoji)}  #{recommendation_text}
+         Should I watch this?
 
-
-    DOC
+             #{Emoji.emojize(recommendation_emoji)}  #{recommendation_text}
+      DOC
+    else
+      progress.stop <<-DOC
+         #{Emoji.emojize(":cry:")}  Could not fetch information about the movie. Did you misspell it?
+      DOC
+    end
   end
 end
 
