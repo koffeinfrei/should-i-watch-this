@@ -46,11 +46,41 @@ class Progress
   end
 end
 
+class Score
+  def initialize(@value : Float64 | Int32 | Nil, @is_percentage = true, @suffix = "")
+  end
+
+  def good?
+    @value && percentage_value > 70
+  end
+
+  def bad?
+    @value && percentage_value < 50
+  end
+
+  def percentage_value
+    if @is_percentage
+      @value || 0
+    else
+      (@value || 0) * 10
+    end
+  end
+
+  def to_s(io)
+    io <<
+      if @value
+        "#{@value}#{@suffix}"
+      else
+        "N/A"
+      end
+  end
+end
+
 class Movie
   getter title : String
   property imdb_id : String = ""
 
-  getter score = {} of Symbol => Float64 | Int32
+  getter score = {} of Symbol => Score
 
   def initialize(title)
     @title = title.titleize
@@ -105,13 +135,25 @@ class Fetcher
       @movie.imdb_id = omdb["imdbID"].as_s
 
       # metacritic from omdb
-      @movie.score[:meta] = omdb["Metascore"].to_s.to_i
+      meta_score = omdb["Metascore"].to_s
+      @movie.score[:meta] = Score.new(
+        if meta_score == "N/A"
+          nil
+        else
+          meta_score.to_i
+        end,
+        suffix: "/100"
+      )
 
       # imdb
       # we scrape the score from the imdb website, as the value in omdb is not
       # really up-to-date
       imdb_html = html("https://www.imdb.com/title/#{@movie.imdb_id}")
-      @movie.score[:imdb] = css(imdb_html, %{[itemprop="ratingValue"]}).to_f
+      @movie.score[:imdb] = Score.new(
+        css(imdb_html, %{[itemprop="ratingValue"]}).to_f,
+        is_percentage: false,
+        suffix: "/10"
+      )
 
       channels[:imdb].send(nil)
     end
@@ -120,8 +162,14 @@ class Fetcher
     spawn do
       tomato_html = html("https://www.rottentomatoes.com/m/#{StringInflection.snake(@movie.title)}")
 
-      @movie.score[:tomato] = css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage").to_i
-      @movie.score[:tomato_audience] = css(tomato_html, ".audience-score .mop-ratings-wrap__percentage").to_i
+      @movie.score[:tomato] = Score.new(
+        css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage").to_i,
+        suffix: "%"
+      )
+      @movie.score[:tomato_audience] = Score.new(
+        css(tomato_html, ".audience-score .mop-ratings-wrap__percentage").to_i,
+        suffix: "%"
+      )
 
       channels[:tomato].send(nil)
     end
@@ -143,9 +191,9 @@ class Fetcher
       DOC
     else
       recommendation_text, recommendation_emoji =
-        if @movie.score[:imdb] > 7 && @movie.score[:tomato] > 70 && @movie.score[:tomato_audience] > 70 && @movie.score[:meta] > 70
+        if @movie.score[:imdb].good? && @movie.score[:tomato].good? && @movie.score[:tomato_audience].good? && @movie.score[:meta].good?
           ["Go ahead, you'll probably enjoy this!", ":+1:"]
-        elsif @movie.score[:imdb] < 5 && @movie.score[:tomato] > 50 && @movie.score[:tomato_audience] > 50 && @movie.score[:meta] > 50
+        elsif @movie.score[:imdb].bad? && @movie.score[:tomato].bad? && @movie.score[:tomato_audience].bad? && @movie.score[:meta].bad?
           ["Be prepared for something aweful.", ":-1:"]
         else
           ["Not sure, you may fall asleep.", ":zzz:"]
@@ -154,16 +202,16 @@ class Fetcher
       progress.stop <<-DOC
          #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
 
-             score:        #{@movie.score[:tomato]}%
-             audience:     #{@movie.score[:tomato_audience]}%
+             score:        #{@movie.score[:tomato]}
+             audience:     #{@movie.score[:tomato_audience]}
 
          #{Emoji.emojize(":clapper:")}  IMDb
 
-             rating:       #{@movie.score[:imdb]}/10
+             rating:       #{@movie.score[:imdb]}
 
          #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
 
-             score:        #{@movie.score[:meta]}/100
+             score:        #{@movie.score[:meta]}
 
 
 
