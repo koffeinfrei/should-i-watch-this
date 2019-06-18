@@ -185,6 +185,7 @@ class ShouldIWatchThis < Cli::Command
     arg "title",
       required: true,
       desc: "The title of the movie"
+    help
   end
 
   def run
