@@ -10,7 +10,9 @@ require "inflector/core_ext"
 class Progress
   SPINNER_CHARACTERS = %w(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
 
-  def initialize(@movie : Movie)
+  getter movie : Movie
+
+  def initialize(@movie)
   end
 
   def start
@@ -47,7 +49,11 @@ class Progress
 end
 
 class Score
-  def initialize(@value : Float64 | Int32 | Nil, @is_percentage = true, @suffix = "")
+  getter value : Float64 | Int32 | Nil
+  getter is_percentage : Bool
+  getter suffix : String
+
+  def initialize(@value, @is_percentage = true, @suffix = "")
   end
 
   def good?
@@ -88,7 +94,7 @@ class Movie
 end
 
 class Fetcher
-  @movie : Movie
+  getter movie : Movie
 
   def initialize(title)
     @movie = Movie.new(title)
