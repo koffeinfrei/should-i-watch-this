@@ -3,98 +3,12 @@ require "json"
 require "crest"
 require "myhtml"
 require "emoji"
-require "cli"
 require "string_inflection"
 require "inflector/core_ext"
 
-class Progress
-  SPINNER_CHARACTERS = %w(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏)
-
-  getter movie : Movie
-
-  def initialize(@movie)
-  end
-
-  def start
-    show_spinner
-  end
-
-  def stop(result_text)
-    puts <<-DOC
-      \r   Movie '#{@movie.title}' #{" " * (progress_text.size - done_text.size)}
-
-      #{result_text}
-
-
-      DOC
-  end
-
-  def progress_text
-    "Fetching movie '#{@movie.title}'"
-  end
-
-  def done_text
-    "Movie '#{@movie.title}':"
-  end
-
-  def show_spinner
-    while
-      0.upto(SPINNER_CHARACTERS.size - 1) do |index|
-        STDOUT << "\r"
-        STDOUT << "#{SPINNER_CHARACTERS[index]}  #{progress_text}"
-        sleep 0.1
-      end
-    end
-  end
-end
-
-class Score
-  getter value : Float64 | Int32 | Nil
-  getter is_percentage : Bool
-  getter suffix : String
-
-  def initialize(@value, @is_percentage = true, @suffix = "")
-  end
-
-  def good?
-    @value && percentage_value > 70
-  end
-
-  def bad?
-    @value && percentage_value < 50
-  end
-
-  def percentage_value
-    if @is_percentage
-      @value || 0
-    else
-      (@value || 0) * 10
-    end
-  end
-
-  def to_s(io)
-    io <<
-      if @value
-        "#{@value}#{@suffix}"
-      else
-        "N/A"
-      end
-  end
-end
-
-class Movie
-  property title : String
-  property imdb_id : String = ""
-  property year : String = ""
-  property director : String = ""
-  property actors : String = ""
-
-  getter score = {} of Symbol => Score
-
-  def initialize(title)
-    @title = title.titleize
-  end
-end
+require "./movie"
+require "./progress"
+require "./score"
 
 class Fetcher
   getter movie : Movie
@@ -257,23 +171,3 @@ class Fetcher
     end
   end
 end
-
-class ShouldIWatchThis < Cli::Command
-  class Help
-    header "Check the different internets if it's worth watching this movie."
-    footer "Made with #{Emoji.emojize(":coffee:")} by Koffeinfrei"
-  end
-
-  class Options
-    arg "title",
-      required: true,
-      desc: "The title of the movie"
-    help
-  end
-
-  def run
-    Fetcher.new(args.title).run
-  end
-end
-
-ShouldIWatchThis.run(ARGV)
