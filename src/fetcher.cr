@@ -150,7 +150,7 @@ class Fetcher
         if @movie.score[:imdb].good? && @movie.score[:tomato].good? && @movie.score[:tomato_audience].good? && @movie.score[:meta].good?
           ["Go ahead, you'll probably enjoy this!", ":+1:"]
         elsif @movie.score[:imdb].bad? && @movie.score[:tomato].bad? && @movie.score[:tomato_audience].bad? && @movie.score[:meta].bad?
-          ["Be prepared for something aweful.", ":-1:"]
+          ["Be prepared for something awful.", ":-1:"]
         else
           ["Not sure, you may fall asleep.", ":zzz:"]
         end
