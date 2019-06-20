@@ -83,7 +83,7 @@ class Score
 end
 
 class Movie
-  getter title : String
+  property title : String
   property imdb_id : String = ""
 
   getter score = {} of Symbol => Score
@@ -115,6 +115,7 @@ class Fetcher
 
     channels = {
       progress: Channel(Nil).new,
+      omdb: Channel(Nil).new,
       imdb: Channel(Nil).new,
       tomato: Channel(Nil).new
     }
@@ -138,6 +139,7 @@ class Fetcher
         end
       end
 
+      @movie.title = omdb["Title"].as_s
       @movie.imdb_id = omdb["imdbID"].as_s
 
       # metacritic from omdb
@@ -151,9 +153,17 @@ class Fetcher
         suffix: "/100"
       )
 
-      # imdb
-      # we scrape the score from the imdb website, as the value in omdb is not
-      # really up-to-date
+      channels[:omdb].send(nil) # unblock main
+      channels[:omdb].send(nil) # unblock imdb
+      channels[:omdb].send(nil) # unblock tomato
+    end
+
+    # imdb
+    # we scrape the score from the imdb website, as the value in omdb is not
+    # really up-to-date
+    spawn do
+      channels[:omdb].receive
+
       imdb_html = html("https://www.imdb.com/title/#{@movie.imdb_id}")
       @movie.score[:imdb] = Score.new(
         css(imdb_html, %{[itemprop="ratingValue"]}).to_f,
@@ -166,7 +176,13 @@ class Fetcher
 
     # tomato
     spawn do
-      tomato_html = html("https://www.rottentomatoes.com/m/#{StringInflection.snake(@movie.title)}")
+      channels[:omdb].receive
+
+      underscored_title = StringInflection.snake(
+        @movie.title.gsub(/[^\w]/, ' ')
+      )
+      url = "https://www.rottentomatoes.com/m/#{underscored_title}"
+      tomato_html = html(url)
 
       @movie.score[:tomato] = Score.new(
         css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage").to_i,
@@ -183,6 +199,7 @@ class Fetcher
     spawn do
       progress.start
 
+      channels[:omdb].receive
       channels[:imdb].receive
       channels[:tomato].receive
 
