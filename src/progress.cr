@@ -12,7 +12,7 @@ class Progress
 
   def stop(result_text)
     puts <<-DOC
-      \r   Movie '#{@movie.title}' #{" " * (progress_text.size - done_text.size)}
+      \r   Movie '#{movie.title}' #{" " * (progress_text.size - done_text.size)}
 
       #{result_text}
 
@@ -21,11 +21,11 @@ class Progress
   end
 
   def progress_text
-    "Fetching movie '#{@movie.title}'"
+    "Fetching movie '#{movie.title}'"
   end
 
   def done_text
-    "Movie '#{@movie.title}':"
+    "Movie '#{movie.title}':"
   end
 
   def show_spinner

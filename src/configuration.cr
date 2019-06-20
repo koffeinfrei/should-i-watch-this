@@ -6,7 +6,7 @@ class Configuration
   end
 
   def configure!(force = false)
-    return if File.exists?(@config_file) && !force
+    return if File.exists?(config_file) && !force
 
     puts <<-MESSAGE
        Hi! #{Emoji.emojize(":wave:")}
@@ -30,8 +30,8 @@ class Configuration
     print "   ⟶  Please paste your API key: "
     key = gets
 
-    Dir.mkdir_p(File.dirname(@config_file))
-    File.write(@config_file, key)
+    Dir.mkdir_p(File.dirname(config_file))
+    File.write(config_file, key)
 
     puts <<-MESSAGE
 

@@ -7,25 +7,25 @@ class Score
   end
 
   def good?
-    @value && percentage_value > 70
+    value && percentage_value > 70
   end
 
   def bad?
-    @value && percentage_value < 50
+    value && percentage_value < 50
   end
 
   def percentage_value
-    if @is_percentage
-      @value || 0
+    if is_percentage
+      value || 0
     else
-      (@value || 0) * 10
+      (value || 0) * 10
     end
   end
 
   def to_s(io)
     io <<
-      if @value
-        "#{@value}#{@suffix}"
+      if value
+        "#{value}#{suffix}"
       else
         "N/A"
       end

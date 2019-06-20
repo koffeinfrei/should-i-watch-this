@@ -41,7 +41,7 @@ class Fetcher
   end
 
   def abort(error_message)
-    @error = error_message
+    self.error = error_message
 
     # cancel all requests
     channels.each_value do |channel|
@@ -50,7 +50,7 @@ class Fetcher
   end
 
   def run
-    progress = Progress.new(@movie)
+    progress = Progress.new(movie)
 
     spawn do
       # omdb
@@ -58,7 +58,7 @@ class Fetcher
       begin
         json = Crest.get(
           "http://www.omdbapi.com/",
-          params: { :t => @movie.title, :apikey => @omdb_api_key }
+          params: { :t => movie.title, :apikey => omdb_api_key }
         ).body
         omdb = JSON.parse(json)
       rescue e : Crest::Unauthorized
@@ -69,15 +69,15 @@ class Fetcher
         abort("Could not fetch information about the movie. Did you misspell it?")
       end
 
-      @movie.title = omdb["Title"].as_s
-      @movie.imdb_id = omdb["imdbID"].as_s
-      @movie.year = omdb["Year"].as_s
-      @movie.director = omdb["Director"].as_s
-      @movie.actors = omdb["Actors"].as_s
+      movie.title = omdb["Title"].as_s
+      movie.imdb_id = omdb["imdbID"].as_s
+      movie.year = omdb["Year"].as_s
+      movie.director = omdb["Director"].as_s
+      movie.actors = omdb["Actors"].as_s
 
       # metacritic from omdb
       meta_score = omdb["Metascore"].to_s
-      @movie.score[:meta] = Score.new(
+      movie.score[:meta] = Score.new(
         if meta_score == "N/A"
           nil
         else
@@ -97,8 +97,8 @@ class Fetcher
     spawn do
       channels[:omdb].receive
 
-      imdb_html = html("https://www.imdb.com/title/#{@movie.imdb_id}")
-      @movie.score[:imdb] = Score.new(
+      imdb_html = html("https://www.imdb.com/title/#{movie.imdb_id}")
+      movie.score[:imdb] = Score.new(
         css(imdb_html, %{[itemprop="ratingValue"]}).to_f,
         is_percentage: false,
         suffix: "/10"
@@ -112,16 +112,16 @@ class Fetcher
       channels[:omdb].receive
 
       underscored_title = StringInflection.snake(
-        @movie.title.gsub(/[^\w]/, ' ')
+        movie.title.gsub(/[^\w]/, ' ')
       )
       url = "https://www.rottentomatoes.com/m/#{underscored_title}"
       tomato_html = html(url)
 
-      @movie.score[:tomato] = Score.new(
+      movie.score[:tomato] = Score.new(
         css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage").to_i,
         suffix: "%"
       )
-      @movie.score[:tomato_audience] = Score.new(
+      movie.score[:tomato_audience] = Score.new(
         css(tomato_html, ".audience-score .mop-ratings-wrap__percentage").to_i,
         suffix: "%"
       )
@@ -141,39 +141,39 @@ class Fetcher
 
     channels[:progress].receive
 
-    if @error
+    if error
       progress.stop <<-DOC
-         #{Emoji.emojize(":cry:")}  #{@error}
+         #{Emoji.emojize(":cry:")}  #{error}
       DOC
     else
       recommendation_text, recommendation_emoji =
-        if @movie.score[:imdb].good? && @movie.score[:tomato].good? && @movie.score[:tomato_audience].good? && @movie.score[:meta].good?
+        if movie.score[:imdb].good? && movie.score[:tomato].good? && movie.score[:tomato_audience].good? && movie.score[:meta].good?
           ["Go ahead, you'll probably enjoy this!", ":+1:"]
-        elsif @movie.score[:imdb].bad? && @movie.score[:tomato].bad? && @movie.score[:tomato_audience].bad? && @movie.score[:meta].bad?
+        elsif movie.score[:imdb].bad? && movie.score[:tomato].bad? && movie.score[:tomato_audience].bad? && movie.score[:meta].bad?
           ["Be prepared for something awful.", ":-1:"]
         else
           ["Not sure, you may fall asleep.", ":zzz:"]
         end
 
       progress.stop <<-DOC
-         year:             #{@movie.year}
-         director:         #{@movie.director}
-         actors:           #{@movie.actors}
+         year:             #{movie.year}
+         director:         #{movie.director}
+         actors:           #{movie.actors}
 
 
 
          #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
 
-             score:        #{@movie.score[:tomato]}
-             audience:     #{@movie.score[:tomato_audience]}
+             score:        #{movie.score[:tomato]}
+             audience:     #{movie.score[:tomato_audience]}
 
          #{Emoji.emojize(":clapper:")}  IMDb
 
-             rating:       #{@movie.score[:imdb]}
+             rating:       #{movie.score[:imdb]}
 
          #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
 
-             score:        #{@movie.score[:meta]}
+             score:        #{movie.score[:meta]}
 
 
 
