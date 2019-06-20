@@ -85,6 +85,9 @@ end
 class Movie
   property title : String
   property imdb_id : String = ""
+  property year : String = ""
+  property director : String = ""
+  property actors : String = ""
 
   getter score = {} of Symbol => Score
 
@@ -141,6 +144,9 @@ class Fetcher
 
       @movie.title = omdb["Title"].as_s
       @movie.imdb_id = omdb["imdbID"].as_s
+      @movie.year = omdb["Year"].as_s
+      @movie.director = omdb["Director"].as_s
+      @movie.actors = omdb["Actors"].as_s
 
       # metacritic from omdb
       meta_score = omdb["Metascore"].to_s
@@ -223,6 +229,12 @@ class Fetcher
         end
 
       progress.stop <<-DOC
+         year:             #{@movie.year}
+         director:         #{@movie.director}
+         actors:           #{@movie.actors}
+
+
+
          #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
 
              score:        #{@movie.score[:tomato]}
