@@ -9,13 +9,26 @@ require "inflector/core_ext"
 require "./movie"
 require "./progress"
 require "./score"
+require "./configuration"
 
 class Fetcher
+  getter omdb_api_key : String
   getter movie : Movie
+  getter channels
+  property error : String | Nil
 
   def initialize(title)
     @movie = Movie.new(title)
-  end
+
+    @channels = {
+      progress: Channel(Nil).new,
+      omdb: Channel(Nil).new,
+      imdb: Channel(Nil).new,
+      tomato: Channel(Nil).new
+    }
+
+    @omdb_api_key = Configuration.new.key
+   end
 
   def html(url)
     html = Crest.get(url).body
@@ -27,33 +40,33 @@ class Fetcher
     html.css(expression).first.inner_text.strip.gsub(/[^0-9.]/, "")
   end
 
+  def abort(error_message)
+    @error = error_message
+
+    # cancel all requests
+    channels.each_value do |channel|
+      channel.send(nil)
+    end
+  end
+
   def run
     progress = Progress.new(@movie)
 
-    channels = {
-      progress: Channel(Nil).new,
-      omdb: Channel(Nil).new,
-      imdb: Channel(Nil).new,
-      tomato: Channel(Nil).new
-    }
-
-    error = nil
-
     spawn do
       # omdb
-      json = Crest.get(
-        "http://www.omdbapi.com/",
-        params: { :t => @movie.title, :apikey => "af8f7bfb" }
-      ).body
-      omdb = JSON.parse(json)
+      omdb = {} of String => JSON::Any
+      begin
+        json = Crest.get(
+          "http://www.omdbapi.com/",
+          params: { :t => @movie.title, :apikey => @omdb_api_key }
+        ).body
+        omdb = JSON.parse(json)
+      rescue e : Crest::Unauthorized
+        abort("The OMDB API refused our request. It seems like your OMDB API key is not valid.")
+      end
 
       if omdb["Response"] == "False"
-        error = json["Error"]
-
-        # cancel all requests
-        channels.each_value do |channel|
-          channel.send(nil)
-        end
+        abort("Could not fetch information about the movie. Did you misspell it?")
       end
 
       @movie.title = omdb["Title"].as_s
@@ -128,9 +141,9 @@ class Fetcher
 
     channels[:progress].receive
 
-    if error
+    if @error
       progress.stop <<-DOC
-         #{Emoji.emojize(":cry:")}  Could not fetch information about the movie. Did you misspell it?
+         #{Emoji.emojize(":cry:")}  #{@error}
       DOC
     else
       recommendation_text, recommendation_emoji =
