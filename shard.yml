@@ -5,7 +5,7 @@ authors:
   - Alexis Reigel <mail@koffeinfrei.org>
 
 description: |
-  CLI to get rating information for a film from different platforms.
+  Simple CLI to ask the internet if it's worth watching this movie.
 
 dependencies:
   myhtml:
@@ -22,5 +22,11 @@ dependencies:
   inflector:
     github: phoffer/inflector.cr
     version: "~> 0.1.8"
+
+targets:
+  should-i-watch-this:
+    main: src/should-i-watch-this.cr
+
+crystal: 0.29.0
 
 license: GPL-3.0
