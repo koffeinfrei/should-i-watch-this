@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/koffeinfrei/should-i-watch-this.svg?branch=master)](https://travis-ci.org/koffeinfrei/should-i-watch-this)
+
 # Should I watch this?
 
 Simple CLI to ask the internet if it's worth watching this movie.

@@ -1,0 +1,15 @@
+language: crystal
+
+cache: shards
+
+script:
+  - shards install
+
+jobs:
+  include:
+    - stage: test
+      name: format check
+      script: crystal tool format --check
+    - stage: test
+      name: ameba
+      script: bin/ameba
