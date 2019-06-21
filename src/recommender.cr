@@ -21,10 +21,14 @@ class Recommender
   end
 
   def unanimously_good?
-    movie.score.values.all?(&.good?)
+    movie.score.values.all? do |score|
+      score.good? || score.not_defined?
+    end
   end
 
   def unanimously_bad?
-    movie.score.values.all?(&.bad?)
+    movie.score.values.all? do |score|
+      score.bad? || score.not_defined?
+    end
   end
 end

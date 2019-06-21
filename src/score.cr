@@ -18,6 +18,10 @@ abstract class Score
     _value && _value < (BAD_THRESHOLD * max_value)
   end
 
+  def not_defined?
+    raw_value.nil?
+  end
+
   def to_s(io)
     io <<
       if value
