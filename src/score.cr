@@ -44,6 +44,20 @@ abstract class Score
   end
 end
 
+class MissingScore < Score
+  def initialize
+    super(nil)
+  end
+
+  def max_value
+    0
+  end
+
+  def value
+    score_value.value
+  end
+end
+
 class DecimalScore < Score
   def max_value
     10

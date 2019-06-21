@@ -98,6 +98,8 @@ class Fetcher
 
     channels[:progress].receive
 
+    missing_scores!
+
     if error
       output_error
     else
@@ -140,9 +142,20 @@ class Fetcher
       end,
       suffix: "/100"
     )
+
+    # tomato from omdb
+    tomato_score = omdb["Ratings"].as_a.find do |rating|
+      rating["Source"] == "Rotten Tomatoes"
+    end
+    if tomato_score
+      movie.score[:tomato] = PercentageScore.new(
+        tomato_score["Value"].as_s.gsub(/[^0-9.]/, ""),
+        suffix: "%"
+      )
+    end
   end
 
-  # we scrape the score from the imdb website, as the value in omdb is not
+  # scrape the score from the imdb website, as the value in omdb is not
   # really up-to-date
   def fetch_imdb
     imdb_html = html("https://www.imdb.com/title/#{movie.imdb_id}")
@@ -152,6 +165,8 @@ class Fetcher
     )
   end
 
+  # try to scrape the score from the rotten tomatoes website, as the value in
+  # omdb is not really up-to-date
   def fetch_tomato
     underscored_title = StringInflection.snake(
       movie.title.tr("àäéèëöü", "aaeeeou").gsub(/[^\w]/, ' ')
@@ -167,6 +182,15 @@ class Fetcher
       css(tomato_html, ".audience-score .mop-ratings-wrap__percentage"),
       suffix: "%"
     )
+  rescue Crest::NotFound
+  end
+
+  def missing_scores!
+    [:imdb, :tomato, :tomato_audience, :meta].each do |key|
+      unless @movie.score.has_key?(key)
+        @movie.score[key] = MissingScore.new
+      end
+    end
   end
 
   def output_error
