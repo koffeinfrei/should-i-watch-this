@@ -25,15 +25,15 @@ class Fetcher
 
     @channels = {
       progress: Channel(Nil).new,
-      omdb: Channel(Nil).new,
-      imdb: Channel(Nil).new,
-      tomato: Channel(Nil).new
+      omdb:     Channel(Nil).new,
+      imdb:     Channel(Nil).new,
+      tomato:   Channel(Nil).new,
     }
 
     @progress = Progress.new(movie)
 
     @omdb_api_key = Configuration.new.key
-   end
+  end
 
   def html(url)
     html = Crest.get(url).body
@@ -107,8 +107,8 @@ class Fetcher
       json = Crest.get(
         "http://www.omdbapi.com/",
         params: {
-          :t => movie.title,
-          :apikey => omdb_api_key
+          :t      => movie.title,
+          :apikey => omdb_api_key,
         }
       ).body
       omdb = JSON.parse(json)
