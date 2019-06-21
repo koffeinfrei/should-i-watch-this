@@ -9,13 +9,11 @@ abstract class Score
   end
 
   def good?
-    _value = value
-    _value && _value > (GOOD_THRESHOLD * max_value)
+    value.try(&.> (GOOD_THRESHOLD * max_value))
   end
 
   def bad?
-    _value = value
-    _value && _value < (BAD_THRESHOLD * max_value)
+    value.try(&.< (BAD_THRESHOLD * max_value))
   end
 
   def not_defined?
@@ -42,10 +40,7 @@ class DecimalScore < Score
   end
 
   def value : Float64 | Nil
-    _raw_value = raw_value
-    unless _raw_value.nil?
-      _raw_value.to_f
-    end
+    raw_value.try(&.to_f)
   end
 end
 
@@ -55,9 +50,6 @@ class PercentageScore < Score
   end
 
   def value : Int32 | Nil
-    _raw_value = raw_value
-    unless _raw_value.nil?
-      _raw_value.to_i
-    end
+    raw_value.try(&.to_i)
   end
 end
