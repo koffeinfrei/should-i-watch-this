@@ -21,16 +21,10 @@ class Recommender
   end
 
   def unanimously_good?
-    movie.score[:imdb].good? &&
-      movie.score[:tomato].good? &&
-      movie.score[:tomato_audience].good? &&
-      movie.score[:meta].good?
+    movie.score.values.all?(&.good?)
   end
 
   def unanimously_bad?
-    movie.score[:imdb].bad? &&
-      movie.score[:tomato].bad? &&
-      movie.score[:tomato_audience].bad? &&
-      movie.score[:meta].bad?
+    movie.score.values.all?(&.bad?)
   end
 end
