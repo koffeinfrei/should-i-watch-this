@@ -154,7 +154,7 @@ class Fetcher
 
   def fetch_tomato
     underscored_title = StringInflection.snake(
-      movie.title.gsub(/[^\w]/, ' ')
+      movie.title.tr("àäéèëöü", "aaeeeou").gsub(/[^\w]/, ' ')
     )
     url = "https://www.rottentomatoes.com/m/#{underscored_title}"
     tomato_html = html(url)
