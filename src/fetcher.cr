@@ -82,7 +82,9 @@ class Fetcher
 
     spawn do
       progress.start
+    end
 
+    spawn do
       channels[:omdb].receive
       channels[:imdb].receive
       channels[:tomato].receive

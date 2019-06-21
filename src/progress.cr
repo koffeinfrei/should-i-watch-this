@@ -29,10 +29,11 @@ class Progress
   end
 
   def show_spinner
-    while
+    loop do
       0.upto(SPINNER_CHARACTERS.size - 1) do |index|
         STDOUT << "\r"
         STDOUT << "#{SPINNER_CHARACTERS[index]}  #{progress_text}"
+        STDOUT.flush
         sleep 0.1
       end
     end
