@@ -1,5 +1,9 @@
 version: 1.0
 shards:
+  ameba:
+    github: veelenga/ameba
+    version: 0.10.0
+
   callback:
     github: mosop/callback
     version: 0.6.3
