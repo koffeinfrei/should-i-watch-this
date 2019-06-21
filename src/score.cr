@@ -1,6 +1,8 @@
 abstract class Score
-  GOOD_THRESHOLD = 0.7
-  BAD_THRESHOLD  = 0.5
+  RANGE = {
+    good: (0.7..1),
+    bad:  (0...0.7),
+  }
 
   getter raw_value : String | Nil
   getter suffix : String
@@ -9,11 +11,11 @@ abstract class Score
   end
 
   def good?
-    value.try(&.> (GOOD_THRESHOLD * max_value))
+    within_range?(:good)
   end
 
   def bad?
-    value.try(&.< (BAD_THRESHOLD * max_value))
+    within_range?(:bad)
   end
 
   def not_defined?
@@ -32,6 +34,14 @@ abstract class Score
   abstract def max_value
 
   abstract def value
+
+  private def within_range?(type)
+    _value = value
+
+    return false if _value.nil?
+
+    RANGE[type].includes?(_value.to_f / max_value)
+  end
 end
 
 class DecimalScore < Score
