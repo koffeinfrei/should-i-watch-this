@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/koffeinfrei/should-i-watch-this.svg?branch=master)](https://travis-ci.org/koffeinfrei/should-i-watch-this)
+![License](https://img.shields.io/github/license/koffeinfrei/should-i-watch-this.svg)
 
 # Should I watch this?
 
