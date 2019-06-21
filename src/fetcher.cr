@@ -42,7 +42,11 @@ class Fetcher
   end
 
   def css(html, expression)
-    html.css(expression).first.inner_text.strip.gsub(/[^0-9.]/, "")
+    elements = html.css(expression)
+
+    return nil if elements.size == 0
+
+    elements.first.inner_text.strip.gsub(/[^0-9.]/, "")
   end
 
   def abort(error_message)
@@ -128,11 +132,11 @@ class Fetcher
 
     # metacritic from omdb
     meta_score = omdb["Metascore"].to_s
-    movie.score[:meta] = Score.new(
+    movie.score[:meta] = PercentageScore.new(
       if meta_score == "N/A"
         nil
       else
-        meta_score.to_i
+        meta_score
       end,
       suffix: "/100"
     )
@@ -142,9 +146,8 @@ class Fetcher
   # really up-to-date
   def fetch_imdb
     imdb_html = html("https://www.imdb.com/title/#{movie.imdb_id}")
-    movie.score[:imdb] = Score.new(
-      css(imdb_html, %{[itemprop="ratingValue"]}).to_f,
-      is_percentage: false,
+    movie.score[:imdb] = DecimalScore.new(
+      css(imdb_html, %{[itemprop="ratingValue"]}),
       suffix: "/10"
     )
   end
@@ -156,12 +159,12 @@ class Fetcher
     url = "https://www.rottentomatoes.com/m/#{underscored_title}"
     tomato_html = html(url)
 
-    movie.score[:tomato] = Score.new(
-      css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage").to_i,
+    movie.score[:tomato] = PercentageScore.new(
+      css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage"),
       suffix: "%"
     )
-    movie.score[:tomato_audience] = Score.new(
-      css(tomato_html, ".audience-score .mop-ratings-wrap__percentage").to_i,
+    movie.score[:tomato_audience] = PercentageScore.new(
+      css(tomato_html, ".audience-score .mop-ratings-wrap__percentage"),
       suffix: "%"
     )
   end
