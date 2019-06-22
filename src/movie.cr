@@ -8,6 +8,6 @@ class Movie
   getter score = {} of Symbol => Score
 
   def initialize(title)
-    @title = title.titleize
+    @title = title.strip.titleize
   end
 end
