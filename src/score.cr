@@ -3,7 +3,7 @@ require "./score_value"
 abstract class Score
   RANGE = {
     good: (0.7..1),
-    bad:  (0...0.7),
+    bad:  (0..0.5),
   }
 
   getter score_value : ScoreValue
