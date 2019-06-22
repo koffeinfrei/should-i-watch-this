@@ -2,7 +2,6 @@ require "json"
 
 require "crest"
 require "myhtml"
-require "emoji"
 require "string_inflection"
 require "inflector/core_ext"
 
@@ -12,6 +11,7 @@ require "./score"
 require "./configuration"
 require "./recommender"
 require "./recommendation"
+require "./result_output"
 
 class Fetcher
   getter omdb_api_key : String
@@ -19,10 +19,10 @@ class Fetcher
   getter channels
   getter links
   getter progress : Progress
-  getter show_links : Bool
   property error : String | Nil
+  property result_output : ResultOutput
 
-  def initialize(title, @show_links = false)
+  def initialize(title, show_links = false)
     @movie = Movie.new(title)
 
     @channels = {
@@ -40,6 +40,8 @@ class Fetcher
     @progress = Progress.new(movie)
 
     @omdb_api_key = Configuration.new.key
+
+    @result_output = ResultOutput.new(@movie, @links, show_links)
   end
 
   def html(url)
@@ -107,11 +109,9 @@ class Fetcher
 
     missing_scores!
 
-    if error
-      output_error
-    else
-      output_success
-    end
+    progress.stop(
+      result_output.run(error)
+    )
   end
 
   def fetch_omdb
@@ -198,60 +198,5 @@ class Fetcher
         @movie.score[key] = MissingScore.new
       end
     end
-  end
-
-  def output_error
-    progress.stop <<-DOC
-       #{Emoji.emojize(":cry:")}  #{error}
-    DOC
-  end
-
-  def output_success
-    recommendation = Recommender.new(movie).run
-
-    progress.stop <<-DOC
-       year:             #{movie.year}
-       director:         #{movie.director}
-       actors:           #{movie.actors}
-
-
-
-       #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
-
-           score:        #{movie.score[:tomato]}
-           audience:     #{movie.score[:tomato_audience]}
-
-       #{Emoji.emojize(":clapper:")}  IMDb
-
-           rating:       #{movie.score[:imdb]}
-
-       #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
-
-           score:        #{movie.score[:meta]}
-
-
-
-       Should I watch this?
-
-           #{Emoji.emojize(recommendation.emoji)}  #{recommendation.text}
-    #{format_links}
-    DOC
-  end
-
-  def format_links
-    return unless show_links
-
-    output = [] of String
-
-    output << "\n\n"
-    output << "   Need more info? Maybe check some reviews?\n"
-
-    links.reject { |_key, value| value.nil? }.each do |_key, value|
-      output << "       ⟶  #{value}"
-    end
-
-    output << ""
-
-    output.join("\n")
   end
 end
