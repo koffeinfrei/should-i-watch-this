@@ -7,7 +7,7 @@ Simple CLI to ask the internet if it's worth watching this movie.
 
 ![Demo](demo.gif)
 
-It uses the [OMDB API](http://www.omdbapi.com) to get basic information about
+It uses the [OMDb API](http://www.omdbapi.com) to get basic information about
 the movie.
 
 The ratings are fetched from the following sources:
