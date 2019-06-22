@@ -40,7 +40,9 @@ class ShouldIWatchThis < Cli::Supercommand
 
   class Configure < Cli::Command
     class Options
-      bool "--force", default: false
+      bool "--force",
+        default: false,
+        desc: "Reconfigure, even if the config already exists"
       help
     end
 
