@@ -2,8 +2,10 @@ require "./score_value"
 
 abstract class Score
   RANGE = {
-    good: (0.7..1),
-    bad:  (0..0.5),
+    excellent: (0.8..1),
+    good:      (0.7..0.79),
+    average:   (0.51..0.69),
+    bad:       (0..0.5),
   }
 
   getter score_value : ScoreValue
@@ -14,8 +16,16 @@ abstract class Score
     @score_value = ScoreValue.new(raw_value)
   end
 
+  def excellent?
+    within_range?(:excellent)
+  end
+
   def good?
     within_range?(:good)
+  end
+
+  def average?
+    within_range?(:average)
   end
 
   def bad?
