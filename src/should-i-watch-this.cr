@@ -20,6 +20,9 @@ class ShouldIWatchThis < Cli::Supercommand
       arg "title",
         required: true,
         desc: "The title of the movie"
+      bool ["-l", "--show-links"],
+        default: false,
+        desc: "Output links to movies on the different platforms"
       help
     end
 
@@ -31,7 +34,7 @@ class ShouldIWatchThis < Cli::Supercommand
     def run
       Configuration.new.configure!
 
-      Fetcher.new(args.title).run
+      Fetcher.new(args.title, show_links: args.show_links?).run
     end
   end
 

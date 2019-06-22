@@ -17,10 +17,12 @@ class Fetcher
   getter omdb_api_key : String
   getter movie : Movie
   getter channels
+  getter links
   getter progress : Progress
+  getter show_links : Bool
   property error : String | Nil
 
-  def initialize(title)
+  def initialize(title, @show_links = false)
     @movie = Movie.new(title)
 
     @channels = {
@@ -29,6 +31,11 @@ class Fetcher
       imdb:     Channel(Nil).new,
       tomato:   Channel(Nil).new,
     }
+
+    @links = {
+      :imdb   => nil,
+      :tomato => nil,
+    } of Symbol => String | Nil
 
     @progress = Progress.new(movie)
 
@@ -156,10 +163,13 @@ class Fetcher
   # scrape the score from the imdb website, as the value in omdb is not
   # really up-to-date
   def fetch_imdb
-    imdb_html = html("https://www.imdb.com/title/#{movie.imdb_id}")
+    url = "https://www.imdb.com/title/#{movie.imdb_id}"
+    imdb_html = html(url)
     movie.score[:imdb] = DecimalScore.new(
       css(imdb_html, %{[itemprop="ratingValue"]})
     )
+
+    links[:imdb] = url
   end
 
   # try to scrape the score from the rotten tomatoes website, as the value in
@@ -177,6 +187,8 @@ class Fetcher
     movie.score[:tomato_audience] = PercentageScore.new(
       css(tomato_html, ".audience-score .mop-ratings-wrap__percentage")
     )
+
+    links[:tomato] = url
   rescue Crest::NotFound
   end
 
@@ -222,6 +234,24 @@ class Fetcher
        Should I watch this?
 
            #{Emoji.emojize(recommendation.emoji)}  #{recommendation.text}
+    #{format_links}
     DOC
+  end
+
+  def format_links
+    return unless show_links
+
+    output = [] of String
+
+    output << "\n\n"
+    output << "   Need more info? Maybe check some reviews?\n"
+
+    links.reject { |_key, value| value.nil? }.each do |_key, value|
+      output << "       ⟶  #{value}"
+    end
+
+    output << ""
+
+    output.join("\n")
   end
 end

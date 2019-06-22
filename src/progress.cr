@@ -16,7 +16,6 @@ class Progress
 
       #{result_text}
 
-
       DOC
   end
 
