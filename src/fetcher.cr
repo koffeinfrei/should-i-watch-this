@@ -69,6 +69,10 @@ class Fetcher
 
   def run
     spawn do
+      progress.start
+    end
+
+    spawn do
       fetch_omdb
 
       channels[:omdb].send(nil) # unblock main
@@ -91,10 +95,6 @@ class Fetcher
       fetch_tomato
 
       channels[:tomato].send(nil)
-    end
-
-    spawn do
-      progress.start
     end
 
     spawn do
