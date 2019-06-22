@@ -1,13 +1,17 @@
+require "./score_value"
+
 abstract class Score
   RANGE = {
     good: (0.7..1),
     bad:  (0...0.7),
   }
 
-  getter raw_value : String | Nil
-  getter suffix : String
+  getter score_value : ScoreValue
 
-  def initialize(@raw_value, @suffix = "")
+  delegate suffix, to: @score_value
+
+  def initialize(raw_value)
+    @score_value = ScoreValue.new(raw_value)
   end
 
   def good?
@@ -19,7 +23,7 @@ abstract class Score
   end
 
   def not_defined?
-    raw_value.nil?
+    score_value.value.nil?
   end
 
   def to_s(io)
@@ -64,7 +68,7 @@ class DecimalScore < Score
   end
 
   def value : Float64 | Nil
-    raw_value.try(&.to_f)
+    score_value.value.try(&.to_f)
   end
 end
 
@@ -74,6 +78,6 @@ class PercentageScore < Score
   end
 
   def value : Int32 | Nil
-    raw_value.try(&.to_i)
+    score_value.value.try(&.to_i)
   end
 end

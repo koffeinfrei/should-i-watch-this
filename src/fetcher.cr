@@ -46,7 +46,7 @@ class Fetcher
 
     return nil if elements.size == 0
 
-    elements.first.inner_text.strip.gsub(/[^0-9.]/, "")
+    elements.first.inner_text.strip
   end
 
   def abort(error_message)
@@ -138,9 +138,8 @@ class Fetcher
       if meta_score == "N/A"
         nil
       else
-        meta_score
-      end,
-      suffix: "/100"
+        "#{meta_score}/100"
+      end
     )
 
     # tomato from omdb
@@ -149,8 +148,7 @@ class Fetcher
     end
     if tomato_score
       movie.score[:tomato] = PercentageScore.new(
-        tomato_score["Value"].as_s.gsub(/[^0-9.]/, ""),
-        suffix: "%"
+        tomato_score["Value"].as_s
       )
     end
   end
@@ -160,8 +158,7 @@ class Fetcher
   def fetch_imdb
     imdb_html = html("https://www.imdb.com/title/#{movie.imdb_id}")
     movie.score[:imdb] = DecimalScore.new(
-      css(imdb_html, %{[itemprop="ratingValue"]}),
-      suffix: "/10"
+      css(imdb_html, %{[itemprop="ratingValue"]})
     )
   end
 
@@ -175,12 +172,10 @@ class Fetcher
     tomato_html = html(url)
 
     movie.score[:tomato] = PercentageScore.new(
-      css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage"),
-      suffix: "%"
+      css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage")
     )
     movie.score[:tomato_audience] = PercentageScore.new(
-      css(tomato_html, ".audience-score .mop-ratings-wrap__percentage"),
-      suffix: "%"
+      css(tomato_html, ".audience-score .mop-ratings-wrap__percentage")
     )
   rescue Crest::NotFound
   end
