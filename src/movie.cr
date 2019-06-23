@@ -4,6 +4,7 @@ class Movie
   property year : String = ""
   property director : String = ""
   property actors : String = ""
+  property type : String = ""
 
   getter score = {} of Symbol => Score
 

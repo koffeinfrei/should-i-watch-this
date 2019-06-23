@@ -14,6 +14,11 @@ require "./recommendation"
 require "./result_output"
 
 class Fetcher
+  OMDB_TO_TOMATO_TYPE_MAP = {
+    "movie"  => "m",
+    "series" => "tv",
+  }
+
   getter omdb_api_key : String
   getter movie : Movie
   getter channels
@@ -138,6 +143,7 @@ class Fetcher
     movie.year = omdb["Year"].as_s
     movie.director = omdb["Director"].as_s
     movie.actors = omdb["Actors"].as_s
+    movie.type = omdb["Type"].as_s
 
     # metacritic from omdb
     meta_score = omdb["Metascore"].to_s
@@ -178,7 +184,7 @@ class Fetcher
     underscored_title = StringInflection.snake(
       movie.title.tr("àäéèëöü", "aaeeeou").gsub(/[^\w]/, ' ')
     )
-    url = "https://www.rottentomatoes.com/m/#{underscored_title}"
+    url = "https://www.rottentomatoes.com/#{OMDB_TO_TOMATO_TYPE_MAP[movie.type]}/#{underscored_title}"
     tomato_html = html(url)
 
     movie.score[:tomato] = PercentageScore.new(
