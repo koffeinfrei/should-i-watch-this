@@ -1,7 +1,5 @@
 require "json"
 
-require "crest"
-require "myhtml"
 require "string_inflection"
 require "inflector/core_ext"
 
@@ -12,12 +10,17 @@ require "./configuration"
 require "./recommender"
 require "./recommendation"
 require "./result_output"
+require "./http_grabber"
 
 class Fetcher
   OMDB_TO_TOMATO_TYPE_MAP = {
     "movie"  => "m",
     "series" => "tv",
   }
+
+  OMDB_URL  = "https://www.omdbapi.com/"
+  IMDB_URL  = "https://www.imdb.com"
+  TOMAT_URL = "https://www.rottentomatoes.com"
 
   getter omdb_api_key : String
   getter movie : Movie
@@ -47,12 +50,6 @@ class Fetcher
     @omdb_api_key = Configuration.new.key
 
     @result_output = ResultOutput.new(@movie, @links, show_links)
-  end
-
-  def html(url)
-    html = Crest.get(url).body
-
-    Myhtml::Parser.new(html)
   end
 
   def css(html, expression)
@@ -120,21 +117,19 @@ class Fetcher
   end
 
   def fetch_omdb
-    omdb = {} of String => JSON::Any
-    begin
-      json = Crest.get(
-        "http://www.omdbapi.com/",
-        params: {
-          :t      => movie.title,
-          :apikey => omdb_api_key,
-        }
-      ).body
-      omdb = JSON.parse(json)
-    rescue e : Crest::Unauthorized
-      abort("The OMDB API refused our request. It seems like your OMDB API key is not valid.")
-    end
+    omdb = JsonHttpGrabber.new(
+      OMDB_URL, {
+      timeout: "The OMDb API can't be reached right now. Maybe your " \
+               "connection is broken. Or the whole internet is down. Or just " \
+               "www.omdbapi.com.",
+      unauthorized: "The OMDb API refused our request. It seems like your " \
+                    "OMDb API key is not valid.",
+    }).run(->abort(String), {
+      :t      => movie.title,
+      :apikey => omdb_api_key,
+    })
 
-    if omdb["Response"] == "False"
+    if omdb.try(&.["Response"]) == "False"
       abort("Could not fetch information about the movie. Did you misspell it?")
     end
 
@@ -169,8 +164,12 @@ class Fetcher
   # scrape the score from the imdb website, as the value in omdb is not
   # really up-to-date
   def fetch_imdb
-    url = "https://www.imdb.com/title/#{movie.imdb_id}"
-    imdb_html = html(url)
+    url = "#{IMDB_URL}/title/#{movie.imdb_id}"
+    imdb_html = HtmlHttpGrabber.new(url, {
+      timeout: "IMDb can't be reached right now. Maybe your connection is " \
+               "broken. Or the whole internet is down. Or just www.imdb.com.",
+    }).run(->abort(String))
+
     movie.score[:imdb] = DecimalScore.new(
       css(imdb_html, %{[itemprop="ratingValue"]})
     )
@@ -184,8 +183,12 @@ class Fetcher
     underscored_title = StringInflection.snake(
       movie.title.tr("àäéèëöü", "aaeeeou").gsub(/[^\w]/, ' ')
     )
-    url = "https://www.rottentomatoes.com/#{OMDB_TO_TOMATO_TYPE_MAP[movie.type]}/#{underscored_title}"
-    tomato_html = html(url)
+    url = "#{TOMAT_URL}/#{OMDB_TO_TOMATO_TYPE_MAP[movie.type]}/#{underscored_title}"
+    tomato_html = HtmlHttpGrabber.new(url, {
+      timeout: "Rotten tomatoes can't be reached right now. Maybe your " \
+               "connection is broken. Or the whole internet is down. Or just " \
+               "www.rottentomatoes.com.",
+    }).run(->abort(String))
 
     movie.score[:tomato] = PercentageScore.new(
       css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage")
