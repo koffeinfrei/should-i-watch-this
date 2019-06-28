@@ -18,12 +18,12 @@ The ratings are fetched from the following sources:
 
 ## Installation
 
-### From sources
+### From source
 
 ```bash
 $ git clone git@github.com:koffeinfrei/should-i-watch-this.git
 $ cd should-i-watch-this
-$ shards build --production
+$ shards build --release
 ```
 
 ## Usage
