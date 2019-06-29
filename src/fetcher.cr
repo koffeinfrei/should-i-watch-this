@@ -11,6 +11,7 @@ require "./recommender"
 require "./recommendation"
 require "./result_output"
 require "./http_grabber"
+require "./html_text_by_css"
 
 class Fetcher
   OMDB_TO_TOMATO_TYPE_MAP = {
@@ -50,14 +51,6 @@ class Fetcher
     @omdb_api_key = Configuration.new.key
 
     @result_output = ResultOutput.new(@movie, @links, show_links)
-  end
-
-  def css(html, expression)
-    elements = html.css(expression)
-
-    return nil if elements.size == 0
-
-    elements.first.inner_text.strip
   end
 
   def abort(error_message)
@@ -171,7 +164,7 @@ class Fetcher
     }).run(->abort(String))
 
     movie.score[:imdb] = DecimalScore.new(
-      css(imdb_html, %{[itemprop="ratingValue"]})
+      html_text_by_css(imdb_html, %{[itemprop="ratingValue"]})
     )
 
     links[:imdb] = url
@@ -191,10 +184,10 @@ class Fetcher
     }).run(->abort(String))
 
     movie.score[:tomato] = PercentageScore.new(
-      css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage")
+      html_text_by_css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage")
     )
     movie.score[:tomato_audience] = PercentageScore.new(
-      css(tomato_html, ".audience-score .mop-ratings-wrap__percentage")
+      html_text_by_css(tomato_html, ".audience-score .mop-ratings-wrap__percentage")
     )
 
     links[:tomato] = url
