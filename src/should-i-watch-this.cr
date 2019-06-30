@@ -1,7 +1,7 @@
 require "cli"
 require "emoji"
 
-require "./fetcher"
+require "./lookup"
 require "./configuration"
 
 HELP_FOOTER = "Made with #{Emoji.emojize(":coffee:")} by Koffeinfrei"
@@ -34,7 +34,7 @@ class ShouldIWatchThis < Cli::Supercommand
     def run
       Configuration.new.configure!
 
-      Fetcher.new(args.title, show_links: args.show_links?).run
+      ::Lookup.new(args.title, show_links: args.show_links?).run
     end
   end
 

@@ -13,7 +13,7 @@ require "./result_output"
 require "./http_grabber"
 require "./html_text_by_css"
 
-class Fetcher
+class Lookup
   OMDB_TO_TOMATO_TYPE_MAP = {
     "movie"  => "m",
     "series" => "tv",
@@ -178,7 +178,7 @@ class Fetcher
     )
     url = "#{TOMAT_URL}/#{OMDB_TO_TOMATO_TYPE_MAP[movie.type]}/#{underscored_title}"
     tomato_html = HtmlHttpGrabber.new(url, {
-      timeout: "Rotten tomatoes can't be reached right now. Maybe your " \
+      timeout: "Rotten Tomatoes can't be reached right now. Maybe your " \
                "connection is broken. Or the whole internet is down. Or just " \
                "www.rottentomatoes.com.",
     }).run(->abort(String))
