@@ -9,10 +9,15 @@ HELP_FOOTER = "Made with #{Emoji.emojize(":coffee:")}  by Koffeinfrei"
 class ShouldIWatchThis < Cli::Supercommand
   command "lookup"
   command "configure"
+  version {{ `shards version #{__DIR__}`.chomp.stringify }}
 
   class Help
     header "Simple CLI to ask the internet if it's worth watching this movie."
     footer HELP_FOOTER
+  end
+
+  class Options
+    version
   end
 
   class Lookup < Cli::Command
@@ -23,6 +28,7 @@ class ShouldIWatchThis < Cli::Supercommand
       bool ["-l", "--show-links"],
         default: false,
         desc: "Output links to movies on the different platforms"
+      version
       help
     end
 
@@ -43,6 +49,7 @@ class ShouldIWatchThis < Cli::Supercommand
       bool "--force",
         default: false,
         desc: "Reconfigure, even if the config already exists"
+      version
       help
     end
 
