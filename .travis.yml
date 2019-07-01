@@ -2,14 +2,44 @@ language: crystal
 
 cache: shards
 
+os:
+  - linux
+  - osx
+
+matrix:
+  include:
+    - os: linux
+      env: TARGET_TRIPLE=$(uname -m)-unknown-$(uname -s)-gnu
+    - os: osx
+      env: TARGET_TRIPLE=$(uname -m)-apple-$(uname -s)
+
 script:
-  - shards install
+- shards install
 
 jobs:
   include:
-    - stage: test
-      name: format check
-      script: crystal tool format --check
-    - stage: test
-      name: ameba
-      script: bin/ameba
+  - stage: test
+    name: format check
+    script: crystal tool format --check
+  - stage: test
+    name: ameba
+    script: bin/ameba
+  - stage: build
+    name: build release binary
+    script: shards build --production
+
+before_deploy:
+  - shards build --release
+  - mv bin/should-i-watch-this bin/should-i-watch-this_${TARGET_TRIPLE}
+
+deploy:
+  provider: releases
+  api_key:
+    secure: $DEPLOY_API_KEY
+  file_glob: true
+  file: bin/should-i-watch-this*
+  on:
+    # repo: koffeinfrei/should-i-watch-this
+    # tags: true
+    branch: chore/travis-releases
+  draft: true
