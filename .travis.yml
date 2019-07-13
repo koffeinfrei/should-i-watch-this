@@ -25,8 +25,7 @@ deploy:
   provider: releases
   api_key:
     secure: Ldjf2+aOKalZgob3+N80FCgZQ+pVSvwczpa2ViivBQ6D0MHGlaoUm+/+V1OCILSkvQnyGPzcxNUNrugbAMpHIlfbIBYUqs+dB5+hrEjec9E7FZ/6Yas07fMTxLYIDFsdiDW2e23X1uj3Bhmtcto6NcRNRA2r+gCj03NOfK1hkASywAtwiFKEmScV1OU5fb1Z7i9jNIIaah1augJVTYhfRmcdSXIpZQVETqWoidLR3p+ra4tDmo/Wm0vZdbIniJVZ8Z7vUvewCqOxd33FzjfFawREaVA8c/CdR/pKFQxvC0c4ZvNwtOQA9DXjeDblMOEsWDhCFygo2OD+5fw3Wur0OvkUNQ/GkbTAxQDLPIutpiNhh2YFU5QBm1sXPo5OvERBKJNDvo1XyNlVeHRBliJOkeRu5CBCsslV0ZHpUx76m5tHcLeAtikAfSoB+mMW6LM9EPNTP74o/GqoAKXNAUO7aP1S4EGW+aoUTccjqFDVN/NQhqBGrvobc/rC40KKTdYb7/AFpxNQ54eWX7tBEgSJsCvk+VZKsKBonvzTPRJS1Lz5QbF0/WZ1mEmscacmh0vYQGoBZjPb235d4i2FHkYZTvPthGxyJ3bFA6eNIihHnrJj/Coh5YKb/OJFmbfzbWAJHLWp3VBENFMjKUwwDgrw7Pqz7It5p0oeYfkyFjQHKlE=
-  file: bin/should-i-watch-this.*
-  file_glob: true
+  file: bin/should-i-watch-this.${TRAVIS_OS_NAME}-$(uname -m)
   skip_cleanup: true
   on:
     repo: koffeinfrei/should-i-watch-this
