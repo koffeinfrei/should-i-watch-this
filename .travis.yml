@@ -1,15 +1,10 @@
 language: crystal
 cache: shards
-os:
-  - linux
-  - osx
 
 matrix:
   include:
     - os: linux
-      env: TARGET_TRIPLE=$(uname -m)-unknown-$(uname -s)-gnu
     - os: osx
-      env: TARGET_TRIPLE=$(uname -m)-apple-$(uname -s)
 
 install:
   - shards install
@@ -20,10 +15,10 @@ script:
   - echo "--> ameba..."
   - bin/ameba
   - echo "--> build..."
-  - echo $TARGET_TRIPLE
+  - echo $TRAVIS_OS_NAME
   - shards build --release
-  - mv bin/should-i-watch-this bin/should-i-watch-this_${TARGET_TRIPLE}
-  - ls -l
+  - mv bin/should-i-watch-this bin/should-i-watch-this_${TRAVIS_OS_NAME}
+  - ls -l bin
 
 deploy:
   provider: releases
