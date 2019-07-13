@@ -17,7 +17,7 @@ script:
   - bin/ameba
 
   - echo "--> build"
-  - shards build --release
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then shards build --release --static; else shards build --release; fi
   - mv bin/should-i-watch-this bin/should-i-watch-this.${TRAVIS_OS_NAME}-$(uname -m)
   - ls -lh bin/should-i-watch-this.*
 
