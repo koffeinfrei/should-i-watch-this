@@ -19,6 +19,13 @@ The ratings are fetched from the following sources:
 
 ## Installation
 
+### Prebuilt binaries
+
+For Linux and Mac OSX there are binaries available for download:
+
+- [Linux](https://github.com/koffeinfrei/should-i-watch-this/releases/latest/download/should-i-watch-this.linux-x86_64)
+- [Mac OSX](https://github.com/koffeinfrei/should-i-watch-this/releases/latest/download/should-i-watch-this.osx-x86_64)
+
 ### From source
 
 ```bash
