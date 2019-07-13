@@ -9,7 +9,7 @@ install:
 
 script:
   - echo "--> format check..."
-  - format check
+  - crystal tool format --check
   - echo "--> ameba..."
   - bin/ameba
   - echo "--> build..."
