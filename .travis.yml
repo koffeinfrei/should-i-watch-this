@@ -12,13 +12,14 @@ install:
 script:
   - echo "--> format check"
   - crystal tool format --check
+
   - echo "--> ameba"
   - bin/ameba
+
   - echo "--> build"
-  - echo $TRAVIS_OS_NAME
   - shards build --release
   - mv bin/should-i-watch-this bin/should-i-watch-this.${TRAVIS_OS_NAME}-$(uname -m)
-  - ls -l bin
+  - ls -lh bin/should-i-watch-this.*
 
 deploy:
   provider: releases
