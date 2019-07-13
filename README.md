@@ -55,6 +55,4 @@ $ shards install
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
 
-## Contributors
-
-- [Alexis Reigel](https://github.com/koffeinfrei) - creator and maintainer
+Made with ☕️  by [Koffeinfrei](https://github.com/koffeinfrei)
