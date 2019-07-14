@@ -9,7 +9,9 @@ class Recommender
 
   def run
     text, emoji =
-      if unanimously_excellent?
+      if no_rating?
+        ["Hmm, there's no rating about this at all...", ":question:"]
+      elsif unanimously_excellent?
         ["Watch this right now, this is really excellent!", ":star2:"]
       elsif unanimously_good? || good_or_excellent?
         ["Go ahead, you'll probably enjoy this!", ":+1:"]
@@ -22,6 +24,10 @@ class Recommender
       end
 
     Recommendation.new(text, emoji)
+  end
+
+  def no_rating?
+    movie.score.values.all?(&.not_defined?)
   end
 
   def unanimously_excellent?
