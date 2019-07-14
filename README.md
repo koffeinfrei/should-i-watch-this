@@ -21,6 +21,8 @@ The ratings are fetched from the following sources:
 
 ### From source
 
+First you'll need to [install Crystal](https://crystal-lang.org/reference/installation/).
+
 ```bash
 $ git clone git@github.com:koffeinfrei/should-i-watch-this.git
 $ cd should-i-watch-this
