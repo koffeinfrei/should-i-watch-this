@@ -29,6 +29,21 @@ $ cd should-i-watch-this
 $ shards build --release
 ```
 
+### Using Docker
+
+```bash
+$ git clone git@github.com:koffeinfrei/should-i-watch-this.git
+$ cd should-i-watch-this
+$ docker run -it \
+  -v $PWD:/app \
+  -v $HOME/.config/should-i-watch-this:/root/.config/should-i-watch-this \
+  -w /app \
+  crystallang/crystal /bin/bash
+
+# Then, inside Docker container:
+$ shards build --release
+```
+
 ## Usage
 
 ```bash
