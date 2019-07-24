@@ -1,5 +1,5 @@
 class Configuration
-  getter config_file : String = Path.home.join(".config", ".should-i-watch-this").to_s
+  getter config_file : String = Path.home.join(".config", "should-i-watch-this", "omdb-api-key").to_s
 
   def key
     File.read(config_file)
