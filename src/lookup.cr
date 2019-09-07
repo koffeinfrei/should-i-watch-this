@@ -1,8 +1,5 @@
 require "json"
 
-require "string_inflection"
-require "inflector/core_ext"
-
 require "./movie"
 require "./progress"
 require "./score"
@@ -14,14 +11,8 @@ require "./http_grabber"
 require "./html_text_by_css"
 
 class Lookup
-  OMDB_TO_TOMATO_TYPE_MAP = {
-    "movie"  => "m",
-    "series" => "tv",
-  }
-
-  OMDB_URL  = "https://www.omdbapi.com/"
-  IMDB_URL  = "https://www.imdb.com"
-  TOMAT_URL = "https://www.rottentomatoes.com"
+  OMDB_URL = "https://www.omdbapi.com/"
+  IMDB_URL = "https://www.imdb.com"
 
   getter omdb_api_key : String
   getter movie : Movie
@@ -118,8 +109,9 @@ class Lookup
       unauthorized: "The OMDb API refused our request. It seems like your " \
                     "OMDb API key is not valid.",
     }).run(->abort(String), {
-      :t      => movie.title,
-      :apikey => omdb_api_key,
+      :t        => movie.title,
+      :tomatoes => "true",
+      :apikey   => omdb_api_key,
     })
 
     if omdb.try(&.["Response"]) == "False"
@@ -127,11 +119,11 @@ class Lookup
     end
 
     movie.title = omdb["Title"].as_s
-    movie.imdb_id = omdb["imdbID"].as_s
     movie.year = omdb["Year"].as_s
     movie.director = omdb["Director"].as_s
     movie.actors = omdb["Actors"].as_s
-    movie.type = omdb["Type"].as_s
+    movie.imdb_id = omdb["imdbID"].as_s
+    movie.tomato_url = omdb["tomatoURL"].as_s
 
     # metacritic from omdb
     meta_score = omdb["Metascore"].to_s
@@ -173,11 +165,7 @@ class Lookup
   # try to scrape the score from the rotten tomatoes website, as the value in
   # omdb is not really up-to-date
   def fetch_tomato
-    underscored_title = StringInflection.snake(
-      movie.title.tr("àäéèëöü", "aaeeeou").gsub(/[^\w]/, ' ')
-    )
-    url = "#{TOMAT_URL}/#{OMDB_TO_TOMATO_TYPE_MAP[movie.type]}/#{underscored_title}"
-    tomato_html = HtmlHttpGrabber.new(url, {
+    tomato_html = HtmlHttpGrabber.new(movie.tomato_url, {
       timeout: "Rotten Tomatoes can't be reached right now. Maybe your " \
                "connection is broken. Or the whole internet is down. Or just " \
                "www.rottentomatoes.com.",
@@ -190,7 +178,7 @@ class Lookup
       html_text_by_css(tomato_html, ".audience-score .mop-ratings-wrap__percentage")
     )
 
-    links[:tomato] = url
+    links[:tomato] = movie.tomato_url
   rescue Crest::NotFound
   end
 

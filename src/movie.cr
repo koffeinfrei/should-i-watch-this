@@ -1,10 +1,12 @@
+require "inflector/core_ext"
+
 class Movie
   property title : String
-  property imdb_id : String = ""
   property year : String = ""
   property director : String = ""
   property actors : String = ""
-  property type : String = ""
+  property imdb_id : String = ""
+  property tomato_url : String = ""
 
   getter score = {} of Symbol => Score
 

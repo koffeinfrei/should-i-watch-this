@@ -17,8 +17,6 @@ dependencies:
     branch: master
   cli:
     github: mosop/cli
-  string_inflection:
-    github: mosop/string_inflection
   inflector:
     github: phoffer/inflector.cr
     version: "~> 0.1.8"
