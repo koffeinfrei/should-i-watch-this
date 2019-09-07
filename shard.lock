@@ -14,11 +14,11 @@ shards:
 
   crest:
     github: mamantoha/crest
-    version: 0.20.0
+    version: 0.21.1
 
   emoji:
     github: veelenga/emoji.cr
-    commit: 808f66db7078200a69a1a01998b8a12cc802764b
+    commit: 22c147f37333a94249eac7ce54e7e9f1c4999838
 
   inflector:
     github: phoffer/inflector.cr
