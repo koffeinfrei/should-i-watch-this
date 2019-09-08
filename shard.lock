@@ -5,7 +5,7 @@ shards:
     version: 0.10.0
 
   callback:
-    github: mosop/callback
+    github: drujensen/callback
     version: 0.6.3
 
   cli:
