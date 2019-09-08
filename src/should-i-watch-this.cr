@@ -40,7 +40,11 @@ class ShouldIWatchThis < Cli::Supercommand
     def run
       Configuration.new.configure!
 
-      ::Lookup.new(args.title, show_links: args.show_links?).run
+      # if a title is not provided in quotes we append the remaining arguments
+      # to the title argument
+      title = ([args.title] + args.nameless_args).join(" ")
+
+      ::Lookup.new(title, show_links: args.show_links?).run
     end
   end
 
