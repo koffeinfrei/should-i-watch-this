@@ -30,6 +30,6 @@ targets:
   should-i-watch-this:
     main: src/should-i-watch-this.cr
 
-crystal: 0.29.0
+crystal: 0.30.1
 
 license: GPL-3.0
