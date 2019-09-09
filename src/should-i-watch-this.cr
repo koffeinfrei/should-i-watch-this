@@ -25,6 +25,9 @@ class ShouldIWatchThis < Cli::Supercommand
       arg "title",
         required: true,
         desc: "The title of the movie"
+      string ["-y", "--year"],
+        required: false,
+        desc: "The relase year of the movie"
       bool ["-l", "--show-links"],
         default: false,
         desc: "Output links to movies on the different platforms"
@@ -44,7 +47,7 @@ class ShouldIWatchThis < Cli::Supercommand
       # to the title argument
       title = ([args.title] + args.nameless_args).join(" ")
 
-      ::Lookup.new(title, show_links: args.show_links?).run
+      ::Lookup.new(title, show_links: args.show_links?, year: args.year?).run
     end
   end
 

@@ -22,8 +22,9 @@ class Lookup
   property error : String | Nil
   property result_output : ResultOutput
 
-  def initialize(title, show_links = false)
+  def initialize(title, show_links = false, year = nil)
     @movie = Movie.new(title)
+    @movie.year = year if year
 
     @channels = {
       progress: Channel(Nil).new,
@@ -110,6 +111,7 @@ class Lookup
                     "OMDb API key is not valid.",
     }).run(->abort(String), {
       :t        => movie.title,
+      :y        => movie.year,
       :tomatoes => "true",
       :apikey   => omdb_api_key,
     })
