@@ -124,6 +124,7 @@ class Lookup
     movie.actors = omdb["Actors"].as_s
     movie.imdb_id = omdb["imdbID"].as_s
     movie.tomato_url = omdb["tomatoURL"].as_s
+    movie.tomato_url = nil if movie.tomato_url == "N/A"
 
     # metacritic from omdb
     meta_score = omdb["Metascore"].to_s
@@ -165,7 +166,11 @@ class Lookup
   # try to scrape the score from the rotten tomatoes website, as the value in
   # omdb is not really up-to-date
   def fetch_tomato
-    tomato_html = HtmlHttpGrabber.new(movie.tomato_url, {
+    url = movie.tomato_url
+
+    return if url.nil?
+
+    tomato_html = HtmlHttpGrabber.new(url, {
       timeout: "Rotten Tomatoes can't be reached right now. Maybe your " \
                "connection is broken. Or the whole internet is down. Or just " \
                "www.rottentomatoes.com.",
