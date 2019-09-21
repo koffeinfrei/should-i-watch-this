@@ -10,14 +10,28 @@ jobs:
       matrix:
         os: [ubuntu-14.04, ubuntu-18.04, macOS-10.14, windows-2019]
 
-    container:
-      image: crystallang/crystal
-
     steps:
       - uses: actions/checkout@v1
+
+      - name: Setup crystal (Ubuntu)
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          curl -sSL https://dist.crystal-lang.org/apt/setup.sh | sudo bash
+          curl -sL "https://keybase.io/crystal/pgp_keys.asc" | sudo apt-key add -
+          echo "deb https://dist.crystal-lang.org/apt crystal main" | sudo tee /etc/apt/sources.list.d/crystal.list
+          sudo apt-get update
+          sudo apt install libyaml-dev
+          sudo apt install crystal
+
+      - name: Setup crystal (Mac)
+        if: startsWith(matrix.os, 'macOS')
+        run: brew install crystal
+
       - name: Install dependencies
         run: shards install
+
       - name: Format check
         run: crystal tool format --check
+
       - name: Ameba (static code analysis)
         run: bin/ameba
