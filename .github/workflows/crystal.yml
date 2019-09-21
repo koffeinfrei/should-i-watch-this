@@ -35,3 +35,13 @@ jobs:
 
       - name: Ameba (static code analysis)
         run: bin/ameba
+
+      - name: Build
+        env:
+          OS_NAME: ${{ matrix.os }}
+        run: |
+          export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opt/openssl/lib/pkgconfig # for macOS
+          crystal --version
+          shards build --release
+          mv bin/should-i-watch-this bin/should-i-watch-this.${OS_NAME}
+          ls -lh bin/should-i-watch-this.*
