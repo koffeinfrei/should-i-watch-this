@@ -1,0 +1,22 @@
+name: Crystal CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: crystallang/crystal
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: shards install
+    - name: Run tests
+      run: crystal spec
+    - name: Format check
+      run: crystal tool format --check
+    - name: Ameba (static code analysis)
+      run: bin/ameba
