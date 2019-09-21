@@ -45,3 +45,11 @@ jobs:
           shards build --release
           mv bin/should-i-watch-this bin/should-i-watch-this.${OS_NAME}
           ls -lh bin/should-i-watch-this.*
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sudo npm install --global release-it
+          sudo chown -R $USER:$(id -gn $USER) /home/runner/.config
+          release-it --verbose --ci --no-increment

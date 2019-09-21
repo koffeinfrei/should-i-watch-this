@@ -1,0 +1,9 @@
+github:
+  release: true
+  assets: ["bin/should-i-watch-this.*"]
+  releaseName: v${version}
+git:
+  commit: false
+  tag: false
+  push: false
+  requireUpstream: false
