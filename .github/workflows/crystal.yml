@@ -46,14 +46,13 @@ jobs:
           export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opt/openssl/lib/pkgconfig # for macOS
           crystal --version
           shards build --release
-          mv bin/should-i-watch-this bin/should-i-watch-this.${OS_NAME}
-          ls -lh bin/should-i-watch-this.*
+          tar -C bin/ -czf should-i-watch-this.${OS_NAME}.tgz should-i-watch-this
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v1
         with:
           name: should-i-watch-this.${{ matrix.os }}
-          path: bin/should-i-watch-this.${{ matrix.os }}
+          path: should-i-watch-this.${{ matrix.os }}.tgz
 
   release:
     runs-on: ubuntu-latest
