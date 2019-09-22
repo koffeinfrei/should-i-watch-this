@@ -8,6 +8,9 @@ jobs:
 
     strategy:
       matrix:
+        # whenever an os is added, a new download artifacts step
+        # `name: Download build artifacts <os>` needs to be added in the
+        # release job
         os: [ubuntu-16.04, ubuntu-18.04, macOS-10.14]
 
     steps:
@@ -46,6 +49,12 @@ jobs:
           mv bin/should-i-watch-this bin/should-i-watch-this.${OS_NAME}
           ls -lh bin/should-i-watch-this.*
 
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: should-i-watch-this.${{ matrix.os }}
+          path: bin/should-i-watch-this.${{ matrix.os }}
+
   release:
     runs-on: ubuntu-latest
 
@@ -53,6 +62,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+
+      - name: Download build artifacts ubuntu-16.04
+        uses: actions/download-artifact@v1
+        with:
+          name: should-i-watch-this.ubuntu-16.04
+          path: bin/
+
+      - name: Download build artifacts ubuntu-18.04
+        uses: actions/download-artifact@v1
+        with:
+          name: should-i-watch-this.ubuntu-18.04
+          path: bin/
+
+      - name: Download build artifacts macOS-10.14
+        uses: actions/download-artifact@v1
+        with:
+          name: should-i-watch-this.macOS-10.14
+          path: bin/
 
       - name: Release
         env:
