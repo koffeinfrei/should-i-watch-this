@@ -46,6 +46,14 @@ jobs:
           mv bin/should-i-watch-this bin/should-i-watch-this.${OS_NAME}
           ls -lh bin/should-i-watch-this.*
 
+  release:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v1
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
