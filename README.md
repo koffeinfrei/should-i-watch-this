@@ -19,6 +19,14 @@ The ratings are fetched from the following sources:
 
 ## Installation
 
+### Prebuilt binaries
+
+For Ubuntu and Mac OS there are binaries available for download:
+
+- [Ubuntu 18.04](https://github.com/koffeinfrei/should-i-watch-this/releases/latest/download/should-i-watch-this.ubuntu-18.04.tgz)
+- [Ubuntu 16.04](https://github.com/koffeinfrei/should-i-watch-this/releases/latest/download/should-i-watch-this.ubuntu-16.04.tgz)
+- [Mac OS 10.14](https://github.com/koffeinfrei/should-i-watch-this/releases/latest/download/should-i-watch-this.macOS-10.14.tgz)
+
 ### From source
 
 First you'll need to [install Crystal](https://crystal-lang.org/reference/installation/).
