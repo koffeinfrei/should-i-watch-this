@@ -27,6 +27,8 @@ For Ubuntu and Mac OS there are binaries available for download:
 - [Ubuntu 16.04](https://github.com/koffeinfrei/should-i-watch-this/releases/latest/download/should-i-watch-this.ubuntu-16.04.tgz)
 - [Mac OS 10.14](https://github.com/koffeinfrei/should-i-watch-this/releases/latest/download/should-i-watch-this.macOS-10.14.tgz)
 
+Extract the compressed archive and place the binary somewhere in your `$PATH`.
+
 ### From source
 
 First you'll need to [install Crystal](https://crystal-lang.org/reference/installation/).
@@ -35,12 +37,13 @@ First you'll need to [install Crystal](https://crystal-lang.org/reference/instal
 $ git clone git@github.com:koffeinfrei/should-i-watch-this.git
 $ cd should-i-watch-this
 $ shards build --release
+$ cp bin/should-i-watch-this <some directory in your $PATH>
 ```
 
 ## Usage
 
 ```bash
-$ bin/should-i-watch-this lookup "terminator 2"
+$ should-i-watch-this lookup "terminator 2"
 ```
 
 ## Development
