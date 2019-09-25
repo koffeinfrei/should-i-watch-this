@@ -1,5 +1,5 @@
 [![GitHub release](https://img.shields.io/github/release/koffeinfrei/should-i-watch-this.svg)](https://github.com/koffeinfrei/should-i-watch-this/releases)
-[![Build Status](https://travis-ci.org/koffeinfrei/should-i-watch-this.svg?branch=master)](https://travis-ci.org/koffeinfrei/should-i-watch-this)
+[![Build Status](https://github.com/koffeinfrei/should-i-watch-this/workflows/Crystal%20CI/badge.svg)](https://github.com/koffeinfrei/should-i-watch-this/actions?workflow=Crystal+CI)
 ![License](https://img.shields.io/github/license/koffeinfrei/should-i-watch-this.svg)
 
 # Should I watch this?
