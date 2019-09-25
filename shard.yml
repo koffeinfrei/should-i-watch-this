@@ -8,12 +8,6 @@ description: |
   Simple CLI to ask the internet if it's worth watching this movie.
 
 dependencies:
-  # FIXME: Fixes the breaking change introduced by 0.30.0:
-  #   Error: abstract `def Enumerable(T)#each(&block)` must be implemented by Callback::ResultSet(T)
-  # Use the fork until https://github.com/mosop/callback/pull/3 has been merged
-  # and optarg has been updated to that version.
-  callback:
-    github: drujensen/callback
   myhtml:
     github: kostya/myhtml
   crest:
@@ -22,7 +16,7 @@ dependencies:
     github: veelenga/emoji.cr
     branch: master
   cli:
-    github: mosop/cli
+    github: drujensen/cli
   inflector:
     github: phoffer/inflector.cr
     version: "~> 0.1.8"

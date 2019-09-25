@@ -1,0 +1,90 @@
+name: Crystal CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        # whenever an os is added, a new download artifacts step
+        # `name: Download build artifacts <os>` needs to be added in the
+        # release job
+        os: [ubuntu-16.04, ubuntu-18.04, macOS-10.14]
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup crystal (Ubuntu)
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          curl -sSL https://dist.crystal-lang.org/apt/setup.sh | sudo bash
+          curl -sL "https://keybase.io/crystal/pgp_keys.asc" | sudo apt-key add -
+          echo "deb https://dist.crystal-lang.org/apt crystal main" | sudo tee /etc/apt/sources.list.d/crystal.list
+          sudo apt-get update
+          sudo apt install libyaml-dev
+          sudo apt install crystal
+
+      - name: Setup crystal (Mac)
+        if: startsWith(matrix.os, 'macOS')
+        run: brew install crystal
+
+      - name: Install dependencies
+        run: shards install
+
+      - name: Format check
+        run: crystal tool format --check
+
+      - name: Ameba (static code analysis)
+        run: bin/ameba
+
+      - name: Build
+        env:
+          OS_NAME: ${{ matrix.os }}
+        run: |
+          export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opt/openssl/lib/pkgconfig # for macOS
+          crystal --version
+          shards build --release
+          tar -C bin/ -czf should-i-watch-this.${OS_NAME}.tgz should-i-watch-this
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: should-i-watch-this.${{ matrix.os }}
+          path: should-i-watch-this.${{ matrix.os }}.tgz
+
+  release:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Download build artifacts ubuntu-16.04
+        uses: actions/download-artifact@v1
+        with:
+          name: should-i-watch-this.ubuntu-16.04
+          path: bin/
+
+      - name: Download build artifacts ubuntu-18.04
+        uses: actions/download-artifact@v1
+        with:
+          name: should-i-watch-this.ubuntu-18.04
+          path: bin/
+
+      - name: Download build artifacts macOS-10.14
+        uses: actions/download-artifact@v1
+        with:
+          name: should-i-watch-this.macOS-10.14
+          path: bin/
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sudo npm install --global release-it
+          sudo chown -R $USER:$(id -gn $USER) /home/runner/.config
+          release-it --verbose --ci --no-increment
