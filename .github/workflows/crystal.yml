@@ -2,6 +2,10 @@ name: Crystal CI
 
 on: [push]
 
+.install_dependencies: &install_dependencies
+  name: Install dependencies
+  run: shards install
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -30,8 +34,8 @@ jobs:
         if: startsWith(matrix.os, 'macOS')
         run: brew install crystal
 
-      - name: Install dependencies
-        run: shards install
+      -
+        <<: *install_dependencies
 
       - name: Format check
         run: crystal tool format --check
