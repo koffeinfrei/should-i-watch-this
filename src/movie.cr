@@ -1,5 +1,7 @@
 require "inflector/core_ext"
 
+require "./score"
+
 class Movie
   property title : String
   property year : String = ""

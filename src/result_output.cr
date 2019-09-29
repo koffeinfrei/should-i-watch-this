@@ -1,6 +1,7 @@
 require "emoji"
 
 require "./movie"
+require "./recommender"
 
 class ResultOutput
   getter movie : Movie

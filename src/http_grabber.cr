@@ -1,3 +1,5 @@
+require "json"
+
 require "crest"
 require "myhtml"
 
