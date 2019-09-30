@@ -1,7 +1,7 @@
 require "json"
 require "should-i-watch-this/movie"
 require "should-i-watch-this/score_fetcher"
-require "should-i-watch-this/result_output"
+require "should-i-watch-this/text_output"
 
 # Provides an OpenFaaS function for should-i-watch-this.
 #
@@ -28,7 +28,7 @@ class Handler
     score_fetcher = ScoreFetcher.new(movie, omdb_token)
     score_fetcher.run
 
-    output = ResultOutput.new(
+    output = TextOutput.new(
       score_fetcher.movie, score_fetcher.links, show_links
     ).run(score_fetcher.error)
 
