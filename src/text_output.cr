@@ -3,7 +3,7 @@ require "emoji"
 require "./movie"
 require "./recommender"
 
-class ResultOutput
+class TextOutput
   getter movie : Movie
   getter links : Hash(Symbol, String | Nil)
   getter show_links : Bool
