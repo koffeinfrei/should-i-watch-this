@@ -14,6 +14,12 @@ require "should-i-watch-this/text_output"
 #     curl -H 'X-Auth-Token: <your omdb token>' \
 #         http://127.0.0.1:8080/function/should-i-watch-this?show_links=true\&year=1984 \
 #         -d "the terminator"
+
+# Example with json response (using curl):
+#     curl -H 'X-Auth-Token: <your omdb token>' \
+#         -H "Accept: application/json" \
+#         http://127.0.0.1:8080/function/should-i-watch-this?show_links=true\&year=1984 \
+#         -d "the terminator"
 class Handler
   def run(req : String)
     params = HTTP::Params.parse(ENV.fetch("Http_Query", ""))
