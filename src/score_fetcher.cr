@@ -14,15 +14,15 @@ class ScoreFetcher
 
   def initialize(@movie, @omdb_api_key)
     @channels = {
-      progress: Channel(Nil).new,
-      omdb:     Channel(Nil).new,
-      imdb:     Channel(Nil).new,
-      tomato:   Channel(Nil).new,
+      progress:        Channel(Nil).new,
+      omdb:            Channel(Nil).new,
+      imdb:            Channel(Nil).new,
+      rotten_tomatoes: Channel(Nil).new,
     }
 
     @links = {
-      :imdb   => nil,
-      :tomato => nil,
+      :imdb            => nil,
+      :rotten_tomatoes => nil,
     } of Symbol => String | Nil
   end
 
@@ -49,13 +49,13 @@ class ScoreFetcher
 
       fetch_tomato
 
-      channels[:tomato].send(nil)
+      channels[:rotten_tomatoes].send(nil)
     end
 
     spawn do
       channels[:omdb].receive
       channels[:imdb].receive
-      channels[:tomato].receive
+      channels[:rotten_tomatoes].receive
 
       channels[:progress].send(nil)
     end
@@ -94,7 +94,7 @@ class ScoreFetcher
 
     # metacritic from omdb
     meta_score = omdb["Metascore"].to_s
-    movie.score[:meta] = PercentageScore.new(
+    movie.score[:metacritic] = PercentageScore.new(
       if meta_score == "N/A"
         nil
       else
@@ -107,7 +107,7 @@ class ScoreFetcher
       rating["Source"] == "Rotten Tomatoes"
     end
     if tomato_score
-      movie.score[:tomato] = PercentageScore.new(
+      movie.score[:rotten_tomatoes] = PercentageScore.new(
         tomato_score["Value"].as_s
       )
     end
@@ -142,19 +142,19 @@ class ScoreFetcher
                "www.rottentomatoes.com.",
     }).run(->abort(String))
 
-    movie.score[:tomato] = PercentageScore.new(
+    movie.score[:rotten_tomatoes] = PercentageScore.new(
       html_text_by_css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage")
     )
-    movie.score[:tomato_audience] = PercentageScore.new(
+    movie.score[:rotten_tomatoes_audience] = PercentageScore.new(
       html_text_by_css(tomato_html, ".audience-score .mop-ratings-wrap__percentage")
     )
 
-    links[:tomato] = movie.tomato_url
+    links[:rotten_tomatoes] = movie.tomato_url
   rescue Crest::NotFound
   end
 
   def missing_scores!
-    [:imdb, :tomato, :tomato_audience, :meta].each do |key|
+    [:imdb, :rotten_tomatoes, :rotten_tomatoes_audience, :metacritic].each do |key|
       unless @movie.score.has_key?(key)
         @movie.score[key] = MissingScore.new
       end

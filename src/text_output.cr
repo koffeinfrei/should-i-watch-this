@@ -38,8 +38,8 @@ class TextOutput
 
        #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
 
-           score:        #{movie.score[:tomato]}
-           audience:     #{movie.score[:tomato_audience]}
+           score:        #{movie.score[:rotten_tomatoes]}
+           audience:     #{movie.score[:rotten_tomatoes_audience]}
 
        #{Emoji.emojize(":clapper:")}  IMDb
 
@@ -47,7 +47,7 @@ class TextOutput
 
        #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
 
-           score:        #{movie.score[:meta]}
+           score:        #{movie.score[:metacritic]}
 
 
 

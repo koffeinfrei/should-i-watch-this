@@ -39,10 +39,10 @@ class JsonOutput
 
         json.field "scores" do
           json.object do
-            json.field "rotten_tomatoes" do
+            json.field "tomato" do
               json.object do
-                json.field "score", movie.score[:tomato].to_s
-                json.field "audience", movie.score[:tomato_audience].to_s
+                json.field "score", movie.score[:rotten_tomatoes].to_s
+                json.field "audience", movie.score[:rotten_tomatoes_audience].to_s
               end
             end
 
@@ -54,7 +54,7 @@ class JsonOutput
 
             json.field "metacritic" do
               json.object do
-                json.field "score", movie.score[:meta].to_s
+                json.field "score", movie.score[:metacritic].to_s
               end
             end
           end
