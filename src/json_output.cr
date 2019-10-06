@@ -68,9 +68,9 @@ class JsonOutput
 
           if show_links
             json.field "links" do
-              json.array do
-                links.reject { |_key, value| value.nil? }.each do |_key, value|
-                  json.string value
+              json.object do
+                links.reject { |_key, value| value.nil? }.each do |key, value|
+                  json.field key, value
                 end
               end
             end
