@@ -5,7 +5,7 @@ export let movie;
 <style>
 
 h2 {
-  padding-left: 24px;
+  padding-left: 28px;
 }
 
 table {
@@ -13,7 +13,7 @@ table {
 }
 
 td.label {
-  padding-left: 24px;
+  padding-left: 28px;
   width: 20%;
 }
 
@@ -23,7 +23,7 @@ td.value {
 
 .icon {
   display: inline-block;
-  width: 24px;
+  width: 28px;
 }
 
 .recommendation {
