@@ -1,5 +1,7 @@
 <script>
-export let movie;
+  import ResultMoreLink from './ResultMoreLink.svelte';
+
+  export let movie;
 </script>
 
 <style>
@@ -43,54 +45,54 @@ td.value {
 <h2 class="box">{movie.title}</h2>
 
 <div class="box">
-<table>
-  <tr>
-    <td class="label">Year</td>
-    <td class="value">{movie.year}</td>
-  </tr>
-  <tr>
-    <td class="label">Director</td>
-    <td class="value">{movie.director}</td>
-  </tr>
-  <tr>
-    <td class="label">Actors</td>
-    <td class="value">{movie.actors}</td>
-  </tr>
-</table>
+  <table>
+    <tr>
+      <td class="label">Year</td>
+      <td class="value">{movie.year}</td>
+    </tr>
+    <tr>
+      <td class="label">Director</td>
+      <td class="value">{movie.director}</td>
+    </tr>
+    <tr>
+      <td class="label">Actors</td>
+      <td class="value">{movie.actors}</td>
+    </tr>
+  </table>
 </div>
 
 <div class="box">
-  <h3><span class="icon">🍅</span> Rotten Tomatoes</h3>
-<table>
-  <tr>
-    <td class="label">Score</td>
-    <td class="value">{movie.scores.rotten_tomatoes.score}</td>
-  </tr>
-  <tr>
-    <td class="label">Audience</td>
-    <td class="value">{movie.scores.rotten_tomatoes.audience}</td>
-  </tr>
-</table>
+  <h3><span class="icon">🍅</span>Rotten Tomatoes<ResultMoreLink link={movie.links.rotten_tomatoes} /></h3>
+  <table>
+    <tr>
+      <td class="label">Score</td>
+      <td class="value">{movie.scores.rotten_tomatoes.score}</td>
+    </tr>
+    <tr>
+      <td class="label">Audience</td>
+      <td class="value">{movie.scores.rotten_tomatoes.audience}</td>
+    </tr>
+  </table>
 </div>
 
 <div class="box">
-<h3><span class="icon">🎬</span> IMDb</h3>
-<table>
-  <tr>
-    <td class="label">Rating</td>
-    <td class="value">{movie.scores.imdb.rating}</td>
-  </tr>
-</table>
+  <h3><span class="icon">🎬</span>IMDb<ResultMoreLink link={movie.links.imdb} /></h3>
+  <table>
+    <tr>
+      <td class="label">Rating</td>
+      <td class="value">{movie.scores.imdb.rating}</td>
+    </tr>
+  </table>
 </div>
 
 <div class="box">
-<h3><span class="icon">📈</span> Metacritic</h3>
-<table>
-  <tr>
-    <td class="label">Score</td>
-    <td class="value">{movie.scores.metacritic.score}</td>
-  </tr>
-</table>
+  <h3><span class="icon">📈</span>Metacritic<ResultMoreLink link={movie.links.metacritic} /></h3>
+  <table>
+    <tr>
+      <td class="label">Score</td>
+      <td class="value">{movie.scores.metacritic.score}</td>
+    </tr>
+  </table>
 </div>
 
 <div class="recommendation box border">
