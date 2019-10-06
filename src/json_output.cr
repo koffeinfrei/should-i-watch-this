@@ -32,6 +32,7 @@ class JsonOutput
 
     JSON.build do |json|
       json.object do
+        json.field "title", movie.title
         json.field "year", movie.year
         json.field "director", movie.director
         json.field "actors", movie.actors
