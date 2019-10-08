@@ -41,7 +41,7 @@ main {
 }
 
 .box {
-  margin-bottom: 24px;
+  margin-bottom: 42px;
 }
 
 </style>

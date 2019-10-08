@@ -7,15 +7,19 @@
 <style>
 
 h2 {
-  padding-left: 28px;
+  padding-left: 38px;
 }
 
 table {
   width: 100%;
 }
 
+td {
+  vertical-align: top;
+}
+
 td.label {
-  padding-left: 28px;
+  padding-left: 38px;
   width: 20%;
 }
 
@@ -25,7 +29,7 @@ td.value {
 
 .icon {
   display: inline-block;
-  width: 28px;
+  width: 38px;
 }
 
 .recommendation {
@@ -33,7 +37,7 @@ td.value {
 }
 
 .box {
-  margin-bottom: 24px;
+  margin-bottom: 42px;
 }
 
 .border {

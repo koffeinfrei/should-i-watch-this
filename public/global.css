@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Fetamont-9ExkzVmc3w';
+  src: url('/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.eot');
+  src: url('/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.eot?#iefix') format('embedded-opentype'),
+  url('/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.woff') format('woff'),
+  url('/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.ttf') format('truetype'),
+  url('/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.svg#Fetamont-9ExkzVmc3w') format('svg');
+}
+
 html, body {
   position: relative;
   width: 100%;
@@ -9,8 +18,8 @@ body {
   margin: 0;
   padding: 50px 8px 8px 8px;
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  font-size: 18px;
+  font-family: 'Fetamont-9ExkzVmc3w';
+  font-size: 24px;
 }
 
 a {
