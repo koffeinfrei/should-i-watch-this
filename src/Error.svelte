@@ -5,7 +5,7 @@ export let text;
 <style>
   div {
     text-align: center;
-    color: #f94141;
+    color: #fba8a8;
   }
 </style>
 

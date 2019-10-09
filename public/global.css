@@ -14,7 +14,8 @@ html, body {
 }
 
 body {
-  color: #333;
+  color: #fff;
+  background: #629bbd;
   margin: 0;
   padding: 50px 8px 8px 8px;
   box-sizing: border-box;
@@ -23,16 +24,16 @@ body {
 }
 
 a {
-  color: rgb(0,100,200);
+  color: #c9e4ff;
   text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: #3a5977;
 }
 
 a:visited {
-  color: rgb(0,80,160);
+  color: #c9e4ff;
 }
 
 label {
