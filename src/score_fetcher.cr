@@ -91,6 +91,7 @@ class ScoreFetcher
     movie.imdb_id = omdb["imdbID"].as_s
     movie.tomato_url = omdb["tomatoURL"].as_s
     movie.tomato_url = nil if movie.tomato_url == "N/A"
+    movie.poster_url = omdb["Poster"].as_s
 
     # metacritic from omdb
     meta_score = omdb["Metascore"].to_s

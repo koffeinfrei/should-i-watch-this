@@ -36,6 +36,7 @@ class JsonOutput
         json.field "year", movie.year
         json.field "director", movie.director
         json.field "actors", movie.actors
+        json.field "poster_url", movie.poster_url
 
         json.field "scores" do
           json.object do
