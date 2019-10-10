@@ -10,10 +10,6 @@ h2 {
   padding-left: 38px;
 }
 
-table {
-  width: 100%;
-}
-
 td {
   vertical-align: top;
 }
@@ -44,25 +40,34 @@ td.value {
   padding-top: 8px;
   border: 1px solid #ccc;
 }
+
+img.poster {
+  height: auto;
+  width: 220px;
+  margin-left: 38px;
+}
 </style>
 
 <h2 class="box">{movie.title}</h2>
 
 <div class="box">
-  <table>
-    <tr>
-      <td class="label">Year</td>
-      <td class="value">{movie.year}</td>
-    </tr>
-    <tr>
-      <td class="label">Director</td>
-      <td class="value">{movie.director}</td>
-    </tr>
-    <tr>
-      <td class="label">Actors</td>
-      <td class="value">{movie.actors}</td>
-    </tr>
-  </table>
+  <div style="display: flex">
+    <img src={movie.poster_url || '/no-picture.png'} width="220" class="poster" />
+    <table>
+      <tr>
+        <td class="label">Year</td>
+        <td class="value">{movie.year}</td>
+      </tr>
+      <tr>
+        <td class="label">Director</td>
+        <td class="value">{movie.director}</td>
+      </tr>
+      <tr>
+        <td class="label">Actors</td>
+        <td class="value">{movie.actors}</td>
+      </tr>
+    </table>
+  </div>
 </div>
 
 <div class="box">
