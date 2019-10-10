@@ -41,7 +41,11 @@ main {
 }
 
 .box {
-  margin-bottom: 42px;
+  margin-bottom: 53px;
+}
+
+.footer {
+  margin-bottom: 8px;
 }
 
 </style>
@@ -52,7 +56,7 @@ main {
     <button on:click={handleClick}>Lookup</button>
   </section>
 
-  <section>
+  <section class="box">
     {#await promise}
       <section class="center box">
         <Spinner />
@@ -68,5 +72,9 @@ main {
     {:catch error}
       <Error text={error.message} />
     {/await}
+  </section>
+
+  <section class="center footer">
+    Made with ☕️  by <a href="https://www.koffeinfrei.org" target="_blank">Koffeinfrei ⭧</a>
   </section>
 </main>
