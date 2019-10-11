@@ -21,7 +21,8 @@
       return { error: 'Hmm? I think you forgot to enter the movie title.' };
     }
 
-    const url = 'http://openfaas.koffeinfrei.org:31112/function/should-i-watch-this-www';
+    const url = 'http://openfaas.koffeinfrei.org:31112/function/should-i-watch-this-www' +
+      '?show_links=true';
 
     const response = await fetch(url, {
       method: 'POST',
