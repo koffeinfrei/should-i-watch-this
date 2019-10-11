@@ -10,6 +10,12 @@
     promise = fetchMovie();
   }
 
+  function handleKeyup(event) {
+    if (event.key === "Enter") {
+      handleClick();
+    }
+  }
+
   async function fetchMovie() {
     if (!title) {
       return { error: 'Hmm? I think you forgot to enter the movie title.' };
@@ -52,7 +58,7 @@ main {
 
 <main>
   <section class="center box">
-    <input bind:value={title} placeholder="Enter the movie title">
+    <input bind:value={title} on:keyup={handleKeyup} placeholder="Enter the movie title">
     <button on:click={handleClick}>Lookup</button>
   </section>
 
