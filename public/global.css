@@ -21,6 +21,11 @@ body {
   box-sizing: border-box;
   font-family: 'Fetamont-9ExkzVmc3w';
   font-size: 24px;
+  /* make footer stick to bottom initially */
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 a {

@@ -41,6 +41,7 @@
 main {
   margin: 0 auto;
   max-width: 800px;
+  margin-bottom: 53px;
 }
 
 .center {
@@ -52,7 +53,7 @@ main {
 }
 
 .footer {
-  margin-bottom: 8px;
+  margin: auto 0 8px 0;
 }
 
 </style>
@@ -80,8 +81,8 @@ main {
       <Error text={error.message} />
     {/await}
   </section>
-
-  <section class="center footer">
-    Made with ☕️  by <a href="https://www.koffeinfrei.org" target="_blank">Koffeinfrei ⭧</a>
-  </section>
 </main>
+
+<section class="center footer">
+  Made with ☕️  by <a href="https://www.koffeinfrei.org" target="_blank">Koffeinfrei ⭧</a>
+</section>
