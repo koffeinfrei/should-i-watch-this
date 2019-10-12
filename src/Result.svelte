@@ -82,7 +82,7 @@ td.value {
   </div>
 
   <div>
-    <img src={movie.poster_url || '/default-poster.png'} width="220" class="poster" />
+    <img src={movie.poster_url || '/default-poster.png'} width="220" class="poster" alt="poster" />
   </div>
 </div>
 
