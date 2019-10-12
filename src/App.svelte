@@ -1,13 +1,16 @@
 <script>
   import { onMount } from 'svelte';
 
+  import { setUrl, getMovieFromUrl } from './url';
+  import { fetchMovie } from './fetchMovie';
+
   import Result from './Result.svelte';
   import Error from './Error.svelte';
   import Spinner from './Spinner.svelte';
 
   let title = '';
   let year = '';
-  let promise;
+  let fetchMoviePromise;
 
   onMount(async () => {
     const {titleFromUrl, yearFromUrl} = getMovieFromUrl();
@@ -20,51 +23,17 @@
   });
 
   function handleClick() {
-    promise = fetchMovie();
+    fetchMoviePromise = fetchMovie(title, year);
+
+    fetchMoviePromise.then((movie) => {
+      setUrl(movie);
+    });
   }
 
   function handleKeyup(event) {
     if (event.key === "Enter") {
       handleClick();
     }
-  }
-
-  function setUrl(movie) {
-    location.hash = `/${encodeURI(movie.title)}/${movie.year}`;
-  }
-
-  function getMovieFromUrl() {
-    const [_, titleFromUrl, yearFromUrl] = location.hash.split(/\//);
-
-    if (!titleFromUrl) {
-      return {};
-    }
-
-    return {
-      yearFromUrl,
-      titleFromUrl: decodeURI(titleFromUrl)
-    }
-  }
-
-  async function fetchMovie() {
-    if (!title) {
-      return { error: 'Hmm? I think you forgot to enter the movie title.' };
-    }
-
-    const url = 'http://openfaas.koffeinfrei.org:31112' +
-      '/function/should-i-watch-this-www' +
-      `?show_links=true&year=${year}`;
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'X-Auth-Token': ''
-      },
-      body: title
-    });
-    return await response.json();
   }
 </script>
 
@@ -96,7 +65,7 @@ main {
   </section>
 
   <section class="box">
-    {#await promise}
+    {#await fetchMoviePromise}
       <section class="center box">
         <Spinner />
       </section>
