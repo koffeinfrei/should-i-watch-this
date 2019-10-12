@@ -3,6 +3,18 @@ require 'net/http'
 # TODO document that this is a proxy handler
 class Handler
   def run(body, headers)
+    if headers['REQUEST_METHOD'] == 'OPTIONS'
+      return [
+        [],
+        {
+          'Allow' => 'POST, GET, OPTIONS',
+          'Access-Control-Allow-Methods' => 'POST, GET, OPTIONS',
+          'Access-Control-Allow-Origin' => '*',
+          'Access-Control-Allow-Headers' => 'X-Auth-Token, Accept'
+        }
+      ]
+    end
+
     function_host = ENV['SHOULD_I_WATCH_THIS_SERVICE_HOST']
     function_port = ENV['SHOULD_I_WATCH_THIS_SERVICE_PORT']
     query_string = headers['rack.request.query_string']
