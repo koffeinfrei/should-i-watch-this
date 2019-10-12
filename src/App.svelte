@@ -25,8 +25,10 @@
   function handleClick() {
     fetchMoviePromise = fetchMovie(title, year);
 
-    fetchMoviePromise.then((movie) => {
-      setUrl(movie);
+    fetchMoviePromise.then((result) => {
+      if (!result.error) {
+        setUrl(result);
+      }
     });
   }
 
