@@ -1,5 +1,5 @@
 export function setUrl(movie) {
-  location.hash = `/${encodeURI(movie.title)}/${movie.year}`;
+  location.hash = `/${encodeURIComponent(movie.title)}/${movie.year}`;
 }
 
 export function getMovieFromUrl() {
@@ -11,6 +11,6 @@ export function getMovieFromUrl() {
 
   return {
     yearFromUrl,
-    titleFromUrl: decodeURI(titleFromUrl)
+    titleFromUrl: decodeURIComponent(titleFromUrl)
   }
 }
