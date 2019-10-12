@@ -4,7 +4,7 @@ export async function fetchMovie(title, year) {
   }
 
   const url = 'http://openfaas.koffeinfrei.org:31112' +
-    '/function/should-i-watch-this-www' +
+    '/function/should-i-watch-this-cors' +
     `?show_links=true&year=${year}`;
 
   const response = await fetch(url, {
