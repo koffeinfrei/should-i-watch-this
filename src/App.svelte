@@ -1,10 +1,23 @@
 <script>
+  import { onMount } from 'svelte';
+
   import Result from './Result.svelte';
   import Error from './Error.svelte';
   import Spinner from './Spinner.svelte';
 
   let title = '';
+  let year = '';
   let promise;
+
+  onMount(async () => {
+    const {titleFromUrl, yearFromUrl} = getMovieFromUrl();
+
+    if (titleFromUrl) {
+      title = titleFromUrl;
+      year = yearFromUrl;
+      handleClick();
+    }
+  });
 
   function handleClick() {
     promise = fetchMovie();
@@ -16,13 +29,31 @@
     }
   }
 
+  function setUrl(movie) {
+    location.hash = `/${encodeURI(movie.title)}/${movie.year}`;
+  }
+
+  function getMovieFromUrl() {
+    const [_, titleFromUrl, yearFromUrl] = location.hash.split(/\//);
+
+    if (!titleFromUrl) {
+      return {};
+    }
+
+    return {
+      yearFromUrl,
+      titleFromUrl: decodeURI(titleFromUrl)
+    }
+  }
+
   async function fetchMovie() {
     if (!title) {
       return { error: 'Hmm? I think you forgot to enter the movie title.' };
     }
 
-    const url = 'http://openfaas.koffeinfrei.org:31112/function/should-i-watch-this-www' +
-      '?show_links=true';
+    const url = 'http://openfaas.koffeinfrei.org:31112' +
+      '/function/should-i-watch-this-www' +
+      `?show_links=true&year=${year}`;
 
     const response = await fetch(url, {
       method: 'POST',
