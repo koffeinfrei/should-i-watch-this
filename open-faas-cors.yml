@@ -1,0 +1,9 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  should-i-watch-this-cors:
+    lang: ruby-http
+    handler: ./open-faas-cors
+    image: koffeinfrei/should-i-watch-this-cors:latest
