@@ -18,11 +18,23 @@
     if (titleFromUrl) {
       title = titleFromUrl;
       year = yearFromUrl;
-      handleClick();
+      run();
     }
   });
 
   function handleClick() {
+    year = '';
+    run();
+  }
+
+  function handleKeyup(event) {
+    if (event.key === "Enter") {
+      year = '';
+      run();
+    }
+  }
+
+  function run() {
     fetchMoviePromise = fetchMovie(title, year);
 
     fetchMoviePromise.then((result) => {
@@ -30,12 +42,6 @@
         setUrl(result);
       }
     });
-  }
-
-  function handleKeyup(event) {
-    if (event.key === "Enter") {
-      handleClick();
-    }
   }
 </script>
 
