@@ -20,7 +20,7 @@ td {
 
 td.label {
   padding-left: 38px;
-  width: 20%;
+  width: 9rem;
 }
 
 td.value {
@@ -82,7 +82,7 @@ td.value {
   </div>
 
   <div>
-    <img src={movie.poster_url || '/default-poster.png'} width="220" class="poster" alt="poster" />
+    <img src={movie.poster_url || '/default-poster.png'} width="130" class="poster" alt="poster" />
   </div>
 </div>
 
