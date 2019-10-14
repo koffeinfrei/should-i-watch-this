@@ -1,6 +1,8 @@
 <style>
 .footer {
-  margin: auto 0 8px 0;
+  margin: auto 0 0 0;
+  /* due to flexbox margin-bottom doesn't work (see body definition in global.css) */
+  padding-bottom: 8px;
   text-align: center;
   font-size: 0.9em;
 }
