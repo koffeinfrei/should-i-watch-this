@@ -7,6 +7,7 @@
   import Result from './Result.svelte';
   import Error from './Error.svelte';
   import Spinner from './Spinner.svelte';
+  import Footer from './Footer.svelte';
 
   let title = '';
   let year = '';
@@ -59,11 +60,6 @@ main {
 .box {
   margin-bottom: 53px;
 }
-
-.footer {
-  margin: auto 0 8px 0;
-}
-
 </style>
 
 <main>
@@ -91,6 +87,4 @@ main {
   </section>
 </main>
 
-<section class="center footer">
-  Made with ☕️  by <a href="https://www.koffeinfrei.org" target="_blank">Koffeinfrei ⭧</a>
-</section>
+<Footer />
