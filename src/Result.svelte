@@ -42,7 +42,7 @@ td.value {
 
 .border {
   padding-top: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #000;
 }
 
 .summary {

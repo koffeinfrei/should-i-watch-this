@@ -14,8 +14,8 @@ html, body {
 }
 
 body {
-  color: #fff;
-  background: #629bbd;
+  color: #000;
+  background-image: linear-gradient(to right,#ff8a00,#e52e71);
   margin: 0;
   padding: 50px 8px 8px 8px;
   box-sizing: border-box;
@@ -28,17 +28,14 @@ body {
   flex-direction: column;
 }
 
-a {
-  color: #c9e4ff;
+a,
+a:visited {
+  color: #50565c;
   text-decoration: none;
 }
 
 a:hover {
-  color: #3a5977;
-}
-
-a:visited {
-  color: #c9e4ff;
+  color: #000;
 }
 
 label {
