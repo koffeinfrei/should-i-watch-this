@@ -1,0 +1,14 @@
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    certmanager.k8s.io/issuer: letsencrypt-prod
+  tls:
+    - hosts:
+        - faas.koffeinfrei.org
+      secretName: openfaas-crt
+  hosts:
+    - host: faas.koffeinfrei.org
+      serviceName: gateway
+      servicePort: 8080
+      path: /

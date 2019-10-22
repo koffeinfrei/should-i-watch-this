@@ -1,8 +1,9 @@
 require "emoji"
 
 require "./movie"
+require "./recommender"
 
-class ResultOutput
+class TextOutput
   getter movie : Movie
   getter links : Hash(Symbol, String | Nil)
   getter show_links : Bool
@@ -37,8 +38,8 @@ class ResultOutput
 
        #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
 
-           score:        #{movie.score[:tomato]}
-           audience:     #{movie.score[:tomato_audience]}
+           score:        #{movie.score[:rotten_tomatoes]}
+           audience:     #{movie.score[:rotten_tomatoes_audience]}
 
        #{Emoji.emojize(":clapper:")}  IMDb
 
@@ -46,7 +47,7 @@ class ResultOutput
 
        #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
 
-           score:        #{movie.score[:meta]}
+           score:        #{movie.score[:metacritic]}
 
 
 
