@@ -57,7 +57,7 @@ class Handler
     movie = renderer.new(result, show_links).run
 
     {
-      body:    movie,
+      body:    "#{movie}\n",
       headers: HTTP::Headers{
         "Content-Type"                => content_type,
         "Access-Control-Allow-Origin" => "*",
