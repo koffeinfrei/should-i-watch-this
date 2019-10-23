@@ -1,34 +1,16 @@
 require "emoji"
 
-require "./movie"
-require "./recommender"
+require "./base_output_renderer"
 
-class TextOutput
-  getter movie : Movie
-  getter links : Hash(Symbol, String | Nil)
-  getter show_links : Bool
-
-  def initialize(@movie, @links, @show_links)
-  end
-
-  def run(error)
-    if error
-      output_error(error)
-    else
-      output_success
-    end
-  end
-
-  def output_error(error)
+class TextOutputRenderer < BaseOutputRenderer
+  def render_error
     <<-DOC
            #{Emoji.emojize(":cry:")}  #{error}
 
     DOC
   end
 
-  def output_success
-    recommendation = Recommender.new(movie).run
-
+  def render_success(recommendation)
     <<-DOC
        year:             #{movie.year}
        director:         #{movie.director}

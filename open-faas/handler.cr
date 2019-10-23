@@ -3,8 +3,8 @@ require "http/request"
 require "http/headers"
 require "should-i-watch-this/movie"
 require "should-i-watch-this/score_fetcher"
-require "should-i-watch-this/text_output"
-require "should-i-watch-this/json_output"
+require "should-i-watch-this/text_output_renderer"
+require "should-i-watch-this/json_output_renderer"
 
 # Provides an OpenFaaS function for should-i-watch-this.
 #
@@ -50,9 +50,9 @@ class Handler
     content_type = headers.fetch("Accept", "text/plain")
     renderer =
       if content_type == "application/json"
-        JsonOutput
+        JsonOutputRenderer
       else
-        TextOutput
+        TextOutputRenderer
       end
 
     movie = renderer.new(

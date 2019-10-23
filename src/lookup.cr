@@ -1,7 +1,7 @@
 require "./movie"
 require "./progress"
 require "./configuration"
-require "./text_output"
+require "./text_output_renderer"
 require "./score_fetcher"
 
 class Lookup
@@ -26,10 +26,8 @@ class Lookup
 
     score_fetcher.run
 
-    output = TextOutput.new(score_fetcher.movie, score_fetcher.links, show_links)
+    output = TextOutputRenderer.new(score_fetcher.movie, score_fetcher.links, show_links, score_fetcher.error)
 
-    progress.stop(
-      output.run(score_fetcher.error)
-    )
+    progress.stop(output.run)
   end
 end

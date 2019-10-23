@@ -1,25 +1,10 @@
 require "json"
 require "emoji"
 
-require "./recommender"
+require "./base_output_renderer"
 
-class JsonOutput
-  getter movie : Movie
-  getter links : Hash(Symbol, String | Nil)
-  getter show_links : Bool
-
-  def initialize(@movie, @links, @show_links)
-  end
-
-  def run(error)
-    if error
-      output_error(error)
-    else
-      output_success
-    end
-  end
-
-  def output_error(error)
+class JsonOutputRenderer < BaseOutputRenderer
+  def render_error
     JSON.build do |json|
       json.object do
         json.field "error", error
@@ -27,9 +12,7 @@ class JsonOutput
     end
   end
 
-  def output_success
-    recommendation = Recommender.new(movie).run
-
+  def render_success(recommendation)
     JSON.build do |json|
       json.object do
         json.field "title", movie.title
