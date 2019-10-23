@@ -44,8 +44,7 @@ class Handler
     movie.year = year if year
 
     omdb_token = headers["X-Auth-Token"]
-    score_fetcher = ScoreFetcher.new(movie, omdb_token)
-    score_fetcher.run
+    result = ScoreFetcher.new(movie, omdb_token).run
 
     content_type = headers.fetch("Accept", "text/plain")
     renderer =
@@ -55,9 +54,7 @@ class Handler
         TextOutputRenderer
       end
 
-    movie = renderer.new(
-      score_fetcher.movie, score_fetcher.links, show_links
-    ).run(score_fetcher.error)
+    movie = renderer.new(result, show_links).run
 
     {
       body:    movie,

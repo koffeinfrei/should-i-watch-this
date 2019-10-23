@@ -1,13 +1,16 @@
 require "./movie"
 require "./recommender"
+require "./output_result"
 
 abstract class BaseOutputRenderer
-  getter movie : Movie
-  getter links : Hash(Symbol, String | Nil)
+  getter output_result : OutputResult
   getter show_links : Bool
-  getter error : String | Nil
 
-  def initialize(@movie, @links, @show_links, @error)
+  delegate movie, to: @output_result
+  delegate links, to: @output_result
+  delegate error, to: @output_result
+
+  def initialize(@output_result, @show_links)
   end
 
   def run

@@ -1,18 +1,21 @@
 require "./movie"
 require "./http_grabber"
 require "./html_text_by_css"
+require "./output_result"
 
 class ScoreFetcher
   OMDB_URL = "https://www.omdbapi.com/"
   IMDB_URL = "https://www.imdb.com"
 
-  getter movie : Movie
   getter omdb_api_key : String
   getter channels
-  getter links
-  property error : String | Nil
+  getter result
 
-  def initialize(@movie, @omdb_api_key)
+  delegate movie, to: @result
+  delegate links, to: @result
+  delegate error, to: @result
+
+  def initialize(movie, @omdb_api_key)
     @channels = {
       progress:        Channel(Nil).new,
       omdb:            Channel(Nil).new,
@@ -20,10 +23,7 @@ class ScoreFetcher
       rotten_tomatoes: Channel(Nil).new,
     }
 
-    @links = {
-      :imdb            => nil,
-      :rotten_tomatoes => nil,
-    } of Symbol => String | Nil
+    @result = OutputResult.new(movie)
   end
 
   def run
@@ -63,6 +63,8 @@ class ScoreFetcher
     channels[:progress].receive
 
     missing_scores!
+
+    result
   end
 
   def fetch_omdb
@@ -157,14 +159,14 @@ class ScoreFetcher
 
   def missing_scores!
     [:imdb, :rotten_tomatoes, :rotten_tomatoes_audience, :metacritic].each do |key|
-      unless @movie.score.has_key?(key)
-        @movie.score[key] = MissingScore.new
+      unless movie.score.has_key?(key)
+        movie.score[key] = MissingScore.new
       end
     end
   end
 
   def abort(error_message)
-    self.error = error_message
+    error = error_message
 
     # cancel all requests
     channels.each_value do |channel|

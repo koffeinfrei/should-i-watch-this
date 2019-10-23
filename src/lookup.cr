@@ -24,9 +24,9 @@ class Lookup
       progress.start
     end
 
-    score_fetcher.run
+    result = score_fetcher.run
 
-    output = TextOutputRenderer.new(score_fetcher.movie, score_fetcher.links, show_links, score_fetcher.error)
+    output = TextOutputRenderer.new(result, show_links)
 
     progress.stop(output.run)
   end
