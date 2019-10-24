@@ -5,7 +5,6 @@
 </script>
 
 <style>
-
 h2 {
   padding-left: 38px;
 }
@@ -45,17 +44,29 @@ td.value {
   border: 1px solid #000;
 }
 
-.summary {
-  display: flex;
+@media (min-width: 40em) {
+  .summary {
+    display: flex;
+  }
 }
 
-.description {
-  margin-right: 38px;
+@media (min-width: 40em) {
+  .description {
+    margin-right: 38px;
+  }
 }
 
 .poster {
   height: auto;
   width: 130px;
+  margin-left: 38px;
+  margin-bottom: 42px;
+}
+
+@media (min-width: 40em) {
+  .poster {
+    margin: 0;
+  }
 }
 </style>
 

@@ -38,11 +38,13 @@ a:hover {
   color: #000;
 }
 
+a.external {
+  margin-right: 2px;
+}
 a.external:after {
- content: '⭧';
+ content: '↗';
  position: relative;
- top: 1px;
- left: 4px;
+ font-size: 0.9em;
 }
 
 label {
