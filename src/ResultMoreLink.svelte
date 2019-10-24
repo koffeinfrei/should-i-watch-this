@@ -11,5 +11,5 @@
 </style>
 
 {#if link}
-  <a href={link} target="_blank">more ⭧</a>
+  <a href={link} class="external" target="_blank">more</a>
 {/if}
