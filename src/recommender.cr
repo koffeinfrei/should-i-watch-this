@@ -1,10 +1,10 @@
-require "./movie"
+require "./score"
 require "./recommendation"
 
 class Recommender
-  getter movie : Movie
+  getter score : Hash(Symbol, Score)
 
-  def initialize(@movie)
+  def initialize(@score)
   end
 
   def run
@@ -27,35 +27,35 @@ class Recommender
   end
 
   def no_rating?
-    movie.score.values.all?(&.not_defined?)
+    score.values.all?(&.not_defined?)
   end
 
   def unanimously_excellent?
-    movie.score.values.all? do |score|
+    score.values.all? do |score|
       score.excellent? || score.not_defined?
     end
   end
 
   def unanimously_good?
-    movie.score.values.all? do |score|
+    score.values.all? do |score|
       score.good? || score.not_defined?
     end
   end
 
   def unanimously_average?
-    movie.score.values.all? do |score|
+    score.values.all? do |score|
       score.average? || score.not_defined?
     end
   end
 
   def unanimously_bad?
-    movie.score.values.all? do |score|
+    score.values.all? do |score|
       score.bad? || score.not_defined?
     end
   end
 
   def good_or_excellent?
-    movie.score.values.all? do |score|
+    score.values.all? do |score|
       score.excellent? || score.good? || score.not_defined?
     end
   end

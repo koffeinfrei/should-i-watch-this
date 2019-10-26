@@ -17,7 +17,7 @@ abstract class BaseOutputRenderer
     if error
       render_error
     else
-      render_success(Recommender.new(movie).run)
+      render_success(Recommender.new(movie.score).run)
     end
   end
 
