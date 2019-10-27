@@ -13,7 +13,6 @@ class ScoreFetcher
 
   delegate movie, to: @result
   delegate links, to: @result
-  delegate error, to: @result
 
   def initialize(movie, @omdb_api_key)
     @channels = {
@@ -166,7 +165,7 @@ class ScoreFetcher
   end
 
   def abort(error_message)
-    error = error_message
+    result.error = error_message
 
     # cancel all requests
     channels.each_value do |channel|
