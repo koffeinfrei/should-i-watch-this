@@ -39,6 +39,9 @@ jobs:
       - name: Ameba (static code analysis)
         run: bin/ameba
 
+      - name: Spec
+        run: crystal spec
+
       - name: Build
         env:
           OS_NAME: ${{ matrix.os }}

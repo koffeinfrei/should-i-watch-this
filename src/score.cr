@@ -1,11 +1,10 @@
 require "./score_value"
 
 abstract class Score
-  RANGE = {
-    excellent: (0.8..1),
-    good:      (0.7..0.79),
-    average:   (0.51..0.69),
-    bad:       (0..0.5),
+  THRESHOLDS = {
+    excellent: 0.8,
+    good:      0.7,
+    average:   0.50,
   }
 
   getter score_value : ScoreValue
@@ -17,19 +16,19 @@ abstract class Score
   end
 
   def excellent?
-    within_range?(:excellent)
+    above_threshold?(:excellent)
   end
 
   def good?
-    within_range?(:good)
+    above_threshold?(:good)
   end
 
   def average?
-    within_range?(:average)
+    above_threshold?(:average)
   end
 
   def bad?
-    within_range?(:bad)
+    below_threshold?(:average)
   end
 
   def not_defined?
@@ -49,12 +48,26 @@ abstract class Score
 
   abstract def value
 
-  private def within_range?(type)
+  private def above_threshold?(type)
+    with_scaled_value?(type) do |scaled_value|
+      scaled_value >= THRESHOLDS[type]
+    end
+  end
+
+  private def below_threshold?(type)
+    with_scaled_value?(type) do |scaled_value|
+      scaled_value < THRESHOLDS[type]
+    end
+  end
+
+  private def with_scaled_value?(type)
     _value = value
 
     return false if _value.nil?
 
-    RANGE[type].includes?(_value.to_f / max_value)
+    scaled_value = _value.to_f / max_value
+
+    yield scaled_value
   end
 end
 
