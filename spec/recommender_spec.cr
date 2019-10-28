@@ -67,7 +67,7 @@ SAMPLES = [
     "63%",
     "6.9",
     "61/100",
-    "This seems to be a fine watch, but it probably won't change your life.",
+    "Meh. This seems to be ok, but it probably won't change your life.",
   ],
   [
     "Grudge Match",
