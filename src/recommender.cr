@@ -52,76 +52,55 @@ class Recommender
     scores.all?(&.not_defined?)
   end
 
-  # TODO remove all not_defined?
   def unanimously_excellent?
-    scores.all? do |score|
-      score.excellent? || score.not_defined?
-    end
+    scores.all?(&.excellent?)
   end
 
   def mostly_excellent?
-    scores.count do |score|
-      score.excellent? || score.not_defined?
-    end == mostly_count
+    scores.count(&.excellent?) == mostly_count
   end
 
   def half_excellent?
-    scores.count do |score|
-      score.excellent? || score.not_defined?
-    end == half_count
+    scores.count(&.excellent?) == half_count
   end
 
   def controversially_excellent?
-    excellent_count = scores.count do |score|
-      score.excellent? || score.not_defined?
-    end
+    excellent_count = scores.count(&.excellent?)
 
     average_or_bad_count = scores.count do |score|
-      (score.average? && !score.good?) || score.bad? || score.not_defined?
+      (score.average? && !score.good?) || score.bad?
     end
 
     excellent_count == half_count && average_or_bad_count >= half_count
   end
 
   def unanimously_good?
-    scores.all? do |score|
-      score.good? || score.not_defined?
-    end
+    scores.all?(&.good?)
   end
 
   def mostly_good?
-    scores.count do |score|
-      score.good? || score.not_defined?
-    end == mostly_count
+    scores.count(&.good?) == mostly_count
   end
 
   def half_good?
-    scores.count do |score|
-      score.good? || score.not_defined?
-    end == half_count
+    scores.count(&.good?) == half_count
   end
 
   def unanimously_average?
-    scores.all? do |score|
-      score.average? || score.not_defined?
-    end
+    scores.all?(&.average?)
   end
 
   def mostly_average_or_bad?
     scores.count do |score|
-      score.average? || score.bad? || score.not_defined?
+      score.average? || score.bad?
     end >= mostly_count
   end
 
   def unanimously_bad?
-    scores.all? do |score|
-      score.bad? || score.not_defined?
-    end
+    scores.all?(&.bad?)
   end
 
   def mostly_bad?
-    scores.count do |score|
-      score.bad? || score.not_defined?
-    end == mostly_count
+    scores.count(&.bad?) == mostly_count
   end
 end
