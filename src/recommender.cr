@@ -32,7 +32,7 @@ class Recommender
       elsif half_good?
         ["You may enjoy this. It could also be boring though.", ":ok_hand:"]
       elsif unanimously_average?
-        ["This seems to be a fine watch, but it probably won't change your life.", ":partly_sunny:"]
+        ["Meh. This seems to be ok, but it probably won't change your life.", ":partly_sunny:"]
       elsif mostly_bad?
         ["Please go along. There's nothing to see here.", ":anguished:"]
       elsif unanimously_bad?
