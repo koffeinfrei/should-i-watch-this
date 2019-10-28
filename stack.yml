@@ -7,3 +7,5 @@ functions:
     lang: crystal-http
     handler: ./open-faas
     image: koffeinfrei/should-i-watch-this:latest
+    environment:
+      custom_templates: https://github.com/koffeinfrei/crystal-http-template
