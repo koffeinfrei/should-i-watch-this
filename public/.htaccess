@@ -1,0 +1,25 @@
+#
+# redirect to www and https
+#
+
+RewriteEngine On
+
+# ensure www.
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ensure https
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+
+#
+# caching
+#
+
+<FilesMatch "\.(html|html.gz)$">
+  # 2 hours
+  Header set Cache-Control "max-age=7200, must-revalidate"
+</FilesMatch>
