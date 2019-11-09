@@ -20,6 +20,6 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 #
 
 <FilesMatch "\.(html|html.gz)$">
-  # 2 hours
-  Header set Cache-Control "max-age=7200, must-revalidate"
+  # 1 hour
+  Header set Cache-Control "max-age=3600, must-revalidate"
 </FilesMatch>
