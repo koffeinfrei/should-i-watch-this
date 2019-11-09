@@ -94,6 +94,10 @@ h3 {
 </div>
 
 <div class="box">
+  <h3><span class="icon">{movie.recommendation.emoji}</span>{movie.recommendation.text}</h3>
+</div>
+
+<div class="box">
   <h3><span class="icon">🍅</span>Rotten Tomatoes<ResultMoreLink link={movie.links.rotten_tomatoes} /></h3>
 
   <table class="full-width">
@@ -128,8 +132,4 @@ h3 {
       <td class="value">{movie.scores.metacritic.score}</td>
     </tr>
   </table>
-</div>
-
-<div class="box">
-  <h3><span class="icon">{movie.recommendation.emoji}</span>{movie.recommendation.text}</h3>
 </div>
