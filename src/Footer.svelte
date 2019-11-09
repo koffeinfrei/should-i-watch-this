@@ -1,16 +1,26 @@
 <style>
 .footer {
-  margin: auto 0 0 0;
-  /* due to flexbox margin-bottom doesn't work (see body definition in global.css) */
+  margin: auto auto 0 auto;
   padding-bottom: 8px;
-  text-align: center;
-  font-size: 0.9em;
+  font-size: 0.7em;
+}
+
+@media (min-width: 800px) {
+  .footer {
+    width: 800px;
+  }
+}
+
+p {
+  padding-left: 50px;
 }
 </style>
 
-<section class="center footer">
-  Made with ☕️  by <a href="https://www.koffeinfrei.org" class="external" target="_blank">Koffeinfrei</a>
-  <br>
-  This is free and open source software.
-  Source code at <a href="https://github.com/koffeinfrei/should-i-watch-this-www" class="external" target="_blank">GitHub</a>
+<section class="footer">
+  <p>
+    Made with ☕️  by <a href="https://www.koffeinfrei.org" class="external" target="_blank">Koffeinfrei</a>
+    <br>
+    This is free and open source software.
+    Source code at <a href="https://github.com/koffeinfrei/should-i-watch-this-www" class="external" target="_blank">GitHub</a>
+  </p>
 </section>

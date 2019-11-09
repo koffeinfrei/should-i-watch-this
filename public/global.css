@@ -14,8 +14,8 @@ html, body {
 }
 
 body {
-  color: #000;
-  background-image: linear-gradient(to right,#ff8a00,#e52e71);
+  color: #fff;
+  background-color: #1c2b3e;
   margin: 0;
   padding: 50px 8px 8px 8px;
   box-sizing: border-box;
@@ -30,12 +30,12 @@ body {
 
 a,
 a:visited {
-  color: #50565c;
+  color: #96a2ae;
   text-decoration: none;
 }
 
 a:hover {
-  color: #000;
+  color: #fff;
 }
 
 a.external {
@@ -55,6 +55,8 @@ input, button, select, textarea {
   font-family: inherit;
   font-size: inherit;
   padding: 0.4em;
+  /* we need to subtract the padding, otherwise it overflows on small screens */
+  max-width: calc(100% - (2 * 0.4em));
   margin: 0 0 0.5em 0;
   box-sizing: border-box;
   border: 1px solid #ccc;

@@ -6,7 +6,7 @@
 
 <style>
 h2 {
-  padding-left: 38px;
+  padding-left: 50px;
 }
 
 table.full-width {
@@ -18,7 +18,7 @@ td {
 }
 
 td.label {
-  padding-left: 38px;
+  padding-left: 50px;
   width: 9rem;
 }
 
@@ -26,22 +26,18 @@ td.value {
   font-weight: bold;
 }
 
-.icon {
-  display: inline-block;
-  width: 38px;
+h3 {
+  position: relative;
+  padding-left: 50px;
 }
 
-.recommendation {
-  text-align: center;
+.icon {
+  position: absolute;
+  left: 0;
 }
 
 .box {
   margin-bottom: 42px;
-}
-
-.border {
-  padding-top: 8px;
-  border: 1px solid #000;
 }
 
 @media (min-width: 40em) {
@@ -52,14 +48,14 @@ td.value {
 
 @media (min-width: 40em) {
   .description {
-    margin-right: 38px;
+    margin-right: 50px;
   }
 }
 
 .poster {
   height: auto;
   width: 130px;
-  margin-left: 38px;
+  margin-left: 50px;
   margin-bottom: 42px;
 }
 
@@ -134,7 +130,6 @@ td.value {
   </table>
 </div>
 
-<div class="recommendation box border">
-  <h3>Should I watch this?</h3>
-  <p>{movie.recommendation.emoji} {movie.recommendation.text}</p>
+<div class="box">
+  <h3><span class="icon">{movie.recommendation.emoji}</span>{movie.recommendation.text}</h3>
 </div>

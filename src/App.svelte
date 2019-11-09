@@ -49,28 +49,33 @@
 <style>
 main {
   margin: 0 auto;
-  max-width: 800px;
   margin-bottom: 53px;
 }
 
-.center {
-  text-align: center;
+@media (min-width: 800px) {
+  main {
+    width: 800px;
+  }
 }
 
 .box {
   margin-bottom: 53px;
 }
+
+.padded {
+  padding-left: 50px;
+}
 </style>
 
 <main>
-  <section class="center box">
+  <section class="box padded">
     <input bind:value={title} on:keyup={handleKeyup} placeholder="Enter the movie title">
-    <button on:click={handleClick}>Lookup</button>
+    <button on:click={handleClick}>Look up</button>
   </section>
 
   <section class="box">
     {#await fetchMoviePromise}
-      <section class="center box">
+      <section class="box padded">
         <Spinner />
       </section>
     {:then result}
