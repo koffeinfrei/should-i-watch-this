@@ -15,6 +15,10 @@
     "sirv-cli": "^0.4.4"
   },
   "scripts": {
+    "dist": "npm run dist:build && npm run dist:deploy",
+    "dist:build": "scripts/build",
+    "dist:deploy": "scripts/deploy",
+    "dist:serve": "ruby -run -e httpd dist -p 8000",
     "build": "rollup -c",
     "autobuild": "rollup -c -w",
     "dev": "run-p start:dev autobuild",
