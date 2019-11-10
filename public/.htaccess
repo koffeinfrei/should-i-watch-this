@@ -16,6 +16,33 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 
 #
+# gzip encoding
+#
+
+<Files *.css.gz>
+ForceType text/css
+</Files>
+<Files *.js.gz>
+ForceType application/javascript
+</Files>
+<Files *.html.gz>
+ForceType text/html
+</Files>
+<Files *.json.gz>
+ForceType application/json
+</Files>
+<Files *.svg.gz>
+ForceType image/svg+xml
+</Files>
+
+AddEncoding gzip .gz
+RewriteCond %{HTTP:Accept-encoding} gzip
+RewriteCond %{HTTP_USER_AGENT} !Konqueror
+RewriteCond %{REQUEST_FILENAME}.gz -f
+RewriteRule ^(.*\.(css|js|html|json|svg))$ $1.gz [QSA,L]
+
+
+#
 # caching
 #
 
