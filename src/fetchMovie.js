@@ -4,7 +4,7 @@ export async function fetchMovie(title, year) {
   }
 
   const url = 'https://faas.koffeinfrei.org' +
-    '/function/should-i-watch-this' +
+    '/function/should-i-watch-this-free' +
     `?show_links=true&year=${year}`;
 
   const response = await fetch(url, {
@@ -12,7 +12,6 @@ export async function fetchMovie(title, year) {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
-      'X-Auth-Token': ''
     },
     body: title
   });
