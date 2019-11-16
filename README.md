@@ -11,6 +11,17 @@ $ npm run dev
 
 Navigate to [localhost:5000](http://localhost:5000).
 
+## Deployment
+
+### Preparation (one time)
+
+1. `cp .env.example .env`
+1. Fill in appropriate values in `.env`
+
+### Deploy
+
+1. `npm run dist`
+
 ## Contributing
 
 1. Fork it (<https://github.com/koffeinfrei/should-i-watch-this-www/fork>)

@@ -2,4 +2,6 @@
 
 set -e
 
+export $(cat .env | xargs)
+
 lftp -e 'mirror -e -R dist should-i-watch-this && exit' -u $DEPLOY_FTP_USER $DEPLOY_FTP_SERVER
