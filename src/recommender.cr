@@ -18,9 +18,9 @@ class Recommender
       if no_rating?
         ["Hmm, there's no rating about this at all...", ":question:"]
       elsif unanimously_excellent?
-        ["You should definitely watch this, this is really excellent!", ":star:"]
+        ["You should definitely watch this, this is really excellent!", ":star2:"]
       elsif mostly_excellent?
-        ["You should watch this, this is probably excellent!", ":sparkles:"]
+        ["You should watch this, this is probably excellent!", ":star:"]
       elsif controversially_excellent?
         ["People seem to either love or hate this.", ":fire:"]
       elsif half_excellent?
