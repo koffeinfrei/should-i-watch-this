@@ -40,7 +40,7 @@ class Handler
     year = params["year"]?
 
     body = request.body.try(&.gets_to_end) || ""
-    movie = Movie.new(body)
+    movie = Movie.parse(body)
     movie.year = year if year
 
     omdb_token = headers["X-Auth-Token"]

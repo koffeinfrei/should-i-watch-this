@@ -76,6 +76,7 @@ class ScoreFetcher
                     "OMDb API key is not valid.",
     }).run(->abort(String), {
       :t        => movie.title,
+      :i        => movie.imdb_id,
       :y        => movie.year,
       :tomatoes => "true",
       :apikey   => omdb_api_key,

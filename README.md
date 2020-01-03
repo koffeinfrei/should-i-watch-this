@@ -43,7 +43,11 @@ $ cp bin/should-i-watch-this <some directory in your $PATH>
 ## Usage
 
 ```bash
+# search by title
 $ should-i-watch-this lookup "terminator 2"
+
+# search by imdb id
+$ should-i-watch-this lookup tt0103064
 ```
 
 ## Development

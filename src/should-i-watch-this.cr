@@ -22,9 +22,9 @@ class ShouldIWatchThis < Cli::Supercommand
 
   class Lookup < Cli::Command
     class Options
-      arg "title",
+      arg "title_or_imdb_id",
         required: true,
-        desc: "The title of the movie"
+        desc: "The title or the IMDb id of the movie"
       string ["-y", "--year"],
         required: false,
         desc: "The relase year of the movie"
@@ -45,9 +45,9 @@ class ShouldIWatchThis < Cli::Supercommand
 
       # if a title is not provided in quotes we append the remaining arguments
       # to the title argument
-      title = ([args.title] + args.nameless_args).join(" ")
+      title_or_imdb_id = ([args.title_or_imdb_id] + args.nameless_args).join(" ")
 
-      ::Lookup.new(title, show_links: args.show_links?, year: args.year?).run
+      ::Lookup.new(title_or_imdb_id, show_links: args.show_links?, year: args.year?).run
     end
   end
 

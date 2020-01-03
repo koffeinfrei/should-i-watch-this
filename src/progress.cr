@@ -20,7 +20,7 @@ class Progress
   end
 
   def progress_text
-    "Fetching movie '#{movie.title}'"
+    "Fetching movie '#{movie.identifier}'"
   end
 
   def done_text
