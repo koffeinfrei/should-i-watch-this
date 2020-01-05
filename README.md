@@ -1,4 +1,6 @@
-# Should I watch this? Website
+# should-i-watch-this.com
+
+![website](screen.jpg)
 
 This is the website project using [should-i-watch-this](https://github.com/koffeinfrei/should-i-watch-this).
 
