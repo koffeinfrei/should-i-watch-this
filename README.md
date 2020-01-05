@@ -1,3 +1,5 @@
+![License](https://img.shields.io/github/license/koffeinfrei/should-i-watch-this-www.svg)
+
 # should-i-watch-this.com
 
 ![website](screen.jpg)
