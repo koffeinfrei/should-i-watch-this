@@ -9,6 +9,7 @@
   import Spinner from './Spinner.svelte';
   import Footer from './Footer.svelte';
 
+  let titleInput;
   let title = '';
   let year = '';
   let fetchMoviePromise;
@@ -20,6 +21,9 @@
       title = titleFromUrl;
       year = yearFromUrl;
       run();
+    }
+    else {
+      titleInput.focus();
     }
   });
 
@@ -69,7 +73,7 @@ main {
 
 <main>
   <section class="box padded">
-    <input bind:value={title} on:keyup={handleKeyup} placeholder="Movie title or IMDb id">
+    <input bind:this={titleInput} bind:value={title} on:keyup={handleKeyup} placeholder="Movie title or IMDb id">
     <button on:click={handleClick}>Look up</button>
   </section>
 
