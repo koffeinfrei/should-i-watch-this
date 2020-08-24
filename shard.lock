@@ -1,42 +1,46 @@
-version: 1.0
+version: 2.0
 shards:
   ameba:
-    github: veelenga/ameba
-    version: 0.10.1
+    git: https://github.com/veelenga/ameba.git
+    version: 0.13.1
 
   callback:
-    github: drujensen/callback
+    git: https://github.com/amberframework/callback.git
     version: 0.7.1
 
   cli:
-    github: drujensen/cli
-    version: 0.8.0
+    git: https://github.com/amberframework/cli.git
+    version: 0.9.3
 
   crest:
-    github: mamantoha/crest
-    version: 0.22.0
+    git: https://github.com/mamantoha/crest.git
+    version: 0.26.1
 
   emoji:
-    github: veelenga/emoji.cr
-    commit: 22c147f37333a94249eac7ce54e7e9f1c4999838
+    git: https://github.com/veelenga/emoji.cr.git
+    version: 0.4.0+git.commit.4642bd8ef64839b4639ba0be521e8c85113cb8d5
 
   http-client-digest_auth:
-    github: mamantoha/http-client-digest_auth
-    version: 0.2.0
+    git: https://github.com/mamantoha/http-client-digest_auth.git
+    version: 0.4.0
+
+  http_proxy:
+    git: https://github.com/mamantoha/http_proxy.git
+    version: 0.7.1
 
   inflector:
-    github: phoffer/inflector.cr
+    git: https://github.com/phoffer/inflector.cr.git
     version: 0.1.8
 
   myhtml:
-    github: kostya/myhtml
-    version: 1.4.2
+    git: https://github.com/kostya/myhtml.git
+    version: 1.5.2
 
   optarg:
-    github: drujensen/optarg
-    version: 0.7.0
+    git: https://github.com/amberframework/optarg.git
+    version: 0.8.0
 
   string_inflection:
-    github: mosop/string_inflection
+    git: https://github.com/mosop/string_inflection.git
     version: 0.2.1
 
