@@ -3,7 +3,7 @@ export async function fetchMovie(title, year) {
     return { error: 'Hmm? I think you forgot to enter the movie title.' };
   }
 
-  const url = 'https://faas.koffeinfrei.org' +
+  const url = 'https://faasd.koffeinfrei.org' +
     '/function/should-i-watch-this-free' +
     `?show_links=true&year=${year}`;
 
