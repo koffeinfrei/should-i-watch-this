@@ -1,24 +1,14 @@
-require "http/client"
 require "http/request"
+require "should-i-watch-this/http_user_interface"
 
+# Provides an OpenFaaS function for should-i-watch-this, without the need to
+# provide a `X-Auth-Token`.
+#
+# See open-faas/handler.cr
 class Handler
   def run(request : HTTP::Request)
-    function_host = ENV["SHOULD_I_WATCH_THIS_SERVICE_HOST"]
-    function_port = ENV["SHOULD_I_WATCH_THIS_SERVICE_PORT"]
+    request.headers["X-Auth-Token"] = File.read("/var/openfaas/secrets/omdb-token")
 
-    headers = request.headers.dup
-    headers["X-Auth-Token"] = File.read("/var/openfaas/secrets/omdb-token")
-
-    response = HTTP::Client.post(
-      URI.parse("http://#{function_host}:#{function_port}?#{request.query}"),
-      body: request.body,
-      headers: headers
-    )
-
-    {
-      body:        response.body,
-      status_code: response.status_code,
-      headers:     response.headers,
-    }
+    HttpUserInterface.new.run(request)
   end
 end

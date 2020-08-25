@@ -1,2 +1,7 @@
 name: crystal-http-template
 version: 0.1.0
+
+dependencies:
+  should-i-watch-this:
+    github: koffeinfrei/should-i-watch-this
+    branch: master
