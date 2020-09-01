@@ -32,3 +32,7 @@ span {
 </style>
 
 <span>{currentCharacter || ''}</span>
+
+<svelte:head>
+  <title>Should I watch this?</title>
+</svelte:head>

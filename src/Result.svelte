@@ -133,3 +133,7 @@ h3 {
     </tr>
   </table>
 </div>
+
+<svelte:head>
+  <title>{movie.title} | Should I watch this?</title>
+</svelte:head>
