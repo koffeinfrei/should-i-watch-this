@@ -18,9 +18,9 @@ p {
 
 <section class="footer">
   <p>
-    Made with ☕️  by <a href="https://www.koffeinfrei.org" class="external" target="_blank">Koffeinfrei</a>
+    Made with ☕️  by <a href="https://www.koffeinfrei.org" class="external" target="_blank" rel="noopener">Koffeinfrei</a>
     <br>
     This is free and open source software.
-    Source code at <a href="https://github.com/koffeinfrei/should-i-watch-this-www" class="external" target="_blank">GitHub</a>
+    Source code at <a href="https://github.com/koffeinfrei/should-i-watch-this-www" class="external" target="_blank" rel="noopener">GitHub</a>
   </p>
 </section>
