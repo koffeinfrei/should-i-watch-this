@@ -91,7 +91,7 @@ SAMPLES = [
     "46%",
     "6.4",
     "35/100",
-    "Please go along. There's nothing to see here.",
+    "Please move along. There's nothing to see here.",
   ],
   [
     "Alone in the Dark",

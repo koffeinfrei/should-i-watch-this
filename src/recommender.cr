@@ -36,7 +36,7 @@ class Recommender
       elsif unanimously_average?
         ["Meh. This seems to be ok, but it probably won't change your life.", ":partly_sunny:"]
       elsif mostly_bad?
-        ["Please go along. There's nothing to see here.", ":anguished:"]
+        ["Please move along. There's nothing to see here.", ":anguished:"]
       elsif unanimously_bad?
         ["Be prepared for something awful.", ":-1:"]
       elsif mostly_average_or_bad?
