@@ -35,6 +35,22 @@ SAMPLES = [
     "89%",
     "8.8",
     "59/100",
+    "This is definitely worth watching!",
+  ],
+  [
+    "Half Baked",
+    "29%",
+    "81%",
+    "6.7",
+    "16/100",
+    "People seem to either love or hate this.",
+  ],
+  [
+    "Ad Astra",
+    "83%",
+    "40%",
+    "6.5",
+    "80/100",
     "People seem to either love or hate this.",
   ],
   [
@@ -95,15 +111,23 @@ SAMPLES = [
   ],
 ]
 
+def get_score_instance(value, target_score_class)
+  if value
+    target_score_class.new(value).as(Score)
+  else
+    MissingScore.new.as(Score)
+  end
+end
+
 describe Recommender do
   describe "#run" do
     SAMPLES.each do |(title, rating1, rating2, rating3, rating4, expected)|
       it "'#{title}'" do
         score = {
-          :"1" => PercentageScore.new(rating1).as(Score),
-          :"2" => PercentageScore.new(rating2).as(Score),
-          :"3" => DecimalScore.new(rating3).as(Score),
-          :"4" => PercentageScore.new(rating4).as(Score),
+          :"1" => get_score_instance(rating1, PercentageScore),
+          :"2" => get_score_instance(rating2, PercentageScore),
+          :"3" => get_score_instance(rating3, DecimalScore),
+          :"4" => get_score_instance(rating4, PercentageScore),
         }
 
         result = Recommender.new(score).run

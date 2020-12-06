@@ -5,11 +5,13 @@ class Recommender
   getter scores : Array(Score)
   getter mostly_count : Int32
   getter half_count : Int32
+  getter minor_count : Int32
 
   def initialize(scores)
     @scores = scores.values.reject { |score| score.is_a?(MissingScore) }
     @mostly_count = (@scores.size * 0.75).round.to_i
     @half_count = (@scores.size * 0.5).round.to_i
+    @minor_count = (@scores.size * 0.25).round.to_i
   end
 
   # ameba:disable Metrics/CyclomaticComplexity
@@ -67,11 +69,9 @@ class Recommender
   def controversially_excellent?
     excellent_count = scores.count(&.excellent?)
 
-    average_or_bad_count = scores.count do |score|
-      (score.average? && !score.good?) || score.bad?
-    end
+    bad_count = scores.count(&.bad?)
 
-    excellent_count == half_count && average_or_bad_count >= half_count
+    excellent_count >= minor_count && bad_count >= minor_count
   end
 
   def unanimously_good?
