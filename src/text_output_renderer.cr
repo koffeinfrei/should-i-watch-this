@@ -48,7 +48,7 @@ class TextOutputRenderer < BaseOutputRenderer
     output << "\n\n"
     output << "   Need more info? Maybe check some reviews?\n"
 
-    links.reject { |_key, value| value.nil? }.each do |_key, value|
+    links.each do |_key, value|
       output << "       ⟶  #{value}"
     end
 

@@ -53,7 +53,7 @@ class JsonOutputRenderer < BaseOutputRenderer
           if show_links
             json.field "links" do
               json.object do
-                links.reject { |_key, value| value.nil? }.each do |key, value|
+                links.each do |key, value|
                   json.field key, value
                 end
               end
