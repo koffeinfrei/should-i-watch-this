@@ -20,6 +20,7 @@ class JsonOutputRenderer < BaseOutputRenderer
         json.field "director", movie.director
         json.field "actors", movie.actors
         json.field "poster_url", movie.poster_url
+        json.field "trailer_url", movie.trailer_url
 
         json.field "scores" do
           json.object do

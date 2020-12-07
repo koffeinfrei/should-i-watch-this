@@ -1,6 +1,6 @@
 require "./movie"
 require "./http_grabber"
-require "./html_text_by_css"
+require "./html_extractor"
 require "./output_result"
 
 class ScoreFetcher
@@ -127,8 +127,16 @@ class ScoreFetcher
     }).run(->abort(String))
 
     movie.score[:imdb] = DecimalScore.new(
-      html_text_by_css(imdb_html, %{[itemprop="ratingValue"]})
+      HtmlExtractor.text(imdb_html, %{[itemprop="ratingValue"]})
     )
+
+    trailer_url = HtmlExtractor.attribute_value(imdb_html, %{.slate a.video-modal})
+    if trailer_url
+      # strip the ugly query params from the url
+      trailer_url = URI.parse(trailer_url)
+      trailer_url.query = nil
+      movie.trailer_url = "#{IMDB_URL}#{trailer_url}"
+    end
 
     links[:imdb] = url
   end
@@ -147,13 +155,13 @@ class ScoreFetcher
     }).run(->abort(String))
 
     movie.score[:rotten_tomatoes] = PercentageScore.new(
-      html_text_by_css(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage")
+      HtmlExtractor.text(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage")
     )
     movie.score[:rotten_tomatoes_audience] = PercentageScore.new(
-      html_text_by_css(tomato_html, ".audience-score .mop-ratings-wrap__percentage")
+      HtmlExtractor.text(tomato_html, ".audience-score .mop-ratings-wrap__percentage")
     )
 
-    links[:rotten_tomatoes] = movie.tomato_url
+    links[:rotten_tomatoes] = url
   rescue Crest::NotFound
   end
 

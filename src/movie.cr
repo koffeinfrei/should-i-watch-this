@@ -10,6 +10,7 @@ class Movie
   property imdb_id : String | Nil
   property tomato_url : String | Nil
   property poster_url : String | Nil
+  property trailer_url : String | Nil
 
   getter score = {} of Symbol => Score
 

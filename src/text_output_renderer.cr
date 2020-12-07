@@ -16,6 +16,7 @@ class TextOutputRenderer < BaseOutputRenderer
        director:         #{movie.director}
        actors:           #{movie.actors}
 
+       trailer:          #{movie.trailer_url}
 
 
        #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
