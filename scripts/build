@@ -12,21 +12,20 @@ cp -r public/. dist/
 
 # create hashed asset files (css, js)
 hash1=$(head -c 12 /dev/urandom | shasum | cut -d' ' -f1)
-mv dist/bundle.css dist/bundle-${hash1}.css
-mv dist/bundle.css.map dist/bundle-${hash1}.css.map
-sed -i "s/bundle\.css/bundle-${hash1}.css/g" dist/index.html dist/bundle-${hash1}.css.map
+mv dist/build/bundle.css "dist/build/bundle-${hash1}.css"
+sed -i "s/bundle\.css/bundle-${hash1}.css/g" dist/index.html
 
 hash2=$(head -c 12 /dev/urandom | shasum | cut -d' ' -f1)
-mv dist/bundle.js dist/bundle-${hash2}.js
-mv dist/bundle.js.map dist/bundle-${hash2}.js.map
-sed -i "s/bundle\.js/bundle-${hash2}.js/g" dist/index.html dist/bundle-${hash2}.js.map
+mv dist/build/bundle.js "dist/build/bundle-${hash2}.js"
+mv dist/build/bundle.js.map "dist/build/bundle-${hash2}.js.map"
+sed -i "s/bundle\.js/bundle-${hash2}.js/g" dist/index.html "dist/build/bundle-${hash2}.js.map"
 
 hash3=$(head -c 12 /dev/urandom | shasum | cut -d' ' -f1)
-mv dist/global.css dist/global-${hash3}.css
+mv dist/global.css "dist/global-${hash3}.css"
 sed -i "s/global\.css/global-${hash3}.css/g" dist/index.html
 
 # create gzip versions
-for file in dist/*.{css,js,html,json,svg}; do
+for file in dist/build/*.{css,js,html,json,svg}; do
   [ -e "$file" ] || continue
-  gzip -c $file > ${file}.gz
+  gzip -c "$file" > "${file}.gz"
 done
