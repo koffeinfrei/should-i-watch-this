@@ -130,7 +130,7 @@ class ScoreFetcher
       HtmlExtractor.text(imdb_html, %{[itemprop="ratingValue"]})
     )
 
-    trailer_url = HtmlExtractor.attribute_value(imdb_html, %{.slate a.video-modal})
+    trailer_url = HtmlExtractor.attribute_value(imdb_html, %{.mediastrip_big a.video-modal})
     if trailer_url
       # strip the ugly query params from the url
       trailer_url = URI.parse(trailer_url)
