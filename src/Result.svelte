@@ -4,9 +4,19 @@
   export let movie;
 </script>
 
-<style>
+<style type="text/scss">
+$horizontal-spacing: 50px;
+$left-column-width: 9rem;
+$box-bottom-spacing: 42px;
+$poster-width: 130px;
+
 h2 {
-  padding-left: 50px;
+  padding-left: $horizontal-spacing;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 table.full-width {
@@ -17,18 +27,18 @@ td {
   vertical-align: top;
 }
 
-td.label {
-  padding-left: 50px;
-  width: 9rem;
+.label {
+  padding-left: $horizontal-spacing;
+  width: $left-column-width;
 }
 
-td.value {
+.value {
   font-weight: bold;
 }
 
 h3 {
   position: relative;
-  padding-left: 50px;
+  padding-left: $horizontal-spacing;
 }
 
 .icon {
@@ -37,7 +47,7 @@ h3 {
 }
 
 .box {
-  margin-bottom: 42px;
+  margin-bottom: $box-bottom-spacing;
 }
 
 @media (min-width: 40em) {
@@ -48,19 +58,33 @@ h3 {
 
 @media (min-width: 40em) {
   .description {
-    margin-right: 50px;
+    margin-right: $horizontal-spacing;
   }
 }
 
 .poster {
   height: auto;
-  width: 130px;
-  margin-left: 50px;
-  margin-bottom: 42px;
+  width: $poster-width;
+}
+
+.marketing {
+  display: flex;
+  margin: 0 0 $box-bottom-spacing $horizontal-spacing;
 }
 
 @media (min-width: 40em) {
-  .poster {
+  .marketing {
+    flex-direction: column;
+    margin: 0;
+  }
+}
+
+.trailer {
+  margin-left: calc(#{$left-column-width} - #{$poster-width});
+}
+
+@media (min-width: 40em) {
+  .trailer {
     margin: 0;
   }
 }
@@ -88,8 +112,9 @@ h3 {
     </div>
   </div>
 
-  <div>
+  <div class="marketing">
     <img src={movie.poster_url || '/default-poster.png'} width="130" class="poster" alt="poster" />
+    <a href={movie.trailer_url} target="_blank" class="external trailer">Trailer</a>
   </div>
 </div>
 
