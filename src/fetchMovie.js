@@ -1,4 +1,4 @@
-export async function fetchMovie(title, year) {
+export async function fetchMovie(title, year, fetchFunction) {
   if (!title) {
     return { error: 'Hmm? I think you forgot to enter the movie title.' };
   }
@@ -7,7 +7,7 @@ export async function fetchMovie(title, year) {
     '/function/should-i-watch-this-free' +
     `?show_links=true&year=${year}`;
 
-  const response = await fetch(url, {
+  const response = await fetchFunction(url, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

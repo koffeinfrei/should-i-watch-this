@@ -93,3 +93,11 @@ h1, h2, h3 {
 p {
   margin: 0 0 8px 0;
 }
+
+.box {
+  margin-bottom: 53px;
+}
+
+.padded {
+  padding-left: 50px;
+}
