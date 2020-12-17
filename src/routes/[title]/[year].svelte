@@ -4,10 +4,10 @@
   export async function preload(page, session) {
     const { title, year } = page.params;
 
-    // only for SSR
-    if (session?.movie) {
-      return { movie: session?.movie };
+    if (session && session.movie) {
+      return { movie: session.movie };
     }
+    // only for SSR
     else {
       const movie = await fetchMovie(title, year, this.fetch);
       return { movie };

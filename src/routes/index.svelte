@@ -1,6 +1,6 @@
 <script context="module">
   export async function preload(page, session) {
-    return { title: session?.title };
+    return { title: (session || {}).title };
   }
 </script>
 

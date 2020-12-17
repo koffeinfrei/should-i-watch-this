@@ -35,7 +35,7 @@
       <Spinner />
     </section>
   {:then result}
-    {#if result?.error}
+    {#if result && result.error}
       <Error text={result.error} />
     {/if}
   {:catch error}
