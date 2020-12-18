@@ -14,7 +14,6 @@
   export let title;
 
   function handleSubmit(newTitle) {
-    console.log('index submit', title);
     title = newTitle || '';
   }
 </script>
