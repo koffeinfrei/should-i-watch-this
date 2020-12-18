@@ -115,7 +115,9 @@ h3 {
 
     <div class="marketing">
       <img src={movie.poster_url || '/default-poster.png'} width="130" class="poster" alt="poster" />
-      <a href={movie.trailer_url} target="_blank" class="external trailer">Trailer</a>
+      {#if movie.trailer_url}
+        <a href={movie.trailer_url} target="_blank" class="external trailer">Trailer</a>
+      {/if}
     </div>
   </div>
 
