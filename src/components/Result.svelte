@@ -164,5 +164,5 @@ h3 {
 </section>
 
 <svelte:head>
-  <title>{movie.title} | Should I watch this?</title>
+  <title>{movie.title} ({movie.year}) | Should I watch this?</title>
 </svelte:head>
