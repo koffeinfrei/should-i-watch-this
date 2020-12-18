@@ -21,3 +21,7 @@
 <SearchBox {title} onSubmit={handleSubmit}/>
 
 <SearchStatus {title} />
+
+<svelte:head>
+  <title>Should I watch this?</title>
+</svelte:head>
