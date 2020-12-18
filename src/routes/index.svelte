@@ -7,9 +7,6 @@
 <script>
   import SearchBox from '../components/SearchBox.svelte';
   import SearchStatus from '../components/SearchStatus.svelte';
-  import { onMount } from 'svelte';
-  import { stores } from '@sapper/app';
-  const { session } = stores();
 
   export let title;
 
