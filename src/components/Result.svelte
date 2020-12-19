@@ -16,10 +16,7 @@
 </script>
 
 <style type="text/scss">
-$horizontal-spacing: 50px;
-$left-column-width: 9rem;
-$box-bottom-spacing: 42px;
-$poster-width: 130px;
+@import '../styles/result';
 
 h2 {
   padding-left: $horizontal-spacing;
@@ -45,16 +42,6 @@ td {
 
 .value {
   font-weight: bold;
-}
-
-h3 {
-  position: relative;
-  padding-left: $horizontal-spacing;
-}
-
-.icon {
-  position: absolute;
-  left: 0;
 }
 
 .box {
@@ -133,11 +120,11 @@ h3 {
   </div>
 
   <div class="box">
-    <h3><span class="icon">{movie.recommendation.emoji}</span>{movie.recommendation.text}</h3>
+    <h3 class="icon-label"><span class="icon">{movie.recommendation.emoji}</span>{movie.recommendation.text}</h3>
   </div>
 
   <div class="box">
-    <h3><span class="icon">🍅</span>Rotten Tomatoes<ResultMoreLink link={movie.links.rotten_tomatoes} /></h3>
+    <h3 class="icon-label"><span class="icon">🍅</span>Rotten Tomatoes<ResultMoreLink link={movie.links.rotten_tomatoes} /></h3>
 
     <table class="full-width">
       <tr>
@@ -152,7 +139,7 @@ h3 {
   </div>
 
   <div class="box">
-    <h3><span class="icon">🎬</span>IMDb<ResultMoreLink link={movie.links.imdb} /></h3>
+    <h3 class="icon-label"><span class="icon">🎬</span>IMDb<ResultMoreLink link={movie.links.imdb} /></h3>
 
     <table class="full-width">
       <tr>
@@ -163,7 +150,7 @@ h3 {
   </div>
 
   <div class="box">
-    <h3><span class="icon">📈</span>Metacritic<ResultMoreLink link={movie.links.metacritic} /></h3>
+    <h3 class="icon-label"><span class="icon">📈</span>Metacritic<ResultMoreLink link={movie.links.metacritic} /></h3>
 
     <table class="full-width">
       <tr>

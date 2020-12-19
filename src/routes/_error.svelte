@@ -2,41 +2,35 @@
   export let status;
   export let error;
 
+  import RandomQuote from '../components/RandomQuote.svelte';
+
   const dev = process.env.NODE_ENV === 'development';
+
+  if (status === 404) {
+    error.message = 'Oh snap! This is not a movie. This is a 404.'
+  }
 </script>
-
-<style>
-  h1, p {
-    margin: 0 auto;
-  }
-
-  h1 {
-    font-size: 2.8em;
-    font-weight: 700;
-    margin: 0 0 0.5em 0;
-  }
-
-  p {
-    margin: 1em auto;
-  }
-
-  @media (min-width: 480px) {
-    h1 {
-      font-size: 4em;
-    }
-  }
-</style>
 
 <svelte:head>
   <title>{status}</title>
 </svelte:head>
 
+<section class="box padded">
 <h1>{status}</h1>
 
-<p>{error.message}</p>
+<h2>{error.message}</h2>
+</section>
 
-<p>Try to go <a href="/">back to the start</a>.</p>
+{#if status === 404}
+  <RandomQuote />
+{/if}
+
+<section class="box padded">
+<div class="box">
+  Try to go <a href="/">back to the start</a>.
+</div>
 
 {#if dev && error.stack}
   <pre>{error.stack}</pre>
 {/if}
+</section>

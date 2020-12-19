@@ -14,7 +14,7 @@
     }
 
     if (movie.error) {
-      this.error(404, 'Oh snap! This is not a movie. This is a 404.');
+      this.error(404);
     }
 
     return { movie };

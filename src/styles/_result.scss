@@ -1,0 +1,14 @@
+$horizontal-spacing: 50px;
+$left-column-width: 9rem;
+$box-bottom-spacing: 42px;
+$poster-width: 130px;
+
+.icon-label {
+  position: relative;
+  padding-left: $horizontal-spacing;
+}
+
+.icon {
+  position: absolute;
+  left: 0;
+}

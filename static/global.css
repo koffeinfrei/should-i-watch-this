@@ -85,7 +85,17 @@ button:focus {
   border-color: #666;
 }
 
-h1, h2, h3 {
+h1 {
+  font-size: 2.8em;
+  margin: 0 0 16px 0;
+}
+@media (min-width: 40em) {
+  h1 {
+    font-size: 4em;
+  }
+}
+
+h2, h3 {
   font-size: 1em;
   margin: 0 0 8px 0;
 }
