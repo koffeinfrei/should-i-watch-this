@@ -4,9 +4,8 @@ export let text;
 
 <style>
   div {
-    text-align: center;
     color: #fba8a8;
   }
 </style>
 
-<div>{text}</div>
+<div class="box padded">{text}</div>
