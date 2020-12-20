@@ -7,6 +7,7 @@
 <script>
   import SearchBox from '../components/SearchBox.svelte';
   import SearchStatus from '../components/SearchStatus.svelte';
+  import RandomQuote from '../components/RandomQuote.svelte';
 
   export let title;
 
@@ -17,7 +18,11 @@
 
 <SearchBox {title} onSubmit={handleSubmit}/>
 
-<SearchStatus {title} />
+{#if title === undefined}
+  <RandomQuote />
+{:else}
+  <SearchStatus {title} />
+{/if}
 
 <svelte:head>
   <title>Should I watch this?</title>
