@@ -114,7 +114,7 @@ td {
     <div class="marketing">
       <img src={posterUrl} width="130" class="poster" alt="poster" />
       {#if movie.trailer_url}
-        <a href={movie.trailer_url} target="_blank" class="external trailer">Trailer</a>
+        <a href={movie.trailer_url} target="_blank" class="external trailer" rel="noopener external">Trailer</a>
       {/if}
     </div>
   </div>
