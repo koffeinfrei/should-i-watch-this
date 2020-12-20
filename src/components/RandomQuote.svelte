@@ -17,7 +17,7 @@
 <div class="box">
   <div class="icon-label"><span class="icon">💭</span>
     <div>“ {quote.quote} ”</div>
-    <a href={quote.url}>{quote.movie}</a>
+    <a rel=prefetch href={quote.url}>{quote.movie}</a>
   </div>
 </div>
 {/if}
