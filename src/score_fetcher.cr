@@ -98,13 +98,9 @@ class ScoreFetcher
 
     # metacritic from omdb
     meta_score = omdb["Metascore"].to_s
-    movie.score[:metacritic] = PercentageScore.new(
-      if meta_score == "N/A"
-        nil
-      else
-        "#{meta_score}/100"
-      end
-    )
+    if meta_score != "N/A"
+      movie.score[:metacritic] = PercentageScore.new("#{meta_score}/100")
+    end
 
     # tomato from omdb
     tomato_score = omdb["Ratings"].as_a.find do |rating|
