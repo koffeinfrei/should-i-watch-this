@@ -110,6 +110,14 @@ SAMPLES = [
     "Meh. This seems to be ok, but it probably won't change your life.",
   ],
   [
+    "Wander",
+    nil,
+    nil,
+    "5.0",
+    nil,
+    "Meh. This seems to be ok, but it probably won't change your life.",
+  ],
+  [
     "Grudge Match",
     "31%",
     "46%",
@@ -131,6 +139,14 @@ SAMPLES = [
     "11%",
     "2.4",
     "9/100",
+    "Be prepared for something awful.",
+  ],
+  [
+    "Breach",
+    nil,
+    nil,
+    "2.7",
+    nil,
     "Be prepared for something awful.",
   ],
   [

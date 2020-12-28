@@ -14,6 +14,10 @@ class Recommender
     @minor_count = (@scores.size * 0.25).round.to_i
   end
 
+  def single_score?
+    @scores.size == 1
+  end
+
   # ameba:disable Metrics/CyclomaticComplexity
   def run
     text, emoji =
@@ -35,10 +39,10 @@ class Recommender
         ["You may enjoy this. It could also be boring though.", ":ok_hand:"]
       elsif unanimously_average?
         ["Meh. This seems to be ok, but it probably won't change your life.", ":partly_sunny:"]
-      elsif mostly_bad?
-        ["Please move along. There's nothing to see here.", ":anguished:"]
       elsif unanimously_bad?
         ["Be prepared for something awful.", ":-1:"]
+      elsif mostly_bad?
+        ["Please move along. There's nothing to see here.", ":anguished:"]
       elsif mostly_average_or_bad?
         ["This seems to be rather something that's not actually good.", ":sleeping:"]
       else
@@ -67,6 +71,8 @@ class Recommender
   end
 
   def controversially_excellent?
+    return false if single_score?
+
     excellent_count = scores.count(&.excellent?)
 
     bad_count = scores.count(&.bad?)
