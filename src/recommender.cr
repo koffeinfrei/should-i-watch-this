@@ -8,7 +8,7 @@ class Recommender
   getter minor_count : Int32
 
   def initialize(scores)
-    @scores = scores.values.reject { |score| score.is_a?(MissingScore) }
+    @scores = scores.values.reject(MissingScore)
     @mostly_count = (@scores.size * 0.75).round.to_i
     @half_count = (@scores.size * 0.5).round.to_i
     @minor_count = (@scores.size * 0.25).round.to_i
