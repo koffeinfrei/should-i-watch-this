@@ -98,18 +98,14 @@ class ScoreFetcher
 
     # metacritic from omdb
     meta_score = omdb["Metascore"].to_s
-    if meta_score != "N/A"
-      movie.score[:metacritic] = PercentageScore.new("#{meta_score}/100")
-    end
+    movie.score[:metacritic] = ScoreFactory.create("#{meta_score}/100", PercentageScore)
 
     # tomato from omdb
     tomato_score = omdb["Ratings"].as_a.find do |rating|
       rating["Source"] == "Rotten Tomatoes"
     end
     if tomato_score
-      movie.score[:rotten_tomatoes] = PercentageScore.new(
-        tomato_score["Value"].as_s
-      )
+      movie.score[:rotten_tomatoes] = ScoreFactory.create(tomato_score["Value"].as_s, PercentageScore)
     end
   end
 
@@ -122,8 +118,9 @@ class ScoreFetcher
                "broken. Or the whole internet is down. Or just www.imdb.com.",
     }).run(->abort(String))
 
-    movie.score[:imdb] = DecimalScore.new(
-      HtmlExtractor.text(imdb_html, %{[itemprop="ratingValue"]})
+    movie.score[:imdb] = ScoreFactory.create(
+      HtmlExtractor.text(imdb_html, %{[itemprop="ratingValue"]}),
+      DecimalScore
     )
 
     trailer_url = HtmlExtractor.attribute_value(imdb_html, %{.mediastrip_big a.video-modal})
@@ -150,11 +147,13 @@ class ScoreFetcher
                "www.rottentomatoes.com.",
     }).run(->abort(String))
 
-    movie.score[:rotten_tomatoes] = PercentageScore.new(
-      HtmlExtractor.text(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage")
+    movie.score[:rotten_tomatoes] = ScoreFactory.create(
+      HtmlExtractor.text(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage"),
+      PercentageScore
     )
-    movie.score[:rotten_tomatoes_audience] = PercentageScore.new(
-      HtmlExtractor.text(tomato_html, ".audience-score .mop-ratings-wrap__percentage")
+    movie.score[:rotten_tomatoes_audience] = ScoreFactory.create(
+      HtmlExtractor.text(tomato_html, ".audience-score .mop-ratings-wrap__percentage"),
+      PercentageScore
     )
 
     links[:rotten_tomatoes] = url

@@ -1,5 +1,15 @@
 require "./score_value"
 
+class ScoreFactory
+  def self.create(value, target_class)
+    if value.nil? || value.includes?("N/A")
+      MissingScore.new
+    else
+      target_class.new(value)
+    end
+  end
+end
+
 abstract class Score
   THRESHOLDS = {
     excellent: 0.8,
