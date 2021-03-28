@@ -2,7 +2,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/veelenga/ameba.git
-    version: 0.13.1
+    version: 0.14.1
 
   callback:
     git: https://github.com/amberframework/callback.git
@@ -14,19 +14,19 @@ shards:
 
   crest:
     git: https://github.com/mamantoha/crest.git
-    version: 0.26.1
+    version: 0.26.4
 
   emoji:
     git: https://github.com/veelenga/emoji.cr.git
-    version: 0.4.0+git.commit.4642bd8ef64839b4639ba0be521e8c85113cb8d5
+    version: 0.4.0+git.commit.46a1f902f0ea81cd61bc99cdf8d12217df17ad5f
 
   http-client-digest_auth:
     git: https://github.com/mamantoha/http-client-digest_auth.git
-    version: 0.4.0
+    version: 0.5.0
 
   http_proxy:
     git: https://github.com/mamantoha/http_proxy.git
-    version: 0.7.1
+    version: 0.7.3
 
   inflector:
     git: https://github.com/phoffer/inflector.cr.git
@@ -34,7 +34,7 @@ shards:
 
   myhtml:
     git: https://github.com/kostya/myhtml.git
-    version: 1.5.2
+    version: 1.5.3
 
   optarg:
     git: https://github.com/amberframework/optarg.git
