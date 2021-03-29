@@ -148,11 +148,11 @@ class ScoreFetcher
     }).run(->abort(String))
 
     movie.score[:rotten_tomatoes] = ScoreFactory.create(
-      HtmlExtractor.text(tomato_html, ".mop-ratings-wrap__score .mop-ratings-wrap__percentage"),
+      "#{HtmlExtractor.attribute_value(tomato_html, "score-board", "tomatometerscore")}%",
       PercentageScore
     )
     movie.score[:rotten_tomatoes_audience] = ScoreFactory.create(
-      HtmlExtractor.text(tomato_html, ".audience-score .mop-ratings-wrap__percentage"),
+      "#{HtmlExtractor.attribute_value(tomato_html, "score-board", "audiencescore")}%",
       PercentageScore
     )
 
