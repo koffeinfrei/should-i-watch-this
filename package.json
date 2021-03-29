@@ -1,7 +1,7 @@
 {
   "name": "should-i-watch-this-www",
   "description": "Shoult I watch this?",
-  "version": "1.1.0",
+  "version": "1.8.0",
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build --legacy",
