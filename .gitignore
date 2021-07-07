@@ -3,3 +3,8 @@
 
 template
 build
+
+node_modules
+/public/bundle.*
+/__sapper__/
+.vercel
