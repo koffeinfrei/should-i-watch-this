@@ -2,11 +2,45 @@
 [![Build Status](https://github.com/koffeinfrei/should-i-watch-this/workflows/Crystal%20CI/badge.svg)](https://github.com/koffeinfrei/should-i-watch-this/actions?workflow=Crystal+CI)
 ![License](https://img.shields.io/github/license/koffeinfrei/should-i-watch-this.svg)
 
-# Should I watch this?
+# Should I Watch This?
 
-Simple CLI to ask the internet if it's worth watching this movie.
+A tool to ask the internet if it's worth watching this movie.
+
+There are 3 versions to this:
+
+- [a CLI](#1.-cli)
+- [a web application](#2.-web-aplication-at-should-i-watch-this.com)
+- [an openfaas function](#3.-openfaas-function)
+
+### 1. CLI
 
 ![Demo](demo.gif)
+
+### 2. Web aplication at should-i-watch-this.com
+
+![website](screen.jpg)
+
+### 3. OpenFaaS function
+
+```bash
+# basic example
+curl -H 'X-Auth-Token: <your omdb token>' \
+    https://faasd.koffeinfrei.org/function/should-i-watch-this \
+    -d "the terminator"
+
+# example with parameters
+curl -H 'X-Auth-Token: <your omdb token>' \
+    https://faasd.koffeinfrei.org/function/should-i-watch-this?show_links=true\&year=1984 \
+    -d "the terminator"
+
+# example with json response
+curl -H 'X-Auth-Token: <your omdb token>' \
+    -H "Accept: application/json" \
+    https://faasd.koffeinfrei.org/function/should-i-watch-this?show_links=true\&year=1984 \
+    -d "the terminator"
+```
+
+## About
 
 It uses the [OMDb API](http://www.omdbapi.com) to get basic information about
 the movie.
@@ -17,44 +51,119 @@ The ratings are fetched from the following sources:
 - [Rotten Tomatoes](https://www.rottentomatoes.com)
 - [Metacritic](https://www.metacritic.com)
 
-## Installation
-
-### Prebuilt binaries
-
-For Ubuntu and Mac OS there are binaries available for download:
-
-- [Ubuntu 18.04](https://github.com/koffeinfrei/should-i-watch-this/releases/latest/download/should-i-watch-this.ubuntu-18.04.tgz)
-- [Ubuntu 16.04](https://github.com/koffeinfrei/should-i-watch-this/releases/latest/download/should-i-watch-this.ubuntu-16.04.tgz)
-- [Mac OS 10.14](https://github.com/koffeinfrei/should-i-watch-this/releases/latest/download/should-i-watch-this.macOS-10.14.tgz)
-
-Extract the compressed archive and place the binary somewhere in your `$PATH`.
-
-### From source
-
-First you'll need to [install Crystal](https://crystal-lang.org/reference/installation/).
-
-```bash
-$ git clone git@github.com:koffeinfrei/should-i-watch-this.git
-$ cd should-i-watch-this
-$ shards build --release
-$ cp bin/should-i-watch-this <some directory in your $PATH>
-```
 
 ## Usage
 
-```bash
-# search by title
-$ should-i-watch-this lookup "terminator 2"
+### CLI
 
-# search by imdb id
-$ should-i-watch-this lookup tt0103064
-```
+1. Get an [OMDb API key](http://www.omdbapi.com/apikey.aspx) (one time)
+
+2. Install binary (one time)
+
+   First you'll need to [install
+Crystal](https://crystal-lang.org/reference/installation/).
+
+   ```bash
+   $ git clone git@github.com:koffeinfrei/should-i-watch-this.git
+   $ cd should-i-watch-this
+   $ shards build --release
+   $ cp bin/should-i-watch-this <some directory in your $PATH>
+   ```
+
+3. Execute binary
+
+   ```bash
+   # search by title
+   $ should-i-watch-this lookup "terminator 2"
+
+   # search by imdb id
+   $ should-i-watch-this lookup tt0103064
+   ```
+
+### Web application
+
+1. Go to https://www.should-i-watch-this.com
+
+2. Type the title or the IMDb id in the search box
+
+3. Hit the search button.
+
+### OpenFaaS function
+
+1. Get an [OMDb API key](http://www.omdbapi.com/apikey.aspx) (one time)
+
+2. Call the function
+
+   There a some headers and query params to the function:
+
+   - mandatory
+     - header `X-Auth-Token`: the OMDb API key
+   - optional
+     - query param `show_links`: value "true" to include the source links
+       in the response
+     - query param `year`: the year of the movie
+
+   ```bash
+   # basic example
+   curl -H 'X-Auth-Token: <your omdb token>' \
+       https://faasd.koffeinfrei.org/function/should-i-watch-this \
+       -d "the terminator"
+
+   # example with parameters
+   curl -H 'X-Auth-Token: <your omdb token>' \
+       https://faasd.koffeinfrei.org/function/should-i-watch-this?show_links=true\&year=1984 \
+       -d "the terminator"
+
+   # example with json response
+   curl -H 'X-Auth-Token: <your omdb token>' \
+       -H "Accept: application/json" \
+       https://faasd.koffeinfrei.org/function/should-i-watch-this?show_links=true\&year=1984 \
+       -d "the terminator"
+   ```
 
 ## Development
+
+### CLI
 
 ```bash
 $ git clone git@github.com:koffeinfrei/should-i-watch-this.git
 $ shards install
+```
+
+### Web application
+```bash
+$ npm install
+$ npm run dev
+```
+
+Navigate to [localhost:5000](http://localhost:5000).
+
+#### Deployment
+
+##### Preparation (one time)
+
+1. `cp .env.example .env`
+2. Fill in appropriate values in `.env`
+
+##### Deploy
+
+1. `npm run dist`
+
+### OpenFaaS function
+
+#### Deployment
+
+##### Preparation (one time)
+
+```bash
+export OPENFAAS_URL=https://faasd.koffeinfrei.org
+faas template store pull crystal-http --overwrite
+```
+
+##### Deploy
+
+```bash
+faas-cli up --no-cache
 ```
 
 ## Contributing
