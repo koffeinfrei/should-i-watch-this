@@ -14,18 +14,17 @@ dependencies:
     github: mamantoha/crest
   cli:
     github: amberframework/cli
-    version: ~> 0.9
   inflector:
     github: phoffer/inflector.cr
 
 development_dependencies:
   ameba:
-    github: veelenga/ameba
+    github: crystal-ameba/ameba
 
 targets:
   should-i-watch-this:
     main: src/should-i-watch-this.cr
 
-crystal: 0.35.1
+crystal: 1.0.0
 
 license: GPL-3.0

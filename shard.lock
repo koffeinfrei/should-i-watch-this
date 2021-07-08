@@ -1,42 +1,38 @@
 version: 2.0
 shards:
   ameba:
-    git: https://github.com/veelenga/ameba.git
-    version: 0.14.1
+    git: https://github.com/crystal-ameba/ameba.git
+    version: 0.14.3
 
   callback:
     git: https://github.com/amberframework/callback.git
-    version: 0.7.1
+    version: 0.9.1
 
   cli:
     git: https://github.com/amberframework/cli.git
-    version: 0.9.3
+    version: 0.11.3
 
   crest:
     git: https://github.com/mamantoha/crest.git
-    version: 0.26.4
+    version: 0.27.0
 
   http-client-digest_auth:
     git: https://github.com/mamantoha/http-client-digest_auth.git
-    version: 0.5.0
+    version: 0.6.0
 
   http_proxy:
     git: https://github.com/mamantoha/http_proxy.git
-    version: 0.7.3
+    version: 0.8.0
 
   inflector:
     git: https://github.com/phoffer/inflector.cr.git
-    version: 0.1.8
+    version: 1.0.0
 
   myhtml:
     git: https://github.com/kostya/myhtml.git
-    version: 1.5.3
+    version: 1.5.6
 
   optarg:
     git: https://github.com/amberframework/optarg.git
-    version: 0.8.0
-
-  string_inflection:
-    git: https://github.com/mosop/string_inflection.git
-    version: 0.2.1
+    version: 0.9.2
 
