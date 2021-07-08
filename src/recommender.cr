@@ -10,8 +10,8 @@ class Recommender
   def initialize(scores)
     @scores = scores.values.reject(MissingScore)
     @mostly_count = (@scores.size * 0.75).round.to_i
-    @half_count = (@scores.size * 0.5).round.to_i
-    @minor_count = (@scores.size * 0.25).round.to_i
+    @half_count = (@scores.size * 0.5).ceil.to_i
+    @minor_count = (@scores.size * 0.25).ceil.to_i
   end
 
   def single_score?
