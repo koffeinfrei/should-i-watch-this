@@ -18,13 +18,7 @@ jobs:
 
       - name: Setup crystal (Ubuntu)
         if: startsWith(matrix.os, 'ubuntu')
-        run: |
-          curl -sSL https://dist.crystal-lang.org/apt/setup.sh | sudo bash
-          curl -sL "https://keybase.io/crystal/pgp_keys.asc" | sudo apt-key add -
-          echo "deb https://dist.crystal-lang.org/apt crystal main" | sudo tee /etc/apt/sources.list.d/crystal.list
-          sudo apt-get update
-          sudo apt install libyaml-dev
-          sudo apt install crystal
+        run: curl -fsSL https://crystal-lang.org/install.sh | sudo bash
 
       - name: Setup crystal (Mac)
         if: startsWith(matrix.os, 'macOS')
