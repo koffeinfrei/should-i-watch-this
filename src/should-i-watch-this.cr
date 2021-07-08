@@ -1,10 +1,9 @@
 require "cli"
-require "emoji"
 
 require "./lookup"
 require "./configuration"
 
-HELP_FOOTER = "Made with #{Emoji.emojize(":coffee:")}  by Koffeinfrei"
+HELP_FOOTER = "Made with ☕️  by Koffeinfrei"
 
 class ShouldIWatchThis < Cli::Supercommand
   command "lookup"

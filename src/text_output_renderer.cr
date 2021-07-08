@@ -1,11 +1,9 @@
-require "emoji"
-
 require "./base_output_renderer"
 
 class TextOutputRenderer < BaseOutputRenderer
   def render_error
     <<-DOC
-           #{Emoji.emojize(":cry:")}  #{error}
+           😢  #{error}
 
     DOC
   end
@@ -19,16 +17,16 @@ class TextOutputRenderer < BaseOutputRenderer
        trailer:          #{movie.trailer_url}
 
 
-       #{Emoji.emojize(":tomato:")}  Rotten Tomatoes
+       🍅  Rotten Tomatoes
 
            score:        #{movie.score[:rotten_tomatoes]}
            audience:     #{movie.score[:rotten_tomatoes_audience]}
 
-       #{Emoji.emojize(":clapper:")}  IMDb
+       🎬  IMDb
 
            rating:       #{movie.score[:imdb]}
 
-       #{Emoji.emojize(":chart_with_upwards_trend:")}  Metacritic
+       📈  Metacritic
 
            score:        #{movie.score[:metacritic]}
 
@@ -36,7 +34,7 @@ class TextOutputRenderer < BaseOutputRenderer
 
        Should I watch this?
 
-           #{Emoji.emojize(recommendation.emoji)}  #{recommendation.text}
+           #{recommendation.emoji}  #{recommendation.text}
     #{output_links}
     DOC
   end

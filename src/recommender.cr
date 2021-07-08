@@ -22,31 +22,31 @@ class Recommender
   def run
     text, emoji =
       if no_rating?
-        ["Hmm, there's no rating about this at all...", ":question:"]
+        ["Hmm, there's no rating about this at all...", "❓"]
       elsif unanimously_excellent?
-        ["You should definitely watch this, this is really excellent!", ":star2:"]
+        ["You should definitely watch this, this is really excellent!", "🌟"]
       elsif mostly_excellent?
-        ["You should watch this, this is probably excellent!", ":star:"]
+        ["You should watch this, this is probably excellent!", "⭐️"]
       elsif controversially_excellent?
-        ["People seem to either love or hate this.", ":fire:"]
+        ["People seem to either love or hate this.", "🔥"]
       elsif half_excellent?
-        ["This is definitely worth watching!", ":clap:"]
+        ["This is definitely worth watching!", "👏"]
       elsif unanimously_good?
-        ["Go ahead, you'll most likely enjoy this!", ":+1:"]
+        ["Go ahead, you'll most likely enjoy this!", "👍"]
       elsif mostly_good?
-        ["Go ahead, you'll probably enjoy this!", ":+1:"]
+        ["Go ahead, you'll probably enjoy this!", "👍"]
       elsif half_good?
-        ["You may enjoy this. It could also be boring though.", ":ok_hand:"]
+        ["You may enjoy this. It could also be boring though.", "👌"]
       elsif unanimously_average?
-        ["Meh. This seems to be ok, but it probably won't change your life.", ":partly_sunny:"]
+        ["Meh. This seems to be ok, but it probably won't change your life.", "⛅️"]
       elsif unanimously_bad?
-        ["Be prepared for something awful.", ":-1:"]
+        ["Be prepared for something awful.", "👎"]
       elsif mostly_bad?
-        ["Please move along. There's nothing to see here.", ":anguished:"]
+        ["Please move along. There's nothing to see here.", "😧"]
       elsif mostly_average_or_bad?
-        ["This seems to be rather something that's not actually good.", ":sleeping:"]
+        ["This seems to be rather something that's not actually good.", "😴"]
       else
-        ["Not sure. You may fall asleep, or you may be delighted.", ":confused:"]
+        ["Not sure. You may fall asleep, or you may be delighted.", "😕"]
       end
 
     Recommendation.new(text, emoji)

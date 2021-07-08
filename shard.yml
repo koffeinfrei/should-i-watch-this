@@ -12,9 +12,6 @@ dependencies:
     github: kostya/myhtml
   crest:
     github: mamantoha/crest
-  emoji:
-    github: veelenga/emoji.cr
-    branch: master
   cli:
     github: amberframework/cli
     version: ~> 0.9

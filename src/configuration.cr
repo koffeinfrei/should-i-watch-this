@@ -9,7 +9,7 @@ class Configuration
     return if File.exists?(config_file) && !force
 
     puts <<-MESSAGE
-       Hi! #{Emoji.emojize(":wave:")}
+       Hi! 👋
 
        I'll bother you only once with this.
 

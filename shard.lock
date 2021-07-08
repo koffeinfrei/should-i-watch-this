@@ -16,10 +16,6 @@ shards:
     git: https://github.com/mamantoha/crest.git
     version: 0.26.4
 
-  emoji:
-    git: https://github.com/veelenga/emoji.cr.git
-    version: 0.4.0+git.commit.46a1f902f0ea81cd61bc99cdf8d12217df17ad5f
-
   http-client-digest_auth:
     git: https://github.com/mamantoha/http-client-digest_auth.git
     version: 0.5.0

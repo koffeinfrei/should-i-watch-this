@@ -1,5 +1,4 @@
 require "json"
-require "emoji"
 
 require "./base_output_renderer"
 
@@ -46,7 +45,7 @@ class JsonOutputRenderer < BaseOutputRenderer
 
           json.field "recommendation" do
             json.object do
-              json.field "emoji", Emoji.emojize(recommendation.emoji)
+              json.field "emoji", recommendation.emoji
               json.field "text", recommendation.text
             end
           end
