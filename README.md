@@ -128,6 +128,8 @@ Crystal](https://crystal-lang.org/reference/installation/).
 ```bash
 $ git clone git@github.com:koffeinfrei/should-i-watch-this.git
 $ shards install
+
+$ crystal run src/should-i-watch-this.cr -- lookup -l the terminator
 ```
 
 ### Web application
