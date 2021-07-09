@@ -1,6 +1,6 @@
 {
   "name": "should-i-watch-this-www",
-  "description": "Shoult I watch this?",
+  "description": "Should I watch this?",
   "version": "1.8.0",
   "scripts": {
     "dev": "sapper dev",

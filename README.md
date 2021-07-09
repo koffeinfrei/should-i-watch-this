@@ -16,7 +16,7 @@ There are 3 versions to this:
 
 ![Demo](demo.gif)
 
-### 2. Web aplication at should-i-watch-this.com
+### 2. Web application at should-i-watch-this.com
 
 ![website](screen.jpg)
 
