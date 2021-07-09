@@ -8,9 +8,9 @@ A tool to ask the internet if it's worth watching this movie.
 
 There are 3 versions to this:
 
-- [a CLI](#1.-cli)
-- [a web application](#2.-web-aplication-at-should-i-watch-this.com)
-- [an openfaas function](#3.-openfaas-function)
+- [a CLI](#1-cli)
+- [a web application](#2-web-application-at-should-i-watch-thiscom)
+- [an openfaas function](#3-openfaas-function)
 
 ### 1. CLI
 
