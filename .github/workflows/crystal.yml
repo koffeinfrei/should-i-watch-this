@@ -59,24 +59,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Download build artifacts ubuntu-16.04
-        uses: actions/download-artifact@v1
-        with:
-          name: should-i-watch-this.ubuntu-16.04
-          path: bin/
-
-      - name: Download build artifacts ubuntu-18.04
-        uses: actions/download-artifact@v1
-        with:
-          name: should-i-watch-this.ubuntu-18.04
-          path: bin/
-
-      - name: Download build artifacts macOS-10.14
-        uses: actions/download-artifact@v1
-        with:
-          name: should-i-watch-this.macOS-10.14
-          path: bin/
-
       - name: Release
         if: startsWith(github.ref, 'refs/tags')
         env:
