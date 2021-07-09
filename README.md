@@ -1,16 +1,34 @@
-[![GitHub release](https://img.shields.io/github/release/koffeinfrei/should-i-watch-this.svg)](https://github.com/koffeinfrei/should-i-watch-this/releases)
-[![Build Status](https://github.com/koffeinfrei/should-i-watch-this/workflows/Crystal%20CI/badge.svg)](https://github.com/koffeinfrei/should-i-watch-this/actions?workflow=Crystal+CI)
-![License](https://img.shields.io/github/license/koffeinfrei/should-i-watch-this.svg)
+<h1 align="center">Should I Watch This?</h1>
 
-# Should I Watch This?
+<div align="center">
 
-A tool to ask the internet if it's worth watching this movie.
+[![GitHub release](https://img.shields.io/github/v/release/koffeinfrei/should-i-watch-this.svg?style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/releases)
+&nbsp;
+[![Build Status](https://img.shields.io/github/workflow/status/koffeinfrei/should-i-watch-this/Crystal%20CI.svg?label=Crystal%20CI&style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/actions)
+&nbsp;
+![License](https://img.shields.io/github/license/koffeinfrei/should-i-watch-this.svg?style=flat-square)
+
+</div>
+
+> I watch a lot of movies. This is exactly what I was looking for.<br> -- myself
+
+<br>
+
+<div align="center">
+
+This is a tool to ask the internet if it's worth watching a movie or show.
 
 There are 3 versions to this:
 
-- [a CLI](#1-cli)
-- [a web application](#2-web-application-at-should-i-watch-thiscom)
-- [an openfaas function](#3-openfaas-function)
+[CLI](#1-cli)
+&nbsp;·&nbsp;
+[web application](#2-web-application-at-should-i-watch-thiscom)
+&nbsp;·&nbsp;
+[openfaas function](#3-openfaas-function)
+
+</div>
+
+<br>
 
 ### 1. CLI
 
