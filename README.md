@@ -165,14 +165,14 @@ Navigate to [localhost:5000](http://localhost:5000).
 ##### Preparation (one time)
 
 ```bash
-export OPENFAAS_URL=https://faasd.koffeinfrei.org
-faas template store pull crystal-http --overwrite
+$ export OPENFAAS_URL=https://faasd.koffeinfrei.org
+$ faas template store pull crystal-http --overwrite
 ```
 
 ##### Deploy
 
 ```bash
-faas-cli up --no-cache
+$ faas-cli up --no-cache
 ```
 
 ## Contributing
