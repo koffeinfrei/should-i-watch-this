@@ -1,8 +1,10 @@
+require "json"
+
 class HtmlExtractor
-  def self.text(html, css_selector)
+  def self.json_content(html, css_selector)
     first_element(html, css_selector) do |element|
-      element.inner_text.strip
-    end
+      JSON.parse(element.inner_text.strip).as_h
+    end || {} of String => JSON::Any
   end
 
   def self.attribute_value(html, css_selector, attribute)

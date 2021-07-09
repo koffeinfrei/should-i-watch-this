@@ -118,16 +118,18 @@ class ScoreFetcher
                "broken. Or the whole internet is down. Or just www.imdb.com.",
     }).run(->abort(String))
 
-    movie.score[:imdb] = ScoreFactory.create(
-      HtmlExtractor.text(imdb_html, %{[itemprop="ratingValue"]}),
-      DecimalScore
-    )
+    data = HtmlExtractor.json_content(imdb_html, %{script[type="application/ld+json"]})
 
-    trailer_url = HtmlExtractor.attribute_value(imdb_html, %{.mediastrip_big a.video-modal}, "href")
+    # score
+    score = data.dig?("aggregateRating", "ratingValue")
+    if score
+      score = "#{score.raw.as(Float64 | Int64).to_f}/10"
+    end
+    movie.score[:imdb] = ScoreFactory.create(score, DecimalScore)
+
+    # trailer
+    trailer_url = data.dig?("trailer", "embedUrl").try(&.as_s)
     if trailer_url
-      # strip the ugly query params from the url
-      trailer_url = URI.parse(trailer_url)
-      trailer_url.query = nil
       movie.trailer_url = "#{IMDB_URL}#{trailer_url}"
     end
 
