@@ -13,8 +13,7 @@ class TextOutputRenderer < BaseOutputRenderer
        year:             #{movie.year}
        director:         #{movie.director}
        actors:           #{movie.actors}
-
-       trailer:          #{movie.trailer_url}
+       #{output_trailer}
 
 
        🍅  Rotten Tomatoes
@@ -54,5 +53,11 @@ class TextOutputRenderer < BaseOutputRenderer
     output << ""
 
     output.join("\n")
+  end
+
+  def output_trailer
+    return unless movie.trailer_url
+
+    "\n   trailer:          #{movie.trailer_url}\n"
   end
 end
