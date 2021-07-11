@@ -1,10 +1,14 @@
-/lib
-/bin
+# cli
+/cli/lib
+/cli/bin
 
-template
-build
+# www
+/www/node_modules
+/www/src/node_modules
+/www/public/bundle.*
+/www/__sapper__/
+/www/.vercel
 
-node_modules
-/public/bundle.*
-/__sapper__/
-.vercel
+# faas
+/faas/build
+/faas/template

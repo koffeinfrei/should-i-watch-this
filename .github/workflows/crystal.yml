@@ -25,22 +25,23 @@ jobs:
         run: brew install crystal
 
       - name: Install dependencies
-        run: shards install
+        run: cd cli && shards install
 
       - name: Format check
-        run: crystal tool format --check
+        run: cd cli && crystal tool format --check
 
       - name: Ameba (static code analysis)
-        run: bin/ameba
+        run: cd cli && bin/ameba
 
       - name: Spec
-        run: crystal spec
+        run: cd cli && crystal spec
 
       - name: Build
         env:
           OS_NAME: ${{ matrix.os }}
         run: |
           export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opt/openssl/lib/pkgconfig # for macOS
+          cd cli
           crystal --version
           shards build --release
           tar -C bin/ -czf should-i-watch-this.${OS_NAME}.tgz should-i-watch-this
@@ -49,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: should-i-watch-this.${{ matrix.os }}
-          path: should-i-watch-this.${{ matrix.os }}.tgz
+          path: cli/should-i-watch-this.${{ matrix.os }}.tgz
 
   release:
     runs-on: ubuntu-latest

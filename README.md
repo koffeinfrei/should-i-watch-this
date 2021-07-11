@@ -83,7 +83,7 @@ Crystal](https://crystal-lang.org/reference/installation/).
 
    ```bash
    $ git clone git@github.com:koffeinfrei/should-i-watch-this.git
-   $ cd should-i-watch-this
+   $ cd should-i-watch-this/cli
    $ shards build --release
    $ cp bin/should-i-watch-this <some directory in your $PATH>
    ```
@@ -144,14 +144,16 @@ Crystal](https://crystal-lang.org/reference/installation/).
 ### CLI
 
 ```bash
-$ git clone git@github.com:koffeinfrei/should-i-watch-this.git
+$ cd cli
 $ shards install
 
 $ crystal run src/should-i-watch-this.cr -- lookup -l the terminator
 ```
 
 ### Web application
+
 ```bash
+$ cd www
 $ npm install
 $ npm run dev
 ```
@@ -165,6 +167,7 @@ Navigate to [localhost:5000](http://localhost:5000).
 ##### Preparation (one time)
 
 ```bash
+$ cd cli
 $ export OPENFAAS_URL=https://faasd.koffeinfrei.org
 $ faas template store pull crystal-http --overwrite
 ```
@@ -172,6 +175,7 @@ $ faas template store pull crystal-http --overwrite
 ##### Deploy
 
 ```bash
+$ cd cli
 $ faas-cli up --no-cache
 ```
 
