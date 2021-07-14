@@ -1,5 +1,5 @@
-name: crystal_faas_function
-version: 0.1.0
+name: should-i-watch-this-faas
+version: 1.8.0
 
 dependencies:
   should-i-watch-this:
