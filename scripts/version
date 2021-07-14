@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# bail if git staging area is dirty
+if ! git diff --cached --exit-code; then
+  echo "Git staging area is dirty. Please commit or reset first."
+  exit 1
+fi
+
+current_version=$(git describe --tags --abbrev=0 | sed s/^v//)
+IFS='.' read -ra current_version_parts <<< "$current_version"
+
+case "$1" in
+  "bump:major")
+    current_version_parts[0]=$((current_version_parts[0] + 1))
+    ;;
+  "bump:minor")
+    current_version_parts[1]=$((current_version_parts[1] + 1))
+    ;;
+  "bump:patch")
+    current_version_parts[2]=$((current_version_parts[2] + 1))
+    ;;
+  *)
+    echo "No valid command provided"
+    exit 1
+    ;;
+esac
+
+new_version=$(IFS='.'; echo "${current_version_parts[*]}")
+
+# yaml files
+yaml_files=(cli/shard.yml snap/snapcraft.yaml faas/open-faas/shard.yml faas/open-faas-free/shard.yml)
+for file in "${yaml_files[@]}"; do
+  sed -i "s#version: ${current_version}#version: ${new_version}#" "$file"
+done
+git add "${yaml_files[@]}"
+
+# json files
+sed -i "s#\"version\": \"${current_version}\"#\"version\": \"${new_version}\"#" www/package.json
+(cd www && npm install)
+git add www/package.json www/package-lock.json
+
+git commit -m "bump version to ${new_version}"
+git tag "v${new_version}"
+
+printf "\n"
+echo "✔ Version was bumped from $current_version to $new_version"
+printf "\n"
+read -rp "👇 Check the commit if the changes are sound, then 'git push && git push --tags'. Press <enter> to continue."
+git show
