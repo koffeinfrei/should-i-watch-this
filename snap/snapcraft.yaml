@@ -24,7 +24,7 @@ apps:
 parts:
   should-i-watch-this:
     plugin: crystal
-    source: ./
+    source: cli
     build-packages:
       - git
       - libssl-dev
