@@ -8,9 +8,6 @@ jobs:
 
     strategy:
       matrix:
-        # whenever an os is added, a new download artifacts step
-        # `name: Download build artifacts <os>` needs to be added in the
-        # release job
         os: [ubuntu-latest, macOS-latest]
 
     steps:
@@ -36,7 +33,6 @@ jobs:
       - name: Spec
         run: cd cli && crystal spec
 
-        # TODO: fix or remove
       - name: Build
         env:
           OS_NAME: ${{ matrix.os }}
@@ -45,13 +41,6 @@ jobs:
           cd cli
           crystal --version
           shards build --release
-          tar -C bin/ -czf should-i-watch-this.${OS_NAME}.tgz should-i-watch-this
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: should-i-watch-this.${{ matrix.os }}
-          path: cli/should-i-watch-this.${{ matrix.os }}.tgz
 
   release:
     runs-on: ubuntu-latest
@@ -59,8 +48,6 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v1
-
       - name: Release
         if: startsWith(github.ref, 'refs/tags')
         env:
