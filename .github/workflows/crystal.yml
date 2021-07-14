@@ -36,6 +36,7 @@ jobs:
       - name: Spec
         run: cd cli && crystal spec
 
+        # TODO: fix or remove
       - name: Build
         env:
           OS_NAME: ${{ matrix.os }}

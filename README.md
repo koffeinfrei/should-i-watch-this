@@ -74,29 +74,31 @@ The ratings are fetched from the following sources:
 
 ### CLI
 
-1. Get an [OMDb API key](http://www.omdbapi.com/apikey.aspx) (one time)
+ ```bash
+ # search by title
+ $ should-i-watch-this lookup "terminator 2"
 
-2. Install binary (one time)
+ # search by imdb id
+ $ should-i-watch-this lookup tt0103064
+ ```
 
-   First you'll need to [install
+#### Install from snap
+
+```bash
+sudo snap install should-i-watch-this
+```
+
+#### Install from source
+
+First you'll need to [install
 Crystal](https://crystal-lang.org/reference/installation/).
 
-   ```bash
-   $ git clone git@github.com:koffeinfrei/should-i-watch-this.git
-   $ cd should-i-watch-this/cli
-   $ shards build --release
-   $ cp bin/should-i-watch-this <some directory in your $PATH>
-   ```
-
-3. Execute binary
-
-   ```bash
-   # search by title
-   $ should-i-watch-this lookup "terminator 2"
-
-   # search by imdb id
-   $ should-i-watch-this lookup tt0103064
-   ```
+ ```bash
+ $ git clone git@github.com:koffeinfrei/should-i-watch-this.git
+ $ cd should-i-watch-this/cli
+ $ shards build --release
+ $ cp bin/should-i-watch-this <some directory in your $PATH>
+ ```
 
 ### Web application
 

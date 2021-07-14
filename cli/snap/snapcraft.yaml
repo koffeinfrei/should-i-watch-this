@@ -1,0 +1,30 @@
+name: should-i-watch-this
+base: core18
+version: 1.8.0
+title: Should I Watch This?
+summary: Ask the internet if it's worth watching a movie or show
+description: |
+  A CLI to ask the internet if it's worth watching a movie or show.  It uses
+  the OMDb API to get basic information about the movie.
+  The ratings are fetched from the following sources: IMDb, Rotten Tomatoes,
+  Metacritic.
+icon: logo.png
+license: AGPL-3.0
+
+grade: stable
+confinement: strict
+
+apps:
+  should-i-watch-this:
+    command: bin/should-i-watch-this
+    plugs:
+      - home
+      - network
+
+parts:
+  should-i-watch-this:
+    plugin: crystal
+    source: ./
+    build-packages:
+      - git
+      - libssl-dev
