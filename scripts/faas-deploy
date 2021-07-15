@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+tmp_dir=$(mktemp -d)
+
+# we need to temporarily remove the lib directory, otherwise we'll get a `too
+# many levels of symbolic links` error when building the docker image
+mv cli/lib "$tmp_dir"
+
+OPENFAAS_URL=https://faasd.koffeinfrei.org/ faas-cli up --no-cache
+
+mv "$tmp_dir/lib" cli/
+rmdir "$tmp_dir"

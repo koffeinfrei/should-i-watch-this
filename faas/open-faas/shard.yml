@@ -3,5 +3,4 @@ version: 1.8.0
 
 dependencies:
   should-i-watch-this:
-    github: koffeinfrei/should-i-watch-this
-    branch: main
+    path: function/cli
