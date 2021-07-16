@@ -31,3 +31,7 @@ parts:
     build-packages:
       - git
       - libssl-dev
+    # workaround for https://bugs.launchpad.net/snapcraft/+bug/1936671
+    override-pull: |
+      snapcraftctl pull
+      rm -rf $SNAPCRAFT_PART_SRC/lib $SNAPCRAFT_PART_SRC/bin
