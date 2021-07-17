@@ -22,13 +22,15 @@ class Configuration
 
 
     MESSAGE
-    print "   ⟶  Please hit <ENTER> to open the website: "
+    print "   ⟶  Please hit <ENTER> to open the website http://www.omdbapi.com/apikey.aspx "
     gets
     `$(which xdg-open || which open) http://www.omdbapi.com/apikey.aspx`
 
     puts <<-MESSAGE
 
        Alright. If you did everything right you should now have an API key.
+
+
     MESSAGE
     print "   ⟶  Please paste your API key: "
     key = gets
