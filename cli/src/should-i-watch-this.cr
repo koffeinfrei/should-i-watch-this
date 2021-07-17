@@ -52,7 +52,7 @@ class ShouldIWatchThis < Cli::Supercommand
 
   class Configure < Cli::Command
     class Options
-      bool "--force",
+      bool ["-f", "--force"],
         default: false,
         desc: "Reconfigure, even if the config already exists"
       version
