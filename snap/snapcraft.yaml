@@ -23,6 +23,7 @@ apps:
     plugs:
       - home
       - network
+      - desktop
 
 parts:
   should-i-watch-this:
