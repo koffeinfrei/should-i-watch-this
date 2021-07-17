@@ -8,6 +8,9 @@ class Configuration
   def configure!(force = false)
     return if File.exists?(config_file) && !force
 
+    # workaround for https://bugs.launchpad.net/snapcraft/+bug/1936712
+    STDOUT.sync = true
+
     puts <<-MESSAGE
        Hi! 👋
 
