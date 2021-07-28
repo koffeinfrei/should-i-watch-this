@@ -1,34 +1,33 @@
 <script>
-import { onDestroy } from 'svelte';
+  import { onDestroy } from "svelte";
 
-const spinnerCharacters = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+  const spinnerCharacters = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 
-let currentIndex = 0;
-let currentCharacter;
+  let currentIndex = 0;
+  let currentCharacter;
 
-function setCurrentCharacter() {
-  currentCharacter = spinnerCharacters[currentIndex];
-}
+  function setCurrentCharacter() {
+    currentCharacter = spinnerCharacters[currentIndex];
+  }
 
-function onInterval(callback, milliseconds) {
-  const interval = setInterval(callback, milliseconds);
+  function onInterval(callback, milliseconds) {
+    const interval = setInterval(callback, milliseconds);
 
-  onDestroy(() => {
-    clearInterval(interval);
-  });
-}
+    onDestroy(() => {
+      clearInterval(interval);
+    });
+  }
 
-onInterval(() => {
-  currentIndex = (currentIndex + 1) % spinnerCharacters.length;
-  setCurrentCharacter();
-}, 60);
-
+  onInterval(() => {
+    currentIndex = (currentIndex + 1) % spinnerCharacters.length;
+    setCurrentCharacter();
+  }, 60);
 </script>
 
-<style>
-span {
-  font-size: 21px;
-}
-</style>
+<span>{currentCharacter || ""}</span>
 
-<span>{currentCharacter || ''}</span>
+<style>
+  span {
+    font-size: 21px;
+  }
+</style>
