@@ -4,10 +4,9 @@
 
 # www
 /www/node_modules
-/www/src/node_modules
-/www/public/bundle.*
-/www/__sapper__/
 /www/.vercel
+/www/.svelte-kit
+/www/package
 
 # faas
 /faas/build

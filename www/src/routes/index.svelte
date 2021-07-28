@@ -1,6 +1,6 @@
 <script context="module">
-  export async function preload(page, session) {
-    return { title: (session || {}).title };
+  export async function load({ session }) {
+    return { props: { title: (session || {}).title } };
   }
 </script>
 

@@ -1,7 +1,7 @@
 <script context="module">
   import { fetchMovie } from '../../fetchMovie';
 
-  export async function preload(page, session) {
+  export async function load({ page, session, fetch }) {
     const { title, year } = page.params;
 
     let movie;
@@ -10,22 +10,25 @@
     }
     // only for SSR
     else {
-      movie = await fetchMovie(title, year, this.fetch);
+      movie = await fetchMovie(title, year, fetch);
     }
 
     if (movie.error) {
-      this.error(404);
+      return {
+        status: 404
+      };
     }
 
-    return { movie };
+    return { props: { movie } };
   }
 </script>
 
 <script>
   import Result from '../../components/Result.svelte';
   import SearchBox from '../../components/SearchBox.svelte';
-  import { goto, stores } from '@sapper/app';
-  const { session } = stores();
+  import { goto } from '$app/navigation';
+  import { getStores } from '$app/stores';
+  const { session } = getStores();
 
   let titleInput;
 

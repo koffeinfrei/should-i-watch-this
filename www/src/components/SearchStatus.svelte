@@ -3,8 +3,9 @@
   import Spinner from '../components/Spinner.svelte';
   import { getUrl } from '../getUrl';
   import { fetchMovie } from '../fetchMovie';
-  import { goto, stores } from '@sapper/app';
-  const { session } = stores();
+  import { goto } from '$app/navigation';
+  import { getStores } from '$app/stores';
+  const { session } = getStores();
 
   export let title;
 

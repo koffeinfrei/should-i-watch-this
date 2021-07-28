@@ -1,10 +1,9 @@
 <script>
   import ResultMoreLink from '../components/ResultMoreLink.svelte';
-  import { stores } from '@sapper/app';
+  import { page } from '$app/stores';
 
   export let movie;
 
-  const { page } = stores();
   const { host, path } = $page;
   const protocol = host.startsWith('localhost') ? 'http://' : 'https://';
   const hostWithProtocol = `${protocol}${host}`
