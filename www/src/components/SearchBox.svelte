@@ -14,12 +14,18 @@
     }
   }
 
-  async function init(element){
+  async function init(element) {
     setTimeout(() => element.focus(), 0);
   }
 </script>
 
 <section class="box padded">
-  <input bind:this={titleInput} bind:value={title} on:keyup={handleKeyup} placeholder="Movie title or IMDb id" use:init>
+  <input
+    bind:this={titleInput}
+    bind:value={title}
+    on:keyup={handleKeyup}
+    placeholder="Movie title or IMDb id"
+    use:init
+  />
   <button on:click={handleClick}>Look up</button>
 </section>

@@ -1,0 +1,23 @@
+name: WWW
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set the NODE_VERSION env variable from NVM
+        run: echo NODE_VERSION=$(cat www/.nvmrc) >> $GITHUB_ENV
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+
+      - name: Install dependencies
+        run: cd www && npm install
+
+      - name: Lint
+        run: cd www && npm run lint

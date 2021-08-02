@@ -1,22 +1,22 @@
 <script context="module">
-  export async function preload(page, session) {
-    return { title: (session || {}).title };
+  export async function load({ session }) {
+    return { props: { title: (session || {}).title } };
   }
 </script>
 
 <script>
-  import SearchBox from '../components/SearchBox.svelte';
-  import SearchStatus from '../components/SearchStatus.svelte';
-  import RandomQuote from '../components/RandomQuote.svelte';
+  import SearchBox from "../components/SearchBox.svelte";
+  import SearchStatus from "../components/SearchStatus.svelte";
+  import RandomQuote from "../components/RandomQuote.svelte";
 
   export let title;
 
   function handleSubmit(newTitle) {
-    title = newTitle || '';
+    title = newTitle || "";
   }
 </script>
 
-<SearchBox {title} onSubmit={handleSubmit}/>
+<SearchBox {title} onSubmit={handleSubmit} />
 
 {#if title === undefined}
   <RandomQuote />

@@ -1,18 +1,19 @@
 <script>
-  import Error from '../components/Error.svelte';
-  import Spinner from '../components/Spinner.svelte';
-  import { getUrl } from '../getUrl';
-  import { fetchMovie } from '../fetchMovie';
-  import { goto, stores } from '@sapper/app';
-  const { session } = stores();
+  import Error from "../components/Error.svelte";
+  import Spinner from "../components/Spinner.svelte";
+  import { getUrl } from "../getUrl";
+  import { fetchMovie } from "../fetchMovie";
+  import { goto } from "$app/navigation";
+  import { getStores } from "$app/stores";
+  const { session } = getStores();
 
   export let title;
 
-  let year = '';
+  let year = "";
   let fetchMoviePromise;
 
   async function run() {
-    year = '';
+    year = "";
     fetchMoviePromise = fetchMovie(title, year, fetch);
 
     fetchMoviePromise.then(async (result) => {

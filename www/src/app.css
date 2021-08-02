@@ -1,13 +1,16 @@
 @font-face {
-  font-family: 'Fetamont-9ExkzVmc3w';
-  src: url('/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.eot');
-  src: url('/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.eot?#iefix') format('embedded-opentype'),
-  url('/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.woff') format('woff'),
-  url('/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.ttf') format('truetype'),
-  url('/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.svg#Fetamont-9ExkzVmc3w') format('svg');
+  font-family: "Fetamont-9ExkzVmc3w";
+  src: url("/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.eot");
+  src: url("/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.eot?#iefix")
+      format("embedded-opentype"),
+    url("/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.woff") format("woff"),
+    url("/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.ttf") format("truetype"),
+    url("/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.svg#Fetamont-9ExkzVmc3w")
+      format("svg");
 }
 
-html, body {
+html,
+body {
   position: relative;
   width: 100%;
   height: 100%;
@@ -19,7 +22,7 @@ body {
   margin: 0;
   padding: 50px 8px 8px 8px;
   box-sizing: border-box;
-  font-family: 'Fetamont-9ExkzVmc3w';
+  font-family: "Fetamont-9ExkzVmc3w";
   font-size: 24px;
   /* make footer stick to bottom initially */
   height: 100%;
@@ -42,16 +45,19 @@ a.external {
   margin-right: 2px;
 }
 a.external:after {
- content: '↗';
- position: relative;
- font-size: 0.9em;
+  content: "↗";
+  position: relative;
+  font-size: 0.9em;
 }
 
 label {
   display: block;
 }
 
-input, button, select, textarea {
+input,
+button,
+select,
+textarea {
   font-family: inherit;
   font-size: inherit;
   padding: 0.4em;
@@ -95,7 +101,8 @@ h1 {
   }
 }
 
-h2, h3 {
+h2,
+h3 {
   font-size: 1em;
   margin: 0 0 8px 0;
 }
