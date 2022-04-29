@@ -6,7 +6,7 @@ tmp_dir=$(mktemp -d)
 # many levels of symbolic links` error when building the docker image
 mv cli/lib "$tmp_dir"
 
-OPENFAAS_URL=https://faasd.koffeinfrei.org/ faas-cli up --no-cache
+(cd faas && OPENFAAS_URL=https://faasd.koffeinfrei.org/ faas-cli up --no-cache)
 
 mv "$tmp_dir/lib" cli/
 rmdir "$tmp_dir"
