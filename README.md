@@ -186,7 +186,7 @@ There's a script that bumps the version in all necessary files and creates a
 git tag.
 
 ```bash
-# bump the major version, e.g. from 1.2.0 to 2.2.0
+# bump the major version, e.g. from 1.2.0 to 2.0.0
 $ scripts/version bump:major
 
 # bump the minor version, e.g. from 1.2.0 to 1.3.0
