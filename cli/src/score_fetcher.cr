@@ -128,10 +128,7 @@ class ScoreFetcher
     movie.score[:imdb] = ScoreFactory.create(score, DecimalScore)
 
     # trailer
-    trailer_url = data.dig?("trailer", "embedUrl").try(&.as_s)
-    if trailer_url
-      movie.trailer_url = "#{IMDB_URL}#{trailer_url}"
-    end
+    movie.trailer_url = data.dig?("trailer", "embedUrl").try(&.as_s)
 
     links[:imdb] = url
   end
