@@ -29,6 +29,8 @@ parts:
   should-i-watch-this:
     plugin: crystal
     source: cli
+    crystal-build-options:
+      - "--release"
     build-packages:
       - git
       - libssl-dev
