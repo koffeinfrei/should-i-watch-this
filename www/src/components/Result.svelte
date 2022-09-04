@@ -12,7 +12,7 @@
   const posterUrl =
     movie.poster_url || `${hostWithProtocol}/default-poster.png`;
 
-  const pageTitle = `${movie.title} (${movie.year}) | Should I watch this?`;
+  const pageTitle = `${movie.title} (${movie.year}) | Should I Watch This?`;
 </script>
 
 <section class="box">

@@ -25,5 +25,5 @@
 {/if}
 
 <svelte:head>
-  <title>Should I watch this?</title>
+  <title>Should I Watch This?</title>
 </svelte:head>
