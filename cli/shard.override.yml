@@ -1,0 +1,6 @@
+dependencies:
+  # Transient dependency of `amberframework/cli`
+  # Needed until https://github.com/amberframework/optarg/pull/6 is merged
+  optarg:
+    github: xendk/optarg
+    branch: crystal-1.13
