@@ -146,14 +146,25 @@ class ScoreFetcher
                "www.rottentomatoes.com.",
     }).run(->abort(String))
 
-    movie.score[:rotten_tomatoes] = ScoreFactory.create(
-      "#{HtmlExtractor.attribute_value(tomato_html, "score-board", "tomatometerscore")}%",
-      PercentageScore
-    )
-    movie.score[:rotten_tomatoes_audience] = ScoreFactory.create(
-      "#{HtmlExtractor.attribute_value(tomato_html, "score-board", "audiencescore")}%",
-      PercentageScore
-    )
+    data = HtmlExtractor.json_content(tomato_html, "#media-scorecard-json")
+
+    critics_score = data.dig?("criticsScore", "score")
+    if critics_score
+      score = "#{critics_score.raw.as(String)}%"
+      movie.score[:rotten_tomatoes] = ScoreFactory.create(
+        score,
+        PercentageScore
+      )
+    end
+
+    audience_score = data.dig?("audienceScore", "score")
+    if audience_score
+      score = "#{audience_score.raw.as(String)}%"
+      movie.score[:rotten_tomatoes_audience] = ScoreFactory.create(
+        score,
+        PercentageScore
+      )
+    end
 
     links[:rotten_tomatoes] = url
   rescue Crest::NotFound
