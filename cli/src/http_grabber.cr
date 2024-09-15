@@ -26,10 +26,10 @@ abstract class HttpGrabber
 
     parse_body(request.execute.body)
   rescue IO::TimeoutError
-    abort.call(errors[:unauthorized])
+    abort.call(errors[:timeout])
     parse_body
   rescue Crest::Unauthorized
-    abort.call(errors[:timeout])
+    abort.call(errors[:unauthorized])
     parse_body
   end
 
