@@ -19,15 +19,21 @@ class Lookup
     @score_fetcher = ScoreFetcher.new(@movie, Configuration.new.key)
   end
 
-  def run
-    spawn do
-      progress.start
+  def run(renderer, show_progress = true)
+    if show_progress
+      spawn do
+        progress.start
+      end
     end
 
     result = score_fetcher.run
 
-    output = TextOutputRenderer.new(result, show_links)
+    output = renderer.new(result, show_links?).run
 
-    progress.stop(output.run)
+    if show_progress
+      progress.stop(output)
+    else
+      puts output
+    end
   end
 end

@@ -1,6 +1,8 @@
 require "cli"
 
 require "./lookup"
+require "./text_output_renderer"
+require "./json_output_renderer"
 require "./configuration"
 
 HELP_FOOTER = "Made with ☕️  by Koffeinfrei"
@@ -30,6 +32,10 @@ class ShouldIWatchThis < Cli::Supercommand
       bool ["-l", "--show-links"],
         default: false,
         desc: "Output links to movies on the different platforms"
+      string ["-f", "--format"],
+        any_of: %w(terminal json),
+        default: "terminal",
+        desc: "The output format"
       version
       help
     end
@@ -46,7 +52,19 @@ class ShouldIWatchThis < Cli::Supercommand
       # to the title argument
       title_or_imdb_id = ([args.title_or_imdb_id] + args.nameless_args).join(" ")
 
-      ::Lookup.new(title_or_imdb_id, show_links: args.show_links?, year: args.year?).run
+      terminal_output = args.format == "terminal"
+      renderer =
+        if terminal_output
+          TextOutputRenderer
+        else
+          JsonOutputRenderer
+        end
+
+      ::Lookup.new(
+        title_or_imdb_id,
+        show_links: args.show_links?,
+        year: args.year?
+      ).run(renderer, show_progress: terminal_output)
     end
   end
 
