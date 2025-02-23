@@ -1,7 +1,7 @@
 {
   "name": "should-i-watch-this-www",
   "description": "Should I Watch This?",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
