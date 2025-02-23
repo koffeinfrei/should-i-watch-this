@@ -50,7 +50,7 @@ class JsonOutputRenderer < BaseOutputRenderer
             end
           end
 
-          if show_links
+          if show_links?
             json.field "links" do
               json.object do
                 links.each do |key, value|

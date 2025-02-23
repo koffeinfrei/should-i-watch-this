@@ -25,6 +25,6 @@ targets:
   should-i-watch-this:
     main: src/should-i-watch-this.cr
 
-crystal: 1.0.0
+crystal: 1.15.1
 
 license: AGPL-3.0

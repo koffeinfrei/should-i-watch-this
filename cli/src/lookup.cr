@@ -8,7 +8,7 @@ class Lookup
   getter progress : Progress
   getter movie : Movie
   getter score_fetcher : ScoreFetcher
-  getter show_links : Bool
+  getter? show_links : Bool
 
   def initialize(title_or_imdb_id, @show_links = false, year = nil)
     @movie = Movie.parse(title_or_imdb_id)

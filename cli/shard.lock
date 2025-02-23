@@ -3,7 +3,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 1.6.1
+    version: 1.6.4
 
   callback:
     git: https://github.com/amberframework/callback.git
@@ -15,7 +15,7 @@ shards:
 
   crest:
     git: https://github.com/mamantoha/crest.git
-    version: 1.4.1
+    version: 1.5.0
 
   http-client-digest_auth:
     git: https://github.com/mamantoha/http-client-digest_auth.git
@@ -23,7 +23,7 @@ shards:
 
   http_proxy:
     git: https://github.com/mamantoha/http_proxy.git
-    version: 0.12.0
+    version: 0.12.1
 
   inflector:
     git: https://github.com/phoffer/inflector.cr.git

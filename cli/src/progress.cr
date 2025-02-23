@@ -33,7 +33,7 @@ class Progress
         STDOUT << "\r"
         STDOUT << "#{SPINNER_CHARACTERS[index]}  #{progress_text}"
         STDOUT.flush
-        sleep 0.1
+        sleep 0.1.seconds
       end
     end
   end

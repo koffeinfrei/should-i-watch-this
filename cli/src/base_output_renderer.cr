@@ -4,7 +4,7 @@ require "./output_result"
 
 abstract class BaseOutputRenderer
   getter output_result : OutputResult
-  getter show_links : Bool
+  getter? show_links : Bool
 
   delegate movie, to: @output_result
   delegate links, to: @output_result

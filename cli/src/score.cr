@@ -70,7 +70,7 @@ abstract class Score
     end
   end
 
-  private def with_scaled_value?(type)
+  private def with_scaled_value?(type, &)
     _value = value
 
     return false if _value.nil?

@@ -39,7 +39,7 @@ class TextOutputRenderer < BaseOutputRenderer
   end
 
   def output_links
-    return unless show_links
+    return unless show_links?
 
     output = [] of String
 

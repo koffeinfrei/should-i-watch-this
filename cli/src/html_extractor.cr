@@ -7,7 +7,7 @@ class HtmlExtractor
     end || {} of String => JSON::Any
   end
 
-  private def self.first_element(html, css_selector)
+  private def self.first_element(html, css_selector, &)
     elements = html.css(css_selector)
 
     if elements.size > 0
