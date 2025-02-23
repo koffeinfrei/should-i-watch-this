@@ -1,0 +1,6 @@
+/# locals: (query: nil)
+
+section.box.padded
+  = form_tag new_search_path, method: :get
+    input name="query" placeholder="Movie title or IMDb id" value=query
+    button Look up

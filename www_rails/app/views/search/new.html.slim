@@ -1,0 +1,10 @@
+= render 'shared/search_box', query: @query
+
+section.box.padded
+  - if @query.present?
+    span.spinner data-controller="spinner"
+
+    = form_tag search_path, 'data-controller': 'auto-submit'
+      = hidden_field_tag :query, @query
+  - else
+    .error Hmm? I think you forgot to enter the movie title.
