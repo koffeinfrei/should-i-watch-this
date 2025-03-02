@@ -9,6 +9,10 @@ gem "hotwire-rails"
 gem "vite_rails"
 gem "slim-rails"
 gem "redis"
+gem "capistrano", "~> 3.19"
+gem "capistrano-rails"
+gem "capistrano-rbenv"
+gem "capistrano3-puma", github: "seuros/capistrano-puma"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
