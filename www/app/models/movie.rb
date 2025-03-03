@@ -1,5 +1,6 @@
 module Movie
   KEY_PREFIX = "siwt_movie"
+  CLI_BIN = ENV.fetch("CLI_BIN", "should-i-watch-this")
 
   class Error < StandardError; end
 
@@ -26,7 +27,7 @@ module Movie
   end
 
   def self.search!(query)
-    json = JSON.parse(`should-i-watch-this lookup -f json #{query} -l`)
+    json = JSON.parse(`#{CLI_BIN} lookup -f json #{query} -l`)
 
     if error = json["error"]
       Rails.logger.error("event=movie_search_error error=#{error.inspect}")
@@ -49,7 +50,7 @@ module Movie
   end
 
   def self.fetch(title, year)
-    JSON.parse(`should-i-watch-this lookup -f json #{title} -y #{year} -l`)
+    JSON.parse(`#{CLI_BIN} lookup -f json #{title} -y #{year} -l`)
   end
 
   def self.key(title, year)
