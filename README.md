@@ -4,7 +4,9 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/koffeinfrei/should-i-watch-this.svg?style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/releases)
 &nbsp;
-[![Build Status](https://img.shields.io/github/workflow/status/koffeinfrei/should-i-watch-this/Crystal%20CI.svg?label=Crystal%20CI&style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/actions)
+[![WWW Build](https://github.com/koffeinfrei/should-i-watch-this/actions/workflows/www.yml/badge.svg?style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/actions/workflows/www.yml)
+&nbsp;
+[![CLI Build](https://github.com/koffeinfrei/should-i-watch-this/actions/workflows/cli.yml/badge.svg?style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/actions/workflows/cli.yml)
 &nbsp;
 ![License](https://img.shields.io/github/license/koffeinfrei/should-i-watch-this.svg?style=flat-square)
 
