@@ -1,0 +1,25 @@
+{
+  "name": "should-i-watch-this-www",
+  "description": "Should I Watch This?",
+  "version": "1.11.0",
+  "scripts": {
+    "dev": "svelte-kit dev",
+    "build": "svelte-kit build",
+    "preview": "svelte-kit preview",
+    "lint": "prettier --check --plugin-search-dir=. .",
+    "format": "prettier --write --plugin-search-dir=. ."
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-vercel": "^1.0.0-next.26",
+    "@sveltejs/kit": "^1.0.0-next.138",
+    "eslint": "^7.22.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-svelte3": "^3.2.0",
+    "prettier": "~2.2.1",
+    "prettier-plugin-svelte": "^2.2.0",
+    "sass": "^1.35.2",
+    "svelte": "^3.34.0",
+    "svelte-preprocess": "^4.7.4"
+  },
+  "type": "module"
+}

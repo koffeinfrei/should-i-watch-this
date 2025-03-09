@@ -1,0 +1,39 @@
+source "https://rubygems.org"
+
+gem "rails", "~> 8.0.1"
+gem "propshaft"
+gem "puma"
+gem "tzinfo-data", platforms: %i[windows jruby]
+gem "bootsnap", require: false
+gem "hotwire-rails"
+gem "vite_rails"
+gem "slim-rails"
+gem "redis"
+gem "capistrano", "~> 3.19"
+gem "capistrano-rails"
+gem "capistrano-rbenv"
+gem "capistrano3-puma", github: "seuros/capistrano-puma"
+
+group :development, :test do
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
+
+  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  gem "brakeman", require: false
+
+  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+  gem "rubocop-rails-omakase", require: false
+
+  gem "dotenv"
+end
+
+group :development do
+  # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "web-console"
+end
+
+group :test do
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "capybara"
+  gem "selenium-webdriver"
+end

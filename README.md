@@ -4,7 +4,9 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/koffeinfrei/should-i-watch-this.svg?style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/releases)
 &nbsp;
-[![Build Status](https://img.shields.io/github/workflow/status/koffeinfrei/should-i-watch-this/Crystal%20CI.svg?label=Crystal%20CI&style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/actions)
+[![WWW Build](https://github.com/koffeinfrei/should-i-watch-this/actions/workflows/www.yml/badge.svg?style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/actions/workflows/www.yml)
+&nbsp;
+[![CLI Build](https://github.com/koffeinfrei/should-i-watch-this/actions/workflows/cli.yml/badge.svg?style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/actions/workflows/cli.yml)
 &nbsp;
 ![License](https://img.shields.io/github/license/koffeinfrei/should-i-watch-this.svg?style=flat-square)
 
@@ -43,20 +45,24 @@ There are 3 versions to this:
 ```bash
 # basic example
 curl -H 'X-Auth-Token: <your omdb token>' \
-    https://faasd.koffeinfrei.org/function/should-i-watch-this \
+    https://your-instance.example.com/function/should-i-watch-this \
     -d "the terminator"
 
 # example with parameters
 curl -H 'X-Auth-Token: <your omdb token>' \
-    https://faasd.koffeinfrei.org/function/should-i-watch-this?show_links=true\&year=1984 \
+    https://your-instance.example.com/function/should-i-watch-this?show_links=true\&year=1984 \
     -d "the terminator"
 
 # example with json response
 curl -H 'X-Auth-Token: <your omdb token>' \
     -H "Accept: application/json" \
-    https://faasd.koffeinfrei.org/function/should-i-watch-this?show_links=true\&year=1984 \
+    https://your-instance.example.com/function/should-i-watch-this?show_links=true\&year=1984 \
     -d "the terminator"
 ```
+
+> [!NOTE]
+> The function on faasd.koffeinfrei.org is not running anymore. I don't
+> maintain that public instance anymore.
 
 ## About
 
@@ -126,18 +132,18 @@ Crystal](https://crystal-lang.org/reference/installation/).
    ```bash
    # basic example
    curl -H 'X-Auth-Token: <your omdb token>' \
-       https://faasd.koffeinfrei.org/function/should-i-watch-this \
+       https://your-instance.example.com/function/should-i-watch-this \
        -d "the terminator"
 
    # example with parameters
    curl -H 'X-Auth-Token: <your omdb token>' \
-       https://faasd.koffeinfrei.org/function/should-i-watch-this?show_links=true\&year=1984 \
+       https://your-instance.example.com/function/should-i-watch-this?show_links=true\&year=1984 \
        -d "the terminator"
 
    # example with json response
    curl -H 'X-Auth-Token: <your omdb token>' \
        -H "Accept: application/json" \
-       https://faasd.koffeinfrei.org/function/should-i-watch-this?show_links=true\&year=1984 \
+       https://your-instance.example.com/function/should-i-watch-this?show_links=true\&year=1984 \
        -d "the terminator"
    ```
 
@@ -153,6 +159,19 @@ $ crystal run src/should-i-watch-this.cr -- lookup -l the terminator
 ```
 
 ### Web application
+
+```bash
+$ cd www
+$ bin/setup
+```
+
+Navigate to [localhost:3000](http://localhost:3000).
+
+#### Legacy Svelte application
+
+> [!NOTE]
+> The svelte web application has been deprecated, and is superseded by the
+> Rails rewrite.
 
 ```bash
 $ cd www

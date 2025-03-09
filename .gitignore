@@ -3,10 +3,10 @@
 /cli/bin
 
 # www
-/www/node_modules
-/www/.vercel
-/www/.svelte-kit
-/www/package
+/www_legacy/node_modules
+/www_legacy/.vercel
+/www_legacy/.svelte-kit
+/www_legacy/package
 
 # faas
 /faas/build

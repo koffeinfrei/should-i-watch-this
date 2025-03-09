@@ -1,0 +1,16 @@
+- if @query
+  = render 'shared/search_box', query: @query
+
+section.box.padded
+  - unless @query
+    h1= @title
+
+  h2= @message
+
+= render 'shared/random_quote'
+
+- unless @query
+  section.box.padded
+    div.box
+      |> Try to go
+      a href=root_path back to the start.

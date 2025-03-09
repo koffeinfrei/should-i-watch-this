@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: bundler
+    directory: "/www"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: npm
+    directory: "/www"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: github-actions
+    directory: "/www"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10

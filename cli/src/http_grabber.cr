@@ -1,7 +1,7 @@
 require "json"
 
 require "crest"
-require "myhtml"
+require "lexbor"
 
 abstract class HttpGrabber
   getter url : String
@@ -38,7 +38,7 @@ end
 
 class HtmlHttpGrabber < HttpGrabber
   def parse_body(body = "")
-    Myhtml::Parser.new(body)
+    Lexbor::Parser.new(body)
   end
 end
 
