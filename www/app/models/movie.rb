@@ -27,15 +27,18 @@ module Movie
   end
 
   def self.search!(query)
-    json = JSON.parse(`#{CLI_BIN} lookup -f json #{query} -l`)
+    IO.popen([CLI_BIN, "lookup", "-f", "json", query, "-l", err: [:child, :out]]) do |io|
+      output = io.read
+      json = JSON.parse(output)
 
-    if error = json["error"]
-      Rails.logger.error("event=movie_search_error error=#{error.inspect}")
-      raise Error.new(error)
+      if error = json["error"]
+        Rails.logger.error("event=movie_search_error error=#{error.inspect}")
+        raise Error.new(error)
+      end
+
+      save(json)
+      RecursiveOstruct.from(json)
     end
-
-    save(json)
-    RecursiveOstruct.from(json)
   end
 
   def self.save(json)
@@ -50,7 +53,10 @@ module Movie
   end
 
   def self.fetch(title, year)
-    JSON.parse(`#{CLI_BIN} lookup -f json #{title} -y #{year} -l`)
+    IO.popen([CLI_BIN, "lookup", "-f", "json", title, "-y", year, "-l", err: [:child, :out]]) do |io|
+      output = io.read
+      JSON.parse(output)
+    end
   end
 
   def self.key(title, year)
