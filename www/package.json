@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "sass-embedded": "^1.85.0",
+    "sass-embedded": "^1.85.1",
     "vite": "^5.4.14",
     "vite-plugin-rails": "^0.5.0"
   },
