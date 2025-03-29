@@ -1,6 +1,13 @@
 /# locals: (query: nil)
 
-section.box.padded
-  = form_tag new_search_path, method: :get
-    input name="query" placeholder="Movie title or IMDb id" value=query
-    button Look up
+section.box.padded[
+    data-controller="search-autocomplete"
+    data-search-autocomplete-url-value=autocomplete_search_path
+    data-search-autocomplete-min-length-value="3"
+    role="combobox"
+  ]
+  = form_tag new_search_path, method: :get, class: 'autocomplete-form'
+    input.search name="query" placeholder="Movie title or IMDb id" value=query data-search-autocomplete-target="input"
+    button data-search-autocomplete-target='submit' Look up
+
+    ul.autocomplete-group data-search-autocomplete-target="results" hidden=''

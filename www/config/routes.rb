@@ -9,7 +9,9 @@ Rails.application.routes.draw do
 
   root "home#show"
 
-  resource :search, only: [:new, :create], controller: "search"
+  resource :search, only: [:new, :create], controller: "search" do
+    get :autocomplete, on: :collection
+  end
   get ":title/:year", to: "movies#show", as: :movie
   post ":title/:year", to: "movies#fetch", as: :fetch_movie
 

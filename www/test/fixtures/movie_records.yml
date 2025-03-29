@@ -1,0 +1,28 @@
+her:
+  title: "Her"
+  wiki_id: "Q788822"
+  imdb_id: "tt1798709"
+  rotten_id: "m/her"
+  metacritic_id: "movie/her"
+  omdb_id: "75296"
+  release_date: "2013-10-12"
+  description: "2013 film by Spike Jonze"
+
+terminator:
+  title: "The Terminator"
+  wiki_id: "Q162255"
+  imdb_id: "tt0088247"
+  rotten_id: "m/termiator"
+  metacritic_id: "movie/the-terminator"
+  omdb_id: "218"
+  release_date: "1984-10-26"
+  description: "1984 film by James Cameron"
+
+here_we_go_round_the_mulberry_bush:
+  title: "Here We Go Round the Mulberry Bush"
+  wiki_id: "Q3133990"
+  imdb_id: "tt0063063"
+  rotten_id: "m/here-we-go-round-the-mulberry-bush"
+  metacritic_id:
+  release_date: "1967-01-01"
+  description: "1967 British film directed by Clive Donner"
