@@ -54,13 +54,10 @@ namespace :movies do
     agent.read_timeout = 5
     agent.open_timeout = 5
 
-    MovieRecord.order("random()").where.not(omdb_id: nil).find_each do |movie|
+    error_output = File.new("./tmp/fetch_posters_errors", "w")
+    existing = Dir.glob(Rails.root.join("public/posters/*")).map { File.basename(_1, ".jpg") }
+    MovieRecord.order("random()").where.not(omdb_id: nil).where.not(wiki_id: existing).find_each do |movie|
       wiki_id = movie.wiki_id
-      target_path = Rails.root.join("public/posters/#{wiki_id}.jpg")
-      if File.exist?(target_path)
-        print "S"
-        next
-      end
 
       omdb_id = movie.omdb_id
       page = agent.get("https://www.omdb.org/en/us/movie/#{omdb_id}")
@@ -77,6 +74,8 @@ namespace :movies do
       tmp_path = Rails.root.join("public/posters/#{filename}")
       image.fetch.save!(tmp_path)
 
+      target_path = Rails.root.join("public/posters/#{wiki_id}.jpg")
+
       if tmp_path != target_path
         `convert #{tmp_path} #{target_path}`
         FileUtils.rm tmp_path
@@ -84,8 +83,9 @@ namespace :movies do
 
       print "."
     rescue Mechanize::ResponseCodeError, Net::ReadTimeout => error
-      print "E"
+      print "F"
       pp ["Get failed", { wiki_id:, omdb_id:, error: error }]
+      error_output.puts wiki_id
       next
     end
   end
