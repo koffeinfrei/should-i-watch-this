@@ -8,7 +8,7 @@ namespace :movies do
   #   2. transformation with `wikibase_dump_filter`
   desc "Import movies from a wikidata json dump"
   task import: [:environment] do
-    file = File.new("./tmp/latest-film-subcategories.json")
+    file = File.new(ENV.fetch("INPUT_FILE"))
     file.lazy.each_slice(10_000) do |lines|
       attributes = lines.map do |line|
         json = JSON.parse(line)
