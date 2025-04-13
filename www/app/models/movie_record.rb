@@ -20,12 +20,4 @@ class MovieRecord < ApplicationRecord
       search_by_title(query)
     end
   end
-
-  self.ignored_columns = [:raw]
-
-  class Raw < MovieRecord
-    self.table_name = "movie_records"
-
-    self.ignored_columns = []
-  end
 end

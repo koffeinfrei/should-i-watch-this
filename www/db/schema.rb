@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_23_130631) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_13_080820) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -22,11 +22,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_23_130631) do
     t.string "rotten_id"
     t.string "metacritic_id"
     t.date "release_date"
-    t.json "raw"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "description"
     t.string "omdb_id"
     t.index ["title"], name: "index_movie_records_on_title", opclass: :gin_trgm_ops, using: :gin
+    t.index ["wiki_id"], name: "index_movie_records_on_wiki_id", unique: true
   end
 end

@@ -9,51 +9,42 @@ namespace :movies do
   desc "Import movies from a wikidata json dump"
   task import: [:environment] do
     file = File.new("./tmp/latest-film-subcategories.json")
-    file.each_line do |line|
-      json = JSON.parse(line)
+    file.lazy.each_slice(10_000) do |lines|
+      attributes = lines.map do |line|
+        json = JSON.parse(line)
 
-      wiki_id = json.dig("id")
-      title = json.dig("labels", "en", "value")
-      description = json.dig("descriptions", "en", "value")
-      imdb_id = json.dig("claims", "P345", 0, "mainsnak", "datavalue", "value")
-      rotten_id = json.dig("claims", "P1258", 0, "mainsnak", "datavalue", "value")
-      metacritic_id = json.dig("claims", "P1712", 0, "mainsnak", "datavalue", "value")
-      omdb_id = json.dig("claims", "P3302", 0, "mainsnak", "datavalue", "value")
+        wiki_id = json.dig("id")
+        title = json.dig("labels", "en", "value")
+        description = json.dig("descriptions", "en", "value")
+        imdb_id = json.dig("claims", "P345", 0, "mainsnak", "datavalue", "value")
+        rotten_id = json.dig("claims", "P1258", 0, "mainsnak", "datavalue", "value")
+        metacritic_id = json.dig("claims", "P1712", 0, "mainsnak", "datavalue", "value")
+        omdb_id = json.dig("claims", "P3302", 0, "mainsnak", "datavalue", "value")
 
-      # for films
-      release_date = json.dig("claims", "P577", 0, "mainsnak", "datavalue", "value", "time")
-      # for shows
-      release_date ||= json.dig("claims", "P580", 0, "mainsnak", "datavalue", "value", "time")
-      if release_date
-        # unknown month / day is represented as `00`, which is an invalid date
-        release_date = release_date.gsub("-00", "-01")
-        release_date = Date.parse(release_date)
-      end
-
-      movie = MovieRecord::Raw.find_or_initialize_by(wiki_id: wiki_id)
-      new_record = movie.new_record?
-      has_changes = movie.changed?
-      saved = movie.update(
-        title: title,
-        description: description,
-        imdb_id: imdb_id,
-        rotten_id: rotten_id,
-        metacritic_id: metacritic_id,
-        omdb_id: omdb_id,
-        release_date: release_date,
-        raw: json
-      )
-      if saved
-        if new_record
-          print "."
-        elsif has_changes
-          print "U"
-        else
-          print "S"
+        # for films
+        release_date = json.dig("claims", "P577", 0, "mainsnak", "datavalue", "value", "time")
+        # for shows
+        release_date ||= json.dig("claims", "P580", 0, "mainsnak", "datavalue", "value", "time")
+        if release_date
+          # unknown month / day is represented as `00`, which is an invalid date
+          release_date = release_date.gsub("-00", "-01")
+          release_date = Date.parse(release_date)
         end
-      else
-        pp(["failed", movie.errors.messages, { wiki_id:, title:, imdb_id:, rotten_id:, metacritic_id:, release_date: }])
+
+        {
+          wiki_id: wiki_id,
+          title: title,
+          description: description,
+          imdb_id: imdb_id,
+          rotten_id: rotten_id,
+          metacritic_id: metacritic_id,
+          omdb_id: omdb_id,
+          release_date: release_date
+        }
       end
+
+      MovieRecord.upsert_all(attributes, unique_by: :wiki_id)
+      print "."
     end
   end
 

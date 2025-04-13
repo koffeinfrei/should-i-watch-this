@@ -9,7 +9,6 @@ class CreateMovieRecords < ActiveRecord::Migration[8.0]
       t.string :metacritic_id
       t.string :omdb_id
       t.date :release_date
-      t.json :raw
 
       t.timestamps
     end
