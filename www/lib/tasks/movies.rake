@@ -14,7 +14,8 @@ namespace :movies do
         json = JSON.parse(line)
 
         wiki_id = json.dig("id")
-        title = json.dig("labels", "en", "value")
+        title = json.dig("labels", "en", "value") || json.dig("labels", "en-us", "value")
+        title_original = json.dig("claims", "P1476", 0, "mainsnak", "datavalue", "value", "text")
         description = json.dig("descriptions", "en", "value")
         imdb_id = json.dig("claims", "P345", 0, "mainsnak", "datavalue", "value")
         rotten_id = json.dig("claims", "P1258", 0, "mainsnak", "datavalue", "value")
@@ -34,6 +35,8 @@ namespace :movies do
         {
           wiki_id: wiki_id,
           title: title,
+          title_normalized: title && I18n.transliterate(title).downcase,
+          title_original: title_original,
           description: description,
           imdb_id: imdb_id,
           rotten_id: rotten_id,

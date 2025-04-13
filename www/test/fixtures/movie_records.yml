@@ -1,5 +1,7 @@
 her:
   title: "Her"
+  title_normalized: "her"
+  title_original: "Her"
   wiki_id: "Q788822"
   imdb_id: "tt1798709"
   rotten_id: "m/her"
@@ -10,6 +12,8 @@ her:
 
 terminator:
   title: "The Terminator"
+  title_normalized: "the terminator"
+  title_original: "The Terminator"
   wiki_id: "Q162255"
   imdb_id: "tt0088247"
   rotten_id: "m/termiator"
@@ -20,9 +24,24 @@ terminator:
 
 here_we_go_round_the_mulberry_bush:
   title: "Here We Go Round the Mulberry Bush"
+  title_normalized: "here we go round the mulberry bush"
+  title_original: "Here We Go Round the Mulberry Bush"
   wiki_id: "Q3133990"
   imdb_id: "tt0063063"
   rotten_id: "m/here-we-go-round-the-mulberry-bush"
   metacritic_id:
+  omdb_id: nil
   release_date: "1967-01-01"
   description: "1967 British film directed by Clive Donner"
+
+pokemon:
+  title: "Pokémon"
+  title_normalized: "pokemon"
+  title_original: "ポケットモンスター"
+  wiki_id: "Q239937"
+  imdb_id: "tt0168366"
+  rotten_id: "tv/pokemon_the_series"
+  metacritic_id: nil
+  omdb_id: nil
+  release_date: "1997-04-01"
+  description: "Japanese anime television series"
