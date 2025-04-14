@@ -266,7 +266,6 @@ a.result-more {
   background: #fff;
   color: #000;
   list-style: none;
-  // padding:
   width: 100%;
   box-sizing: border-box;
   padding: 0.8em 0.4em;
@@ -286,11 +285,11 @@ a.result-more {
   }
 
   &-poster {
-    width: 55px;
-    min-width: 55px;
+    margin-right: 0.6em;
 
     img {
-      max-height: 50px;
+      height: 70px;
+      width: 50px;
     }
   }
 
