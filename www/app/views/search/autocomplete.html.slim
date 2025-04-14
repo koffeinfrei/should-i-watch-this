@@ -11,7 +11,9 @@
         div style="display: flex; flex-direction: column;"
           .autocomplete-item-title= movie.title || movie.title_original
           .autocomplete-item-description= movie.description
-/- else
-/  li.autocomplete-item[
-/      role="option"
-/    ]= link_to "See all results for \"#{@query}\"", href=new_search_path(query: @query)
+- else
+  li.autocomplete-item[
+      role="option"
+      data-autocomplete-value=@query
+      data-autocomplete-label=@query
+    ]= "There's nothing. Try your luck anyway with \"#{@query}\""

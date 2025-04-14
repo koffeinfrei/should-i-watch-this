@@ -279,6 +279,7 @@ a.result-more {
 .autocomplete-item {
   box-sizing: border-box;
   margin-bottom: 0.3em;
+  cursor: default;
 
   &.active {
     font-weight: bold;
