@@ -7,7 +7,14 @@ section.box.padded[
     role="combobox"
   ]
   = form_tag new_search_path, method: :get, class: 'autocomplete-form'
-    input.search name="query" placeholder="Movie title or IMDb id" value=query data-search-autocomplete-target="input"
+    input.search[
+      name="query"
+      placeholder="Movie title or IMDb id"
+      value=query
+      data-search-autocomplete-target="input"
+      autofocus=true
+    ]
+
     button data-search-autocomplete-target='submit' Look up
 
     ul.autocomplete-group data-search-autocomplete-target="results" hidden=''
