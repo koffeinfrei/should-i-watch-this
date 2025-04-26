@@ -8,6 +8,15 @@ namespace :movies do
   #   2. transformation with `wikibase_dump_filter`
   desc "Import movies from a wikidata json dump"
   task import: [:environment] do
+    file = File.new(ENV.fetch("HUMANS_INPUT_FILE"))
+    humans = file.each.map do |line|
+      json = JSON.parse(line)
+      [
+        json[0],
+        json[1] || json[2] || json[3]
+      ]
+    end.to_h
+
     file = File.new(ENV.fetch("INPUT_FILE"))
     file.lazy.each_slice(10_000) do |lines|
       attributes = lines.map do |line|
@@ -21,6 +30,9 @@ namespace :movies do
         rotten_id = json.dig("claims", "P1258", 0, "mainsnak", "datavalue", "value")
         metacritic_id = json.dig("claims", "P1712", 0, "mainsnak", "datavalue", "value")
         omdb_id = json.dig("claims", "P3302", 0, "mainsnak", "datavalue", "value")
+
+        directors = (json.dig("claims", "P57") || []).map { _1.dig("mainsnak", "datavalue", "value", "id") }
+        actors = (json.dig("claims", "P161") || []).take(3).map { _1.dig("mainsnak", "datavalue", "value", "id") }
 
         # for films
         release_date = json.dig("claims", "P577", 0, "mainsnak", "datavalue", "value", "time")
@@ -42,7 +54,9 @@ namespace :movies do
           rotten_id: rotten_id,
           metacritic_id: metacritic_id,
           omdb_id: omdb_id,
-          release_date: release_date
+          release_date: release_date,
+          directors: directors.map { humans[_1] },
+          actors: actors.map { humans[_1] }
         }
       end
 

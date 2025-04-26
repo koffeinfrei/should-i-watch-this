@@ -10,7 +10,10 @@
           img src=poster_url(movie)
         div style="display: flex; flex-direction: column;"
           .autocomplete-item-title= movie.title || movie.title_original
-          .autocomplete-item-description= movie.description
+          .autocomplete-item-description
+            div= movie.release_date&.year || '<em>unknown release date</em>'.html_safe
+            div= movie.directors.join(', ')
+            div= movie.actors.join(', ')
 - else
   li.autocomplete-item[
       role="option"
