@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_26_091642) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_07_140510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -30,9 +30,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_26_091642) do
     t.string "title_original"
     t.string "directors", array: true
     t.string "actors", array: true
+    t.tsvector "tsv_title"
+    t.tsvector "tsv_title_original"
     t.index ["imdb_id"], name: "index_movie_records_on_imdb_id"
     t.index ["title_normalized"], name: "index_movie_records_on_title_normalized", opclass: :gin_trgm_ops, using: :gin
     t.index ["title_original"], name: "index_movie_records_on_title_original", opclass: :gin_trgm_ops, using: :gin
+    t.index ["tsv_title"], name: "index_movie_records_on_tsv_title", using: :gin
+    t.index ["tsv_title_original"], name: "index_movie_records_on_tsv_title_original", using: :gin
     t.index ["wiki_id"], name: "index_movie_records_on_wiki_id", unique: true
   end
 end

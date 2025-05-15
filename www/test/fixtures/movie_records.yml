@@ -9,6 +9,8 @@ her:
   omdb_id: "75296"
   release_date: "2013-10-12"
   description: "2013 film by Spike Jonze"
+  tsv_title: "'her':1"
+  tsv_title_original: "'her':1"
 
 terminator:
   title: "The Terminator"
@@ -21,6 +23,8 @@ terminator:
   omdb_id: "218"
   release_date: "1984-10-26"
   description: "1984 film by James Cameron"
+  tsv_title: "'terminator':2 'the':1"
+  tsv_title_original: "'terminator':2 'the':1"
 
 here_we_go_round_the_mulberry_bush:
   title: "Here We Go Round the Mulberry Bush"
@@ -33,6 +37,8 @@ here_we_go_round_the_mulberry_bush:
   omdb_id: nil
   release_date: "1967-01-01"
   description: "1967 British film directed by Clive Donner"
+  tsv_title: "'bush':7 'go':3 'here':1 'mulberry':6 'round':4 'the':5"
+  tsv_title_original: "'bush':7 'go':3 'here':1 'mulberry':6 'round':4 'the':5"
 
 pokemon:
   title: "Pokémon"
@@ -45,3 +51,5 @@ pokemon:
   omdb_id: nil
   release_date: "1997-04-01"
   description: "Japanese anime television series"
+  tsv_title: "'pokemon':1"
+  tsv_title_original: "'ポケットモンスター':1"

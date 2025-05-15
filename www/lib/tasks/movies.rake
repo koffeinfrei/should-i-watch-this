@@ -8,6 +8,7 @@ namespace :movies do
   #   2. transformation with `wikibase_dump_filter`
   desc "Import movies from a wikidata json dump"
   task import: [:environment] do
+    puts "Reading humans..."
     file = File.new(ENV.fetch("HUMANS_INPUT_FILE"))
     humans = file.each.map do |line|
       json = JSON.parse(line)
@@ -17,6 +18,7 @@ namespace :movies do
       ]
     end.to_h
 
+    puts "Inserting movies..."
     file = File.new(ENV.fetch("INPUT_FILE"))
     file.lazy.each_slice(10_000) do |lines|
       attributes = lines.map do |line|
@@ -61,8 +63,23 @@ namespace :movies do
       end
 
       MovieRecord.upsert_all(attributes, unique_by: :wiki_id)
+
       print "."
     end
+
+    puts "Generating tsv columns..."
+    ActiveRecord::Base.connection.execute <<~SQL.squish
+      update movie_records
+        set
+          tsv_title = to_tsvector(
+            'pg_catalog.simple',
+            lower(coalesce(title_normalized,''))
+          ),
+          tsv_title_original = to_tsvector(
+            'pg_catalog.simple',
+            lower(coalesce(title_original,''))
+          );
+    SQL
   end
 
   task fetch_posters: [:environment] do

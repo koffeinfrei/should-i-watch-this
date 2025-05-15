@@ -16,9 +16,7 @@ class SearchController < ApplicationController
     @query = params[:q]
     @movies = MovieRecord
       .where.not(imdb_id: nil)
-      .search(@query)
-      .limit(7)
-      .to_a
+      .search(@query, limit: 7)
     render layout: false
   end
 end
