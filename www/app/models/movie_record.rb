@@ -27,9 +27,9 @@ class MovieRecord < ApplicationRecord
     title_normalized = I18n.transliterate(title).downcase
 
     [
-      where.not(imdb_id: nil).search_by_tsv_title_original(title.downcase).limit(limit),
-      where.not(imdb_id: nil).search_by_tsv_title(title_normalized).limit(limit)
-    ].flatten.uniq.take(limit)
+      where.not(imdb_id: nil).search_by_tsv_title(title_normalized).with_pg_search_rank.limit(limit),
+      where.not(imdb_id: nil).search_by_tsv_title_original(title.downcase).with_pg_search_rank.limit(limit)
+    ].flatten.uniq.sort_by { [_1.pg_search_rank, _1.release_date || Date.new] }.reverse.take(limit)
   end
 
   def self.search(query, limit:)
