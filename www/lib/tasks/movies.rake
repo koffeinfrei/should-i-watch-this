@@ -3,10 +3,46 @@ require "uri"
 
 desc "Update the movie database"
 namespace :movies do
-  # TODO: include
-  #   1. downloading full dump
-  #   2. transformation with `wikibase_dump_filter`
-  desc "Import movies from a wikidata json dump"
+  desc "(1) Download the wiki data dump"
+  task :download_data do
+    output_dir = ENV.fetch("OUTPUT_DIR")
+
+    `curl -O https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2 --output-dir #{output_dir}`
+  end
+
+  desc "(2) Decompress the downloaded wiki data dump"
+  task :decompress_data do
+    output_dir = ENV.fetch("OUTPUT_DIR")
+
+    `(cd #{output_dir} && lbzip2 -d latest-all.json.bz2)`
+  end
+
+  desc "(3) Generate the movies file"
+  task :generate_movies do
+    input_file = ENV.fetch("INPUT_FILE")
+    output_file = ENV.fetch("OUTPUT_FILE")
+    claim_file = Rails.root.join("config/wikibase-dump-filter-movies-claim")
+
+    `cat #{input_file} | wikibase-dump-filter --claim #{claim_file} > #{output_file}`
+  end
+
+  desc "(4) Generate the humans file"
+  task :generate_humans do
+    input_file = ENV.fetch("INPUT_FILE")
+    output_file = ENV.fetch("OUTPUT_FILE")
+
+    `cat #{input_file} | wikibase-dump-filter --claim P31:Q5 > #{output_file}`
+  end
+
+  desc "(5) Generate the minimized humans file"
+  task :generate_humans_minimized do
+    input_file = ENV.fetch("INPUT_FILE")
+    output_file = ENV.fetch("OUTPUT_FILE")
+
+    `cat #{input_file} | jq -c '[.id, .labels.mul.value, .labels.en.value, .labels["en-us"].value]' > #{output_file}`
+  end
+
+  desc "(6) Import movies from a wikidata json dump"
   task import: [:environment] do
     puts "Reading humans..."
     file = File.new(ENV.fetch("HUMANS_INPUT_FILE"))
@@ -67,7 +103,7 @@ namespace :movies do
       print "."
     end
 
-    puts "Generating tsv columns..."
+    puts "\nGenerating tsv columns..."
     ActiveRecord::Base.connection.execute <<~SQL.squish
       update movie_records
         set
@@ -82,6 +118,7 @@ namespace :movies do
     SQL
   end
 
+  desc "(7) Fetch movie posters"
   task fetch_posters: [:environment] do
     agent = Mechanize.new
     agent.user_agent_alias = "Mac Safari"
