@@ -11,4 +11,12 @@ class SearchController < ApplicationController
     flash[:query] = params[:query]
     redirect_to error_path
   end
+
+  def autocomplete
+    @query = params[:q]
+    @movies = MovieRecord
+      .where.not(imdb_id: nil)
+      .search(@query, limit: 7)
+    render layout: false
+  end
 end

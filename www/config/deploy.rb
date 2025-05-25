@@ -8,5 +8,6 @@ set :repo_tree, "www"
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", ".bundle", "system"
+append :linked_dirs, "public/posters"
 
 set :keep_releases, 5

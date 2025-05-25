@@ -1,0 +1,22 @@
+- if @movies.any?
+  - @movies.each do |movie|
+    li.autocomplete-item[
+        role="option"
+        data-autocomplete-value=movie.imdb_id
+        data-autocomplete-label=movie.imdb_id
+      ]
+      div style="display: flex;"
+        .autocomplete-item-poster
+          img src=poster_url(movie)
+        div style="display: flex; flex-direction: column;"
+          .autocomplete-item-title= movie.title || movie.title_original
+          .autocomplete-item-description
+            div= movie.release_date&.year || '<em>unknown release date</em>'.html_safe
+            div= movie.directors.join(', ')
+            div= movie.actors.join(', ')
+- else
+  li.autocomplete-item[
+      role="option"
+      data-autocomplete-value=@query
+      data-autocomplete-label=@query
+    ]= "There's nothing. Try your luck anyway with \"#{@query}\""

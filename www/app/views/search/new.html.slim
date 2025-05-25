@@ -2,7 +2,9 @@
 
 section.box.padded
   - if @query.present?
-    span.spinner data-controller="spinner"
+    span.spinner data-controller="spinner" ⠋
+
+    | Scraping the web for up-to-date scores
 
     = form_tag search_path, 'data-controller': 'auto-submit'
       = hidden_field_tag :query, @query

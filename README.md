@@ -68,6 +68,8 @@ curl -H 'X-Auth-Token: <your omdb token>' \
 
 It uses the [OMDb API](http://www.omdbapi.com) to get basic information about
 the movie.
+The web application uses data from [wikidata](https://www.wikidata.org) for the
+search suggestions.
 
 The ratings are fetched from the following sources:
 

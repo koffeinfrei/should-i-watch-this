@@ -61,8 +61,6 @@ textarea {
   font-family: inherit;
   font-size: inherit;
   padding: 0.4em;
-  /* we need to subtract the padding, otherwise it overflows on small screens */
-  max-width: calc(100% - (2 * 0.4em));
   margin: 0 0.3em 0.5em 0;
   box-sizing: border-box;
   border: 1px solid #ccc;
@@ -75,6 +73,11 @@ input:disabled {
 
 input[type="range"] {
   height: 0;
+}
+
+input.search {
+  box-sizing: border-box;
+  width: 100%;
 }
 
 button {
@@ -242,6 +245,7 @@ a.result-more {
 // spinner
 .spinner {
   font-size: 21px;
+  margin-right: 0.6em;
 }
 
 // error
@@ -252,4 +256,50 @@ a.result-more {
 // disable turbo's progress bar
 .turbo-progress-bar {
   visibility: hidden;
+}
+
+// autocomplete
+.autocomplete-form {
+  position: relative;
+}
+
+.autocomplete-group {
+  background: #fff;
+  color: #000;
+  list-style: none;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.8em 0.4em;
+  border-radius: 2px;
+  position: absolute;
+  z-index: 99;
+  top: 25px;
+}
+
+.autocomplete-item {
+  box-sizing: border-box;
+  margin-bottom: 0.3em;
+  cursor: default;
+
+  &.active {
+    font-weight: bold;
+  }
+
+  &-poster {
+    margin-right: 0.6em;
+
+    img {
+      height: 90px;
+      width: 65px;
+    }
+  }
+
+  &-title {
+    margin-bottom: 0.1em;
+    line-height: 1;
+  }
+
+  &-description {
+    font-size: 0.8em;
+  }
 }
