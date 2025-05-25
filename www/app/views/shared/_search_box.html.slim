@@ -2,7 +2,6 @@
 
 section.box.padded[
     data-controller="search-autocomplete"
-    data-action="click->search-autocomplete#reopen"
     data-search-autocomplete-url-value=autocomplete_search_path
     data-search-autocomplete-min-length-value="3"
     role="combobox"
@@ -13,6 +12,7 @@ section.box.padded[
       placeholder="Movie title or IMDb id"
       value=query
       data-search-autocomplete-target="input"
+      data-action="click->search-autocomplete#reopen"
       autofocus=true
     ]
 
