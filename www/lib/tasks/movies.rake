@@ -1,5 +1,6 @@
 require "mechanize"
 require "uri"
+require "fileutils"
 
 desc "Update the movie database"
 namespace :movies do
@@ -118,46 +119,133 @@ namespace :movies do
     SQL
   end
 
-  desc "(7) Fetch movie posters"
-  task fetch_posters: [:environment] do
-    agent = Mechanize.new
-    agent.user_agent_alias = "Mac Safari"
-    agent.read_timeout = 5
-    agent.open_timeout = 5
+  namespace :fetch_posters do
+    desc "(7) Fetch movie posters from omdb [DEPRECATED]"
+    task omdb: [:environment] do
+      agent = Mechanize.new
+      agent.user_agent_alias = "Mac Safari"
+      agent.read_timeout = 5
+      agent.open_timeout = 5
 
-    error_output = File.new("./tmp/fetch_posters_errors", "w")
-    existing = Dir.glob(Rails.root.join("public/posters/*")).map { File.basename(_1, ".jpg") }
-    MovieRecord.order("random()").where.not(omdb_id: nil).where.not(wiki_id: existing).find_each do |movie|
-      wiki_id = movie.wiki_id
+      no_poster_input = File.readlines("./tmp/fetch_posters_none").map(&:strip)
 
-      omdb_id = movie.omdb_id
-      page = agent.get("https://www.omdb.org/en/us/movie/#{omdb_id}")
-      image = page.images_with(id: "left_image").first
-      url = image.uri
-      filename = url.path.split("/").last
+      records =
+        if ENV["FAILED_ONLY"]
+          puts "Re-fetching failed...\n"
+          error_input = File.readlines("./tmp/fetch_posters_errors").map(&:strip)
+          MovieRecord.where(wiki_id: error_input)
+        else
+          puts "Fetching all...\n"
+          existing = Dir.glob(Rails.root.join("public/posters/*")).map { File.basename(_1, ".jpg") }
+          MovieRecord.order("random()").where.not(omdb_id: nil).where.not(wiki_id: existing)
+        end
 
-      if filename == "no_cover185px.png"
-        print "X"
+      error_output = File.new("./tmp/fetch_posters_errors", "w")
+      no_poster_output = File.new("./tmp/fetch_posters_none", "a")
+
+      records.where.not(wiki_id: no_poster_input).find_each do |movie|
+        wiki_id = movie.wiki_id
+
+        omdb_id = movie.omdb_id
+        page = agent.get("https://www.omdb.org/en/ch/movie/#{omdb_id}")
+        image = page.images_with(id: "left_image").first
+        url = image.uri
+        filename = url.path.split("/").last
+
+        if filename == "no_cover185px.png"
+          print "X"
+          no_poster_output.puts wiki_id
+          next
+        end
+        pp ["Different type", wiki_id, url] unless filename =~ /(\.jpg)|(.jpeg)$/
+
+        tmp_path = Rails.root.join("public/posters/#{filename}")
+        image.fetch.save!(tmp_path)
+
+        target_path = Rails.root.join("public/posters/#{wiki_id}.jpg")
+
+        if tmp_path != target_path
+          `convert #{tmp_path} #{target_path}`
+          FileUtils.rm tmp_path
+        end
+
+        print "."
+        sleep 2.1
+      rescue Mechanize::ResponseCodeError, Net::ReadTimeout => error
+        print "F"
+        pp ["Get failed", { wiki_id:, omdb_id:, error: error }]
+        error_output.puts wiki_id
         next
       end
-      pp ["Different type", wiki_id, url] unless filename =~ /(\.jpg)|(.jpeg)$/
+    end
 
-      tmp_path = Rails.root.join("public/posters/#{filename}")
-      image.fetch.save!(tmp_path)
+    desc "(7) Fetch movie posters from imdb"
+    task imdb: [:environment] do
+      agent = Mechanize.new
+      agent.user_agent_alias = "Mac Safari"
+      agent.read_timeout = 5
+      agent.open_timeout = 5
 
-      target_path = Rails.root.join("public/posters/#{wiki_id}.jpg")
+      out_dir = Rails.root.join("public/posters")
+      out_dir_100 = Rails.root.join("public/posters/100")
+      out_dir_300 = Rails.root.join("public/posters/300")
+      log_none = Rails.root.join("tmp/fetch_posters_imdb_none")
+      log_errors = Rails.root.join("tmp/fetch_posters_imdb_errors")
 
-      if tmp_path != target_path
-        `convert #{tmp_path} #{target_path}`
-        FileUtils.rm tmp_path
+      FileUtils.touch(log_none) unless File.exist?(log_none)
+      FileUtils.mkdir_p(out_dir_300)
+      FileUtils.mkdir_p(out_dir_100)
+
+      no_poster_input = File.readlines(log_none).map(&:strip)
+
+      records =
+        if ENV["FAILED_ONLY"]
+          puts "Re-fetching failed...\n"
+          error_input = File.readlines(log_errors).map(&:strip)
+          MovieRecord.where(wiki_id: error_input)
+        else
+          puts "Fetching all...\n"
+          existing = Dir.glob(Rails.root.join("public/posters/*")).map { File.basename(_1, ".jpg") }
+          MovieRecord.order("random()").where.not(imdb_id: nil).where.not(wiki_id: existing)
+        end
+
+      error_output = File.new(log_errors, "w")
+      no_poster_output = File.new(log_none, "a")
+
+      records.where.not(wiki_id: no_poster_input).find_each do |movie|
+        wiki_id = movie.wiki_id
+
+        imdb_id = movie.imdb_id
+        page = agent.get("https://www.imdb.com/title/#{imdb_id}")
+        url = URI(page.search("meta[property='og:image']").first[:content])
+        filename = url.path.split("/").last
+
+        if filename == "imdb_logo.png"
+          print "X"
+          no_poster_output.puts wiki_id
+          next
+        end
+        pp ["Different type", wiki_id, url] unless filename =~ /(\.jpg)|(.jpeg)$/
+
+        tmp_path = out_dir.join(filename)
+        agent.get(url).save(tmp_path)
+
+        target_path = out_dir.join("#{wiki_id}.jpg")
+
+        if tmp_path != target_path
+          `convert #{tmp_path} #{target_path}`
+          FileUtils.rm tmp_path
+        end
+        `convert -resize 100x #{target_path} #{out_dir.join("100/#{wiki_id}.jpg")}`
+        `convert -resize 300x #{target_path} #{out_dir.join("300/#{wiki_id}.jpg")}`
+
+        print "."
+      rescue Mechanize::ResponseCodeError, Net::ReadTimeout, Net::OpenTimeout => error
+        print "F"
+        pp ["Get failed", { wiki_id:, imdb_id:, error: error }]
+        error_output.puts wiki_id
+        next
       end
-
-      print "."
-    rescue Mechanize::ResponseCodeError, Net::ReadTimeout => error
-      print "F"
-      pp ["Get failed", { wiki_id:, omdb_id:, error: error }]
-      error_output.puts wiki_id
-      next
     end
   end
 end
