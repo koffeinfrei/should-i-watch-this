@@ -1,16 +1,17 @@
 = render 'shared/search_box'
 
-- @poster_url ||= vite_asset_path('images/default-poster.png')
-
 - if @fetching
   section.box.padded
     span.spinner data-controller="spinner"
 
     = form_tag fetch_movie_path, 'data-controller': 'auto-submit'
+      = hidden_field_tag :wiki_id, @wiki_id
       = hidden_field_tag :title, @title
       = hidden_field_tag :year, @year
 
 - else
+  - @poster_url = poster_url(@movie, :show)
+
   section.box
     .summary
       .description
@@ -23,10 +24,10 @@
               td.value= @movie.year
             tr
               td.label Director
-              td.value= @movie.director
+              td.value= @movie.directors.join(', ')
             tr
               td.label Actors
-              td.value= @movie.actors
+              td.value= @movie.actors.join(', ')
 
       .marketing
         img.poster src=@poster_url width="130" alt="poster"
@@ -35,44 +36,44 @@
 
     .box
       h3.icon-label
-        span.icon= @movie.recommendation.emoji
-        = @movie.recommendation.text
+        span.icon= @recommendation.emoji
+        = @recommendation.text
 
     .box
       h3.icon-label
         span.icon 🍅
         | Rotten Tomatoes
-        = render 'shared/result_more_link', link: @movie.links.rotten_tomatoes
+        = render 'shared/result_more_link', link: @movie.rotten_url
 
       table.full-width
         tr
           td.label Score
-          td.value= @movie.scores.rotten_tomatoes.score
+          td.value= @scores[:rotten_tomatoes]
         tr
           td.label Audience
-          td.value= @movie.scores.rotten_tomatoes.audience
+          td.value= @scores[:rotten_tomatoes_audience]
 
     div.box
       h3.icon-label
         span.icon 🎬
         | IMDb
-        = render 'shared/result_more_link', link: @movie.links.imdb
+        = render 'shared/result_more_link', link: @movie.imdb_url
 
       table.full-width
         tr
           td.label Rating
-          td.value= @movie.scores.imdb.rating
+          td.value= @scores[:imdb]
 
     div.box
       h3.icon-label
         span.icon 📈
         | Metacritic
-        = render 'shared/result_more_link', link: @movie.links.metacritic
+        = render 'shared/result_more_link', link: @movie.metacritic_url
 
       table.full-width
         tr
           td.label Score
-          td.value= @movie.scores.metacritic.score
+          td.value= @scores[:metacritic]
 
   - content_for :title do
     == @page_title
@@ -84,12 +85,12 @@
     meta property="og:type" content="website"
     meta property="og:url" content=url
     meta property="og:title" content=@page_title
-    meta property="og:description" content="#{@movie.recommendation.emoji} #{@movie.recommendation.text}"
+    meta property="og:description" content="#{@recommendation.emoji} #{@recommendation.text}"
     meta property="og:image" content=@poster_url
 
     /! Twitter
     meta property="twitter:card" content="summary_large_image"
     meta property="twitter:url" content=url
     meta property="twitter:title" content=@page_title
-    meta property="twitter:description" content="#{@movie.recommendation.emoji} #{@movie.recommendation.text}"
+    meta property="twitter:description" content="#{@recommendation.emoji} #{@recommendation.text}"
     meta property="twitter:image" content=@poster_url

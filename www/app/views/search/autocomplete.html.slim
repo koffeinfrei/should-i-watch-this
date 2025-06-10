@@ -2,12 +2,11 @@
   - @movies.each do |movie|
     li.autocomplete-item[
         role="option"
-        data-autocomplete-value=movie.imdb_id
-        data-autocomplete-label=movie.imdb_id
+        data-autocomplete-value= movie_path(movie.wiki_id, movie.title, movie.year)
       ]
       div style="display: flex;"
         .autocomplete-item-poster
-          img src=poster_url(movie)
+          img src=poster_url(movie, :search)
         div style="display: flex; flex-direction: column;"
           .autocomplete-item-title= movie.title || movie.title_original
           .autocomplete-item-description
@@ -15,8 +14,4 @@
             div= movie.directors.join(', ')
             div= movie.actors.join(', ')
 - else
-  li.autocomplete-item[
-      role="option"
-      data-autocomplete-value=@query
-      data-autocomplete-label=@query
-    ]= "There's nothing. Try your luck anyway with \"#{@query}\""
+  li.autocomplete-item role="option" aria-disabled="true" There's nothing.
