@@ -2,7 +2,7 @@
 
 - if @fetching
   section.box.padded
-    span.spinner data-controller="spinner"
+    = render 'shared/spinner'
 
     = form_tag fetch_movie_path, 'data-controller': 'auto-submit'
       = hidden_field_tag :wiki_id, @wiki_id
