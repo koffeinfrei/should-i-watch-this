@@ -5,7 +5,7 @@ module Quote
   end
 
   def self.from_file(file_name)
-    json = JSON.parse(
+    json = Oj.load(
       File.read(File.join(__dir__, "quotes", file_name))
     )
     json.map { RecursiveOstruct.from(_1) }
