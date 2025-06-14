@@ -14,8 +14,10 @@ module MovieScore
         raise Error.new(result.error)
       end
 
-      save(wiki_id, result.scores)
-      result.scores
+      # TODO: the `trailer_url` is somewhat hacked in here
+      save(wiki_id, result.scores, result.trailer_url)
+
+      [result.scores, result.trailer_url]
     end
   end
 
@@ -23,14 +25,13 @@ module MovieScore
     load(wiki_id)
   end
 
-  def self.save(wiki_id, scores)
-    REDIS.set(key(wiki_id), Oj.dump(scores), ex: 1.day)
+  def self.save(wiki_id, scores, trailer_url)
+    REDIS.set(key(wiki_id), Oj.dump([scores, trailer_url]), ex: 1.day)
   end
 
   def self.load(wiki_id)
     value = REDIS.get(key(wiki_id))
     if value
-      movie = MovieRecord.new
       Oj.load(value)
     end
   end

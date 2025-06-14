@@ -5,8 +5,6 @@ class MovieRecord < ApplicationRecord
 
   include PgSearch::Model
 
-  attr_accessor :trailer_url
-
   pg_search_scope :search_by_tsv_title,
     against: :title,
     using: {

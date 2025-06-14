@@ -1,6 +1,6 @@
 class ScoreFetcher
   def initialize(movie)
-    @result = OutputResult.new(movie)
+    @result = ScoreResult.new(movie)
   end
 
   def run
@@ -26,8 +26,7 @@ class ScoreFetcher
       @result.scores[:imdb] = Score.create("#{score.to_f}/10", Score::Decimal)
     end
 
-    # TODO: add to result and store in redis
-    @result.movie.trailer_url = data.dig("trailer", "embedUrl")
+    @result.trailer_url = data.dig("trailer", "embedUrl")
   rescue => e
     abort("IMDb fetch failed: #{e.message}")
   end
