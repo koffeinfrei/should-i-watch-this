@@ -11,5 +11,7 @@ class MovieRecordTest < ActiveSupport::TestCase
     assert_equal ["Here We Go Round the Mulberry Bush"], MovieRecord.search("here", limit: 7).pluck(:title)
     assert_equal ["Here We Go Round the Mulberry Bush"], MovieRecord.search("tt0063063", limit: 7).pluck(:title)
     assert_equal ["Here We Go Round the Mulberry Bush"], MovieRecord.search("TT0063063", limit: 7).pluck(:title)
+    assert_equal ["Here We Go Round the Mulberry Bush"], MovieRecord.search("Q3133990", limit: 7).pluck(:title)
+    assert_equal ["Here We Go Round the Mulberry Bush"], MovieRecord.search("q3133990", limit: 7).pluck(:title)
   end
 end
