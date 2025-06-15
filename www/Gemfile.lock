@@ -423,7 +423,6 @@ DEPENDENCIES
   rubocop-rails-omakase
   selenium-webdriver
   slim-rails
-  tzinfo-data
   vite_rails
   web-console
 

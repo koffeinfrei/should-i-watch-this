@@ -3,7 +3,6 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.1"
 gem "propshaft"
 gem "puma"
-gem "tzinfo-data", platforms: %i[windows jruby]
 gem "bootsnap", require: false
 gem "hotwire-rails"
 gem "vite_rails"
@@ -20,7 +19,7 @@ gem "oj"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
+  gem "debug", require: "debug/prelude"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
