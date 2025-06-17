@@ -15,4 +15,8 @@ export default class extends Autocomplete {
       this.fetchResults(this.inputTarget.value);
     }
   }
+
+  showAll(event) {
+    Turbo.visit(event.params.url);
+  }
 }

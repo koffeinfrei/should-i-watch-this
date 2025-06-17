@@ -1,17 +1,15 @@
 class SearchController < ApplicationController
+  PER = 10
+  MAX_PER = 30
+
   def new
     @query = params[:query]
-  end
-
-  def create
-    movie = MovieRecord.search(params[:query], limit: 1).first
-
-    redirect_to movie_url(movie.wiki_id, movie.title, movie.year)
-  rescue MovieScore::Error => e
-    flash[:error] = e.message
-    flash[:query] = params[:query]
-
-    redirect_to error_path
+    @per = [
+      params.fetch(:per, 0).to_i + PER,
+      MAX_PER
+    ].min
+    @show_more = @per < MAX_PER
+    @movies = MovieRecord.search(params[:query], limit: @per)
   end
 
   def autocomplete

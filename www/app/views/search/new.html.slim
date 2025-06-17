@@ -1,10 +1,30 @@
 = render 'shared/search_box', query: @query
 
-section.box.padded
-  - if @query.present?
-    = render 'shared/spinner'
+turbo-frame id="search-results" data-turbo-action="advance"
+  section.box.padded data-turbo-permanent=true
+    - if @query.present?
+      - if @movies.any?
+        ul.search-results
+          - @movies.each do |movie|
+            li.search-result-item
+              = link_to movie_path(movie.wiki_id, movie.title, movie.year) do
+                div style="display: flex;"
+                  .search-result-item-poster
+                    img src=poster_url(movie, :search)
+                  div style="display: flex; flex-direction: column;"
+                    .search-result-item-title= movie.title || movie.title_original
+                    .search-result-item-description
+                      div= movie.release_date&.year || '<em>unknown release date</em>'.html_safe
+                      div= movie.directors.join(', ')
+                      div= movie.actors.join(', ')
 
-    = form_tag search_path, 'data-controller': 'auto-submit'
-      = hidden_field_tag :query, @query
-  - else
-    .error Hmm? I think you forgot to enter the movie title.
+          - if @show_more
+            li.search-result-item= link_to "Show more results", new_search_path(query: @query, per: @per)
+          - else
+            li.search-result-item.disabled Not what you're looking for? Please refine your search term
+
+      - else
+        li.search-result-item There's nothing.
+
+    - else
+      .error Hmm? I think you forgot to enter the movie title.

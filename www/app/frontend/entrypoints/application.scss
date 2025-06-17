@@ -258,12 +258,12 @@ a.result-more {
   visibility: hidden;
 }
 
-// autocomplete
+// autocomplete / search results
 .autocomplete-form {
   position: relative;
 }
 
-.autocomplete-group {
+.autocomplete-results {
   background: #fff;
   color: #000;
   list-style: none;
@@ -275,11 +275,19 @@ a.result-more {
   z-index: 99;
   top: 25px;
 }
+.search-results {
+  list-style: none;
+  padding: 0;
+}
 
-.autocomplete-item {
+.search-result-item {
   box-sizing: border-box;
   margin-bottom: 0.3em;
-  cursor: default;
+  cursor: pointer;
+
+  &.disabled {
+    cursor: default;
+  }
 
   &.active {
     font-weight: bold;

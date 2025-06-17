@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   root "home#show"
 
-  resource :search, only: [:new, :create], controller: "search" do
+  resource :search, only: :new, controller: "search" do
     get :autocomplete, on: :collection
   end
   get ":wiki_id(/:title)(/:year)", to: "movies#show", as: :movie, constraints: { wiki_id: /Q\d+/ }

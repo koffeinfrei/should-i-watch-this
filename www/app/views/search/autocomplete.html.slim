@@ -1,17 +1,25 @@
 - if @movies.any?
   - @movies.each do |movie|
-    li.autocomplete-item[
+    li.search-result-item[
         role="option"
         data-autocomplete-value= movie_path(movie.wiki_id, movie.title, movie.year)
       ]
       div style="display: flex;"
-        .autocomplete-item-poster
+        .search-result-item-poster
           img src=poster_url(movie, :search)
         div style="display: flex; flex-direction: column;"
-          .autocomplete-item-title= movie.title || movie.title_original
-          .autocomplete-item-description
+          .search-result-item-title= movie.title || movie.title_original
+          .search-result-item-description
             div= movie.release_date&.year || '<em>unknown release date</em>'.html_safe
             div= movie.directors.join(', ')
             div= movie.actors.join(', ')
+
+  li.search-result-item[
+    role="option"
+    aria-disabled="true"
+    data-action="click->search-autocomplete#showAll"
+    data-search-autocomplete-url-param=new_search_path(query: @query)
+  ] Show all results
+
 - else
-  li.autocomplete-item role="option" aria-disabled="true" There's nothing.
+  li.search-result-item role="option" aria-disabled="true" There's nothing.
