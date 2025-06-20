@@ -94,8 +94,8 @@ namespace :movies do
           metacritic_id: metacritic_id,
           omdb_id: omdb_id,
           release_date: release_date,
-          directors: directors.map { humans[_1] },
-          actors: actors.map { humans[_1] }
+          directors: directors.map { humans[_1] }.compact,
+          actors: actors.map { humans[_1] }.compact
         }
       end
 
