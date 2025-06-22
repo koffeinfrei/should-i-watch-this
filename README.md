@@ -66,10 +66,10 @@ curl -H 'X-Auth-Token: <your omdb token>' \
 
 ## About
 
-It uses the [OMDb API](http://www.omdbapi.com) to get basic information about
-the movie.
-The web application uses data from [wikidata](https://www.wikidata.org) for the
-search suggestions.
+The web application is based on data from [wikidata](https://www.wikidata.org).
+The CLI uses the [OMDb API](http://www.omdbapi.com) to get basic information
+about the movie. This is considered legacy at this point, and I'll maybe
+rewrite this to use wikidata as well.
 
 The ratings are fetched from the following sources:
 
@@ -113,8 +113,6 @@ Crystal](https://crystal-lang.org/reference/installation/).
 1. Go to https://www.should-i-watch-this.com
 
 2. Type the title or the IMDb id in the search box
-
-3. Hit the search button.
 
 ### OpenFaaS function
 
