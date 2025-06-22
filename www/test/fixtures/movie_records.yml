@@ -34,7 +34,7 @@ here_we_go_round_the_mulberry_bush:
   imdb_id: "tt0063063"
   rotten_id: "m/here-we-go-round-the-mulberry-bush"
   metacritic_id:
-  omdb_id: nil
+  omdb_id:
   release_date: "1967-01-01"
   description: "1967 British film directed by Clive Donner"
   tsv_title: "'bush':7 'go':3 'here':1 'mulberry':6 'round':4 'the':5"
@@ -47,9 +47,25 @@ pokemon:
   wiki_id: "Q239937"
   imdb_id: "tt0168366"
   rotten_id: "tv/pokemon_the_series"
-  metacritic_id: nil
-  omdb_id: nil
+  metacritic_id:
+  omdb_id:
   release_date: "1997-04-01"
   description: "Japanese anime television series"
   tsv_title: "'pokemon':1"
   tsv_title_original: "'ポケットモンスター':1"
+
+dont_worry_darling:
+  title: "Don't Worry Darling"
+  title_normalized: "dont worry darling"
+  title_original: "Don't Worry Darling"
+  wiki_id: "Q100801718"
+  imdb_id: "tt10731256"
+  rotten_id: "m/dont_worry_darling"
+  metacritic_id: "movie/dont-worry-darling"
+  release_date: "2022-09-05"
+  description: "2022 film directed by Olivia Wilde"
+  omdb_id:
+  directors: ["Olivia Wilde"]
+  actors: ["Florence Pugh", "Harry Styles", "Chris Pine"]
+  tsv_title: "'darling':3 'dont':1 'worry':2"
+  tsv_title_original: "'darling':4 'don':1 't':2 'worry':3"

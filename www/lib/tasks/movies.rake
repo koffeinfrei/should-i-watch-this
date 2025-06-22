@@ -86,7 +86,7 @@ namespace :movies do
         {
           wiki_id: wiki_id,
           title: title,
-          title_normalized: title && I18n.transliterate(title).downcase,
+          title_normalized: MovieRecord.normalize(title),
           title_original: title_original,
           description: description,
           imdb_id: imdb_id,

@@ -50,7 +50,7 @@ class MovieRecord < ApplicationRecord
   end
 
   def self.search_by_title(title, limit:)
-    title_normalized = I18n.transliterate(title).downcase
+    title_normalized = normalize(title)
 
     [
       search_by_tsv_title(title_normalized).with_pg_search_rank.limit(limit),
@@ -67,5 +67,11 @@ class MovieRecord < ApplicationRecord
     else
       search_by_title(query, limit:)
     end
+  end
+
+  def self.normalize(term)
+    return unless term
+
+    I18n.transliterate(term).downcase.gsub(/[[:punct:]]/, "")
   end
 end
