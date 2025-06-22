@@ -64,7 +64,6 @@ namespace :movies do
         wiki_id = json.dig("id")
         title = json.dig("labels", "en", "value") || json.dig("labels", "en-us", "value")
         title_original = json.dig("claims", "P1476", 0, "mainsnak", "datavalue", "value", "text")
-        description = json.dig("descriptions", "en", "value")
         imdb_id = json.dig("claims", "P345", 0, "mainsnak", "datavalue", "value")
         rotten_id = json.dig("claims", "P1258", 0, "mainsnak", "datavalue", "value")
         metacritic_id = json.dig("claims", "P1712", 0, "mainsnak", "datavalue", "value")
@@ -88,7 +87,6 @@ namespace :movies do
           title: title,
           title_normalized: MovieRecord.normalize(title),
           title_original: title_original,
-          description: description,
           imdb_id: imdb_id,
           rotten_id: rotten_id,
           metacritic_id: metacritic_id,

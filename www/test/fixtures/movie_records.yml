@@ -8,7 +8,6 @@ her:
   metacritic_id: "movie/her"
   omdb_id: "75296"
   release_date: "2013-10-12"
-  description: "2013 film by Spike Jonze"
   tsv_title: "'her':1"
   tsv_title_original: "'her':1"
 
@@ -22,7 +21,6 @@ terminator:
   metacritic_id: "movie/the-terminator"
   omdb_id: "218"
   release_date: "1984-10-26"
-  description: "1984 film by James Cameron"
   tsv_title: "'terminator':2 'the':1"
   tsv_title_original: "'terminator':2 'the':1"
 
@@ -36,7 +34,6 @@ here_we_go_round_the_mulberry_bush:
   metacritic_id:
   omdb_id:
   release_date: "1967-01-01"
-  description: "1967 British film directed by Clive Donner"
   tsv_title: "'bush':7 'go':3 'here':1 'mulberry':6 'round':4 'the':5"
   tsv_title_original: "'bush':7 'go':3 'here':1 'mulberry':6 'round':4 'the':5"
 
@@ -50,7 +47,6 @@ pokemon:
   metacritic_id:
   omdb_id:
   release_date: "1997-04-01"
-  description: "Japanese anime television series"
   tsv_title: "'pokemon':1"
   tsv_title_original: "'ポケットモンスター':1"
 
@@ -63,7 +59,6 @@ dont_worry_darling:
   rotten_id: "m/dont_worry_darling"
   metacritic_id: "movie/dont-worry-darling"
   release_date: "2022-09-05"
-  description: "2022 film directed by Olivia Wilde"
   omdb_id:
   directors: ["Olivia Wilde"]
   actors: ["Florence Pugh", "Harry Styles", "Chris Pine"]
