@@ -29,6 +29,7 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+  line-height: 1;
 }
 
 a,
@@ -304,7 +305,6 @@ a.result-more {
 
   &-title {
     margin-bottom: 0.1em;
-    line-height: 1;
   }
 
   &-description {
