@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/seuros/capistrano-puma.git
-  revision: a9f499c5eb2c58ac9c35b6e8f0eb2d1bb91c064b
+  revision: 73aebc9c82cda11b2719ce7fa0822010082f4678
   specs:
-    capistrano3-puma (6.0.0)
+    capistrano3-puma (6.2.0)
       capistrano (~> 3.7)
       capistrano-bundler
       puma (>= 5.1, < 7.0)
@@ -218,7 +218,7 @@ GEM
     oj (3.16.11)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
-    ostruct (0.6.1)
+    ostruct (0.6.2)
     parallel (1.27.0)
     parser (3.3.8.0)
       ast (~> 2.4.1)
