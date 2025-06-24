@@ -9,13 +9,10 @@ module MovieScore
     else
       result = fetch(wiki_id)
 
-      if result.error
-        Rails.logger.error("event=movie_fetch_error error=#{result.error.inspect}")
-        raise Error.new(result.error)
+      if result.has_score?
+        # TODO: the `trailer_url` is somewhat hacked in here
+        save(wiki_id, result.scores, result.trailer_url)
       end
-
-      # TODO: the `trailer_url` is somewhat hacked in here
-      save(wiki_id, result.scores, result.trailer_url)
 
       [result.scores, result.trailer_url]
     end

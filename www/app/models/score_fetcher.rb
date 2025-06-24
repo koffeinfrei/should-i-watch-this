@@ -15,64 +15,61 @@ class ScoreFetcher
     @result
   end
 
+  private
+
   def fetch_imdb
     return unless @result.movie.imdb_url
 
-    html = HttpGrabber.new(@result.movie.imdb_url, timeout: "IMDb unreachable.").run('script[type="application/ld+json"]', method(:abort))
-    data = JSON.parse(html)
+    if html = HttpGrabber.new(@result.movie.imdb_url).run('script[type="application/ld+json"]')
+      data = JSON.parse(html)
 
-    score = data.dig("aggregateRating", "ratingValue")
-    if score
-      @result.scores[:imdb] = Score.create("#{score.to_f}/10", Score::Decimal)
+      if score = data.dig("aggregateRating", "ratingValue")
+        @result.scores[:imdb] = Score.create("#{score.to_f}/10", Score::Decimal)
+      end
+
+      @result.trailer_url = data.dig("trailer", "embedUrl")
+    else
+      Rails.logger.error("event=fetch_imdb_failed wiki_id=#{@result.movie.wiki_id}")
     end
-
-    @result.trailer_url = data.dig("trailer", "embedUrl")
-  rescue => e
-    abort("IMDb fetch failed: #{e.message}")
   end
 
   def fetch_metacritic
     return unless @result.movie.metacritic_url
 
-    html = HttpGrabber.new(@result.movie.metacritic_url, timeout: "Metacritic unreachable.").run('script[type="application/ld+json"]', method(:abort))
-    data = JSON.parse(html)
+    if html = HttpGrabber.new(@result.movie.metacritic_url).run('script[type="application/ld+json"]')
+      data = JSON.parse(html)
 
-    score = data.dig("aggregateRating", "ratingValue")
-    if score
-      @result.scores[:metacritic] = Score.create("#{score.to_f}/100", Score::Percentage)
+      if score = data.dig("aggregateRating", "ratingValue")
+        @result.scores[:metacritic] = Score.create("#{score.to_f}/100", Score::Percentage)
+      end
+    else
+      Rails.logger.error("event=fetch_metacritic_failed wiki_id=#{@result.movie.wiki_id}")
     end
-  rescue => e
-    abort("Metacritic fetch failed: #{e.message}")
   end
 
   def fetch_rotten_tomatoes
     return unless @result.movie.rotten_id
 
-    html = HttpGrabber.new(@result.movie.rotten_url, timeout: "Rotten Tomatoes unreachable.").run("#media-scorecard-json", method(:abort))
-    data = JSON.parse(html)
+    if html = HttpGrabber.new(@result.movie.rotten_url).run("#media-scorecard-json")
+      data = JSON.parse(html)
 
-    critics_score = data.dig("criticsScore", "score")
-    if critics_score
-      score = "#{critics_score}%"
-      @result.scores[:rotten_tomatoes] = Score.create(score, Score::Percentage)
-    end
+      if critics_score = data.dig("criticsScore", "score")
+        score = "#{critics_score}%"
+        @result.scores[:rotten_tomatoes] = Score.create(score, Score::Percentage)
+      end
 
-    audience_score = data.dig("audienceScore", "score")
-    if audience_score
-      score = "#{audience_score}%"
-      @result.scores[:rotten_tomatoes_audience] = Score.create(score, Score::Percentage)
+      if audience_score = data.dig("audienceScore", "score")
+        score = "#{audience_score}%"
+        @result.scores[:rotten_tomatoes_audience] = Score.create(score, Score::Percentage)
+      end
+    else
+      Rails.logger.error("event=fetch_rotten_tomatoes_failed wiki_id=#{@result.movie.wiki_id}")
     end
-  rescue => e
-    abort("Rotten Tomatoes fetch failed: #{e.message}")
   end
 
   def missing_scores!
     [:imdb, :rotten_tomatoes, :rotten_tomatoes_audience, :metacritic].each do |key|
       @result.scores[key] ||= Score::Missing.new
     end
-  end
-
-  def abort(message)
-    @result.error ||= message
   end
 end
