@@ -23,10 +23,6 @@ class MoviesController < ApplicationController
     MovieScore.get!(wiki_id)
 
     redirect_to movie_path(wiki_id, title, year)
-  rescue MovieScore::Error => e
-    flash[:error] = e.message
-
-    redirect_to error_path
   end
 
   def legacy

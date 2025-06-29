@@ -5,55 +5,6 @@ class Score
     average:   0.50
   }
 
-  class Value
-    attr_reader :value
-    attr_reader :suffix
-
-    def initialize(raw_value)
-      if raw_value
-        value_parts = raw_value.match(/^([0-9\.]+)(.*)$/)
-        if value_parts
-          @value = value_parts[1]
-          @suffix = value_parts[2]
-        end
-      end
-    end
-  end
-
-  class Missing < Score
-    def initialize
-      super(nil)
-    end
-
-    def max_value
-      0
-    end
-
-    def value
-      @score_value.value
-    end
-  end
-
-  class Decimal < Score
-    def max_value
-      10
-    end
-
-    def value
-      @score_value.value&.to_f
-    end
-  end
-
-  class Percentage < Score
-    def max_value
-      100
-    end
-
-    def value
-      @score_value.value&.to_i
-    end
-  end
-
   delegate :suffix, to: :@score_value
 
   def initialize(raw_value)
@@ -88,6 +39,14 @@ class Score
     @score_value.value.nil?
   end
 
+  def missing?
+    false
+  end
+
+  def incomplete?
+    false
+  end
+
   def to_s
     if value
       "#{value}#{suffix}"
@@ -116,5 +75,65 @@ class Score
     scaled_value = value.to_f / max_value
 
     yield scaled_value
+  end
+
+  class Value
+    attr_reader :value
+    attr_reader :suffix
+
+    def initialize(raw_value)
+      if raw_value
+        value_parts = raw_value.match(/^([0-9\.]+)(.*)$/)
+        if value_parts
+          @value = value_parts[1]
+          @suffix = value_parts[2]
+        end
+      end
+    end
+  end
+
+  class Missing < Score
+    def initialize
+      super(nil)
+    end
+
+    def max_value
+      0
+    end
+
+    def value
+      @score_value.value
+    end
+
+    def missing?
+      true
+    end
+  end
+
+  # When not all sources could be successfully fetched
+  class Incomplete < Missing
+    def incomplete?
+      true
+    end
+  end
+
+  class Decimal < Score
+    def max_value
+      10
+    end
+
+    def value
+      @score_value.value&.to_f
+    end
+  end
+
+  class Percentage < Score
+    def max_value
+      100
+    end
+
+    def value
+      @score_value.value&.to_i
+    end
   end
 end

@@ -29,6 +29,7 @@ class ScoreFetcher
 
       @result.trailer_url = data.dig("trailer", "embedUrl")
     else
+      @result.scores[:imdb] = Score::Incomplete.new
       Rails.logger.error("event=fetch_imdb_failed wiki_id=#{@result.movie.wiki_id}")
     end
   end
@@ -43,6 +44,7 @@ class ScoreFetcher
         @result.scores[:metacritic] = Score.create("#{score.to_f}/100", Score::Percentage)
       end
     else
+      @result.scores[:metacritic] = Score::Incomplete.new
       Rails.logger.error("event=fetch_metacritic_failed wiki_id=#{@result.movie.wiki_id}")
     end
   end
@@ -63,6 +65,8 @@ class ScoreFetcher
         @result.scores[:rotten_tomatoes_audience] = Score.create(score, Score::Percentage)
       end
     else
+      @result.scores[:rotten_tomatoes] = Score::Incomplete.new
+      @result.scores[:rotten_tomatoes_audience] = Score::Incomplete.new
       Rails.logger.error("event=fetch_rotten_tomatoes_failed wiki_id=#{@result.movie.wiki_id}")
     end
   end

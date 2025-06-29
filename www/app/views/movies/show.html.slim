@@ -38,6 +38,10 @@
       h3.icon-label
         span.icon= @recommendation.emoji
         = @recommendation.text
+      - if @recommendation.disclaimer
+        .padded.disclaimer
+          br
+          = @recommendation.disclaimer
 
     .box
       h3.icon-label

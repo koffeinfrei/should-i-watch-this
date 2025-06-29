@@ -1,6 +1,7 @@
 class Recommender
   def initialize(scores)
-    @scores = scores.values.reject { _1.is_a?(Score::Missing) }
+    @incomplete = scores.values.any?(&:incomplete?)
+    @scores = scores.values.reject(&:missing?)
     @mostly_count = (@scores.size * 0.75).round.to_i
     @half_count = (@scores.size * 0.5).ceil.to_i
     @minor_count = (@scores.size * 0.25).ceil.to_i
@@ -40,7 +41,11 @@ class Recommender
         ["Not sure. You may fall asleep, or you may be delighted.", "😕"]
       end
 
-    Recommendation.new(text, emoji)
+    if @incomplete
+      disclaimer = "Not all ratings could be fetched. Please try again later"
+    end
+
+    Recommendation.new(text, emoji, disclaimer)
   end
 
   def no_rating?

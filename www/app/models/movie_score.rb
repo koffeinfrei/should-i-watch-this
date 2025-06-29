@@ -1,7 +1,6 @@
 module MovieScore
   KEY_PREFIX = "siwt_movie"
-
-  class Error < StandardError; end
+  STD_TTL = 1.day
 
   def self.get!(wiki_id)
     if scores = load(wiki_id)
@@ -9,10 +8,15 @@ module MovieScore
     else
       result = fetch(wiki_id)
 
-      if result.has_score?
-        # TODO: the `trailer_url` is somewhat hacked in here
-        save(wiki_id, result.scores, result.trailer_url)
-      end
+      ttl =
+        if result.incomplete?
+          5.seconds
+        else
+          STD_TTL
+        end
+
+      # TODO: the `trailer_url` is somewhat hacked in here
+      save(wiki_id, result.scores, result.trailer_url, ttl: ttl)
 
       [result.scores, result.trailer_url]
     end
@@ -22,8 +26,8 @@ module MovieScore
     load(wiki_id)
   end
 
-  def self.save(wiki_id, scores, trailer_url)
-    REDIS.set(key(wiki_id), Oj.dump([scores, trailer_url]), ex: 1.day)
+  def self.save(wiki_id, scores, trailer_url, ttl: STD_TTL)
+    REDIS.set(key(wiki_id), Oj.dump([scores, trailer_url]), ex: ttl)
   end
 
   def self.load(wiki_id)

@@ -1,1 +1,1 @@
-Recommendation = Data.define(:text, :emoji)
+Recommendation = Data.define(:text, :emoji, :disclaimer)

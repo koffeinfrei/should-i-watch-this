@@ -8,7 +8,7 @@ class ScoreResult
     @scores = {}
   end
 
-  def has_score?
-    !@scores.values.all?(&:not_defined?)
+  def incomplete?
+    @scores.values.any?(&:incomplete?)
   end
 end
