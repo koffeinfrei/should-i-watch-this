@@ -37,6 +37,10 @@ class MoviesController < ApplicationController
       Rails.logger.warn("event=legacy_redirect_ambiguous title=#{title} year=#{year}")
     end
 
-    redirect_to movie_path(movie.wiki_id, movie.title, movie.year)
+    if movie
+      redirect_to movie_path(movie.wiki_id, movie.title, movie.year)
+    else
+      redirect_to not_found_path
+    end
   end
 end

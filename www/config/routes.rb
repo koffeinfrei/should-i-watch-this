@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   post ":wiki_id(/:title)(/:year)", to: "movies#fetch", as: :fetch_movie
 
   get "error", to: "error#show"
+  get "not_found", to: "error#not_found", as: :not_found
 
   get "*", via: :all, to: "error#not_found"
 end
