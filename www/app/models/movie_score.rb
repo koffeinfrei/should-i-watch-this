@@ -2,11 +2,13 @@ module MovieScore
   KEY_PREFIX = "siwt_movie"
   STD_TTL = 1.day
 
-  def self.get!(wiki_id)
+  def self.get(wiki_id)
     if scores = load(wiki_id)
       scores
     else
       result = fetch(wiki_id)
+
+      return unless result
 
       ttl =
         if result.incomplete?
@@ -39,7 +41,9 @@ module MovieScore
 
   def self.fetch(wiki_id)
     movie = MovieRecord.find_by(wiki_id: wiki_id)
-    ScoreFetcher.new(movie).run
+    if movie
+      ScoreFetcher.new(movie).run
+    end
   end
 
   def self.key(wiki_id)

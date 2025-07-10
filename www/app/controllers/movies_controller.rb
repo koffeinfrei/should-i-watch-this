@@ -20,9 +20,11 @@ class MoviesController < ApplicationController
     title = params["title"]
     year = params["year"]
 
-    MovieScore.get!(wiki_id)
-
-    redirect_to movie_path(wiki_id, title, year)
+    if MovieScore.get(wiki_id)
+      redirect_to movie_path(wiki_id, title, year)
+    else
+      redirect_to not_found_path
+    end
   end
 
   def legacy
