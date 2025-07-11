@@ -6,22 +6,23 @@ desc "Update the movie database"
 namespace :movies do
   desc "(1) Download the wiki data dump"
   task :download_data do
-    output_dir = ENV.fetch("OUTPUT_DIR")
+    output_dir = ENV.fetch("DIR")
 
     `curl -O https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2 --output-dir #{output_dir}`
   end
 
   desc "(2) Decompress the downloaded wiki data dump"
   task :decompress_data do
-    output_dir = ENV.fetch("OUTPUT_DIR")
+    output_dir = ENV.fetch("DIR")
 
     `(cd #{output_dir} && lbzip2 -d latest-all.json.bz2)`
   end
 
   desc "(3) Generate the movies file"
   task :generate_movies do
-    input_file = ENV.fetch("INPUT_FILE")
-    output_file = ENV.fetch("OUTPUT_FILE")
+    output_dir = ENV.fetch("DIR")
+    input_file = File.join(output_dir, "latest-all.json")
+    output_file = File.join(output_dir, "movies.json")
     claim_file = Rails.root.join("config/wikibase-dump-filter-movies-claim")
 
     `cat #{input_file} | wikibase-dump-filter --claim #{claim_file} > #{output_file}`
@@ -29,24 +30,28 @@ namespace :movies do
 
   desc "(4) Generate the humans file"
   task :generate_humans do
-    input_file = ENV.fetch("INPUT_FILE")
-    output_file = ENV.fetch("OUTPUT_FILE")
+    output_dir = ENV.fetch("DIR")
+    input_file = File.join(output_dir, "latest-all.json")
+    output_file = File.join(output_dir, "humans.json")
 
     `cat #{input_file} | wikibase-dump-filter --claim P31:Q5 > #{output_file}`
   end
 
   desc "(5) Generate the minimized humans file"
   task :generate_humans_minimized do
-    input_file = ENV.fetch("INPUT_FILE")
-    output_file = ENV.fetch("OUTPUT_FILE")
+    output_dir = ENV.fetch("DIR")
+    input_file = File.join(output_dir, "humans.json")
+    output_file = File.join(output_dir, "humans-min.json")
 
     `cat #{input_file} | jq -c '[.id, .labels.mul.value, .labels.en.value, .labels["en-us"].value]' > #{output_file}`
   end
 
   desc "(6) Import movies from a wikidata json dump"
   task import: [:environment] do
+    output_dir = ENV.fetch("DIR")
+
     puts "Reading humans..."
-    file = File.new(ENV.fetch("HUMANS_INPUT_FILE"))
+    file = File.new(File.join(output_dir, "humans-min.json"))
     humans = file.each.map do |line|
       json = JSON.parse(line)
       [
@@ -56,7 +61,7 @@ namespace :movies do
     end.to_h
 
     puts "Inserting movies..."
-    file = File.new(ENV.fetch("INPUT_FILE"))
+    file = File.new(File.join(output_dir, "movies.json"))
     file.lazy.each_slice(10_000) do |lines|
       attributes = lines.map do |line|
         json = JSON.parse(line)
