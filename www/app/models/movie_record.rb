@@ -3,6 +3,8 @@ class MovieRecord < ApplicationRecord
   ROTTEN_URL = "https://www.rottentomatoes.com"
   METACRITIC_URL = "https://www.metacritic.com"
 
+  ORDER_SQL = "title_normalized ASC, release_date DESC NULLS LAST, wiki_id ASC"
+
   include PgSearch::Model
 
   pg_search_scope :search_by_tsv_title,
@@ -14,7 +16,7 @@ class MovieRecord < ApplicationRecord
       }
     },
     ranked_by: ":trigram",
-    order_within_rank: "release_date DESC NULLS LAST"
+    order_within_rank: ORDER_SQL
 
   pg_search_scope :search_by_tsv_title_original,
     against: :title_original,
@@ -25,7 +27,7 @@ class MovieRecord < ApplicationRecord
       }
     },
     ranked_by: ":trigram",
-    order_within_rank: "release_date DESC NULLS LAST"
+    order_within_rank: ORDER_SQL
 
   def imdb_url
     return unless imdb_id
@@ -52,10 +54,17 @@ class MovieRecord < ApplicationRecord
   def self.search_by_title(title, limit:)
     title_normalized = normalize(title)
 
-    [
-      search_by_tsv_title(title_normalized).with_pg_search_rank.limit(limit),
-      search_by_tsv_title_original(title.downcase).with_pg_search_rank.limit(limit)
-    ].flatten.uniq.sort_by { [_1.pg_search_rank, _1.release_date || Date.new] }.reverse.take(limit)
+    sql = <<~SQL.squish
+      (
+        (#{search_by_tsv_title(title_normalized).with_pg_search_rank.to_sql})
+          UNION
+        (#{search_by_tsv_title_original(title.downcase).with_pg_search_rank.to_sql})
+      ) AS movie_records
+    SQL
+
+    # Fetch double the records since on the db level the records are not distinct due to `pg_search_rank`.
+    # We then make the records unique in memory and restrict by the actual limit
+    from(sql).limit(limit * 2).order("pg_search_rank DESC, #{ORDER_SQL}").uniq[0, limit]
   end
 
   def self.search(query, limit:)
