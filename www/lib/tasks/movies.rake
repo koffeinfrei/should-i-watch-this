@@ -123,65 +123,6 @@ namespace :movies do
   end
 
   namespace :fetch_posters do
-    desc "(7) Fetch movie posters from omdb [DEPRECATED]"
-    task omdb: [:environment] do
-      agent = Mechanize.new
-      agent.user_agent_alias = "Mac Safari"
-      agent.read_timeout = 5
-      agent.open_timeout = 5
-
-      no_poster_input = File.readlines("./tmp/fetch_posters_none").map(&:strip)
-
-      records =
-        if ENV["FAILED_ONLY"]
-          puts "Re-fetching failed...\n"
-          error_input = File.readlines("./tmp/fetch_posters_errors").map(&:strip)
-          MovieRecord.where(wiki_id: error_input)
-        else
-          puts "Fetching all...\n"
-          existing = Dir.glob(Rails.root.join("public/posters/*")).map { File.basename(_1, ".jpg") }
-          MovieRecord.order("random()").where.not(omdb_id: nil).where.not(wiki_id: existing)
-        end
-
-      error_output = File.new("./tmp/fetch_posters_errors", "w")
-      no_poster_output = File.new("./tmp/fetch_posters_none", "a")
-
-      records.where.not(wiki_id: no_poster_input).find_each do |movie|
-        wiki_id = movie.wiki_id
-
-        omdb_id = movie.omdb_id
-        page = agent.get("https://www.omdb.org/en/ch/movie/#{omdb_id}")
-        image = page.images_with(id: "left_image").first
-        url = image.uri
-        filename = url.path.split("/").last
-
-        if filename == "no_cover185px.png"
-          print "X"
-          no_poster_output.puts wiki_id
-          next
-        end
-        pp ["Different type", wiki_id, url] unless filename =~ /(\.jpg)|(.jpeg)$/
-
-        tmp_path = Rails.root.join("public/posters/#{filename}")
-        image.fetch.save!(tmp_path)
-
-        target_path = Rails.root.join("public/posters/#{wiki_id}.jpg")
-
-        if tmp_path != target_path
-          `convert #{tmp_path} #{target_path}`
-          FileUtils.rm tmp_path
-        end
-
-        print "."
-        sleep 2.1
-      rescue Mechanize::ResponseCodeError, Net::ReadTimeout => error
-        print "F"
-        pp ["Get failed", { wiki_id:, omdb_id:, error: error }]
-        error_output.puts wiki_id
-        next
-      end
-    end
-
     desc "(7) Fetch movie posters from imdb"
     task imdb: [:environment] do
       agent = Mechanize.new
