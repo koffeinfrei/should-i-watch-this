@@ -2,6 +2,14 @@ require "mechanize"
 require "uri"
 require "fileutils"
 
+def as_proper_date(date)
+  return unless date
+
+  # unknown month / day is represented as `00`, which is an invalid date
+  date = date.gsub("-00", "-01")
+  Date.parse(date)
+end
+
 desc "Update the movie database"
 namespace :movies do
   desc "(1) Download the wiki data dump"
@@ -50,6 +58,8 @@ namespace :movies do
   task import: [:environment] do
     output_dir = ENV.fetch("DIR")
 
+    series_classes = File.readlines(Rails.root.join("config/wikidata_series_classes")).map(&:strip)
+
     puts "Reading humans..."
     file = File.new(File.join(output_dir, "humans-min.json"))
     humans = file.each.map do |line|
@@ -66,6 +76,9 @@ namespace :movies do
       attributes = lines.map do |line|
         json = JSON.parse(line)
 
+        instance = json.dig("claims", "P31", 0, "mainsnak", "datavalue", "value", "id")
+        series = instance.in?(series_classes)
+
         wiki_id = json.dig("id")
         title = json.dig("labels", "en", "value") || json.dig("labels", "en-us", "value")
         title_original = json.dig("claims", "P1476", 0, "mainsnak", "datavalue", "value", "text")
@@ -78,14 +91,10 @@ namespace :movies do
         actors = (json.dig("claims", "P161") || []).take(3).map { _1.dig("mainsnak", "datavalue", "value", "id") }
 
         # for films
-        release_date = json.dig("claims", "P577", 0, "mainsnak", "datavalue", "value", "time")
-        # for shows
-        release_date ||= json.dig("claims", "P580", 0, "mainsnak", "datavalue", "value", "time")
-        if release_date
-          # unknown month / day is represented as `00`, which is an invalid date
-          release_date = release_date.gsub("-00", "-01")
-          release_date = Date.parse(release_date)
-        end
+        release_date = as_proper_date(json.dig("claims", "P577", 0, "mainsnak", "datavalue", "value", "time"))
+        # for shows (mostly)
+        start_date = json.dig("claims", "P580", 0, "mainsnak", "datavalue", "value", "time")
+        end_date = json.dig("claims", "P582", 0, "mainsnak", "datavalue", "value", "time")
 
         {
           wiki_id: wiki_id,
@@ -96,7 +105,9 @@ namespace :movies do
           rotten_id: rotten_id,
           metacritic_id: metacritic_id,
           omdb_id: omdb_id,
-          release_date: release_date,
+          series: series,
+          release_date: start_date || release_date,
+          end_date: end_date,
           directors: directors.map { humans[_1] }.compact,
           actors: actors.map { humans[_1] }.compact
         }

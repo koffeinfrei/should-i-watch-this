@@ -10,4 +10,14 @@ module ApplicationHelper
       vite_asset_path("images/default-poster.png")
     end
   end
+
+  def movie_date(movie)
+    if movie.series? && movie.release_date
+      "#{movie.release_date.year} - #{movie.end_date&.year}"
+    elsif movie.release_date
+      movie.release_date.year
+    else
+      "<em>unknown release date</em>".html_safe
+    end
+  end
 end

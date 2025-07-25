@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_22_155132) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_24_192212) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -31,6 +31,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_22_155132) do
     t.string "actors", array: true
     t.tsvector "tsv_title"
     t.tsvector "tsv_title_original"
+    t.boolean "series"
+    t.date "end_date"
     t.index ["imdb_id"], name: "index_movie_records_on_imdb_id"
     t.index ["title_normalized"], name: "index_movie_records_on_title_normalized", opclass: :gin_trgm_ops, using: :gin
     t.index ["title_original"], name: "index_movie_records_on_title_original", opclass: :gin_trgm_ops, using: :gin

@@ -1,0 +1,9 @@
+div style="display: flex;"
+  .search-result-item-poster
+    img src=poster_url(movie, :search)
+  div style="display: flex; flex-direction: column;"
+    .search-result-item-title= movie.title || movie.title_original
+    .search-result-item-description
+      = movie_date(movie)
+      div= movie.directors.join(', ')
+      div= movie.actors.join(', ')
