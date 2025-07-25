@@ -21,7 +21,7 @@
           table
             tr
               td.label Year
-              td.value= @movie.year
+              td.value= movie_date(@movie)
             tr
               td.label Director
               td.value= @movie.directors.join(', ')
