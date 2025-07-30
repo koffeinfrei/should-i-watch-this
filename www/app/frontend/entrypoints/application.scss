@@ -295,7 +295,7 @@ a.result-more {
     cursor: default;
   }
 
-  &.active {
+  &.active, &:hover {
     font-weight: bold;
   }
 
