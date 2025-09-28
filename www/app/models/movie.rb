@@ -1,4 +1,4 @@
-class MovieRecord < ApplicationRecord
+class Movie < ApplicationRecord
   IMDB_URL = "https://www.imdb.com"
   ROTTEN_URL = "https://www.rottentomatoes.com"
   METACRITIC_URL = "https://www.metacritic.com"
@@ -59,7 +59,7 @@ class MovieRecord < ApplicationRecord
         (#{search_by_tsv_title(title_normalized).with_pg_search_rank.to_sql})
           UNION
         (#{search_by_tsv_title_original(title.downcase).with_pg_search_rank.to_sql})
-      ) AS movie_records
+      ) AS movies
     SQL
 
     # Fetch double the records since on the db level the records are not distinct due to `pg_search_rank`.

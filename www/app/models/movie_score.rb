@@ -40,7 +40,7 @@ module MovieScore
   end
 
   def self.fetch(wiki_id)
-    movie = MovieRecord.find_by(wiki_id: wiki_id)
+    movie = Movie.find_by(wiki_id: wiki_id)
     if movie
       ScoreFetcher.new(movie).run
     end

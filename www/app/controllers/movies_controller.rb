@@ -5,7 +5,7 @@ class MoviesController < ApplicationController
     @scores, @trailer_url = MovieScore.get_local(wiki_id)
     if @scores
       @recommendation = Recommender.new(@scores).run
-      @movie = MovieRecord.find_by(wiki_id: wiki_id)
+      @movie = Movie.find_by(wiki_id: wiki_id)
       @page_title = "#{@movie.title} (#{@movie.year})"
     else
       @fetching = true
@@ -31,7 +31,7 @@ class MoviesController < ApplicationController
     title = params["title"]
     year = params["year"]
 
-    movie, *more_movies = MovieRecord
+    movie, *more_movies = Movie
       .where(title_original: title)
       .where("EXTRACT(YEAR FROM release_date) = ?", year)
       .all

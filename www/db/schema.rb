@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_24_192212) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_28_095522) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
 
-  create_table "movie_records", force: :cascade do |t|
+  create_table "movies", force: :cascade do |t|
     t.string "title"
     t.string "wiki_id"
     t.string "imdb_id"
@@ -33,11 +33,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_24_192212) do
     t.tsvector "tsv_title_original"
     t.boolean "series"
     t.date "end_date"
-    t.index ["imdb_id"], name: "index_movie_records_on_imdb_id"
-    t.index ["title_normalized"], name: "index_movie_records_on_title_normalized", opclass: :gin_trgm_ops, using: :gin
-    t.index ["title_original"], name: "index_movie_records_on_title_original", opclass: :gin_trgm_ops, using: :gin
-    t.index ["tsv_title"], name: "index_movie_records_on_tsv_title", using: :gin
-    t.index ["tsv_title_original"], name: "index_movie_records_on_tsv_title_original", using: :gin
-    t.index ["wiki_id"], name: "index_movie_records_on_wiki_id", unique: true
+    t.index ["imdb_id"], name: "index_movies_on_imdb_id"
+    t.index ["title_normalized"], name: "index_movies_on_title_normalized", opclass: :gin_trgm_ops, using: :gin
+    t.index ["title_original"], name: "index_movies_on_title_original", opclass: :gin_trgm_ops, using: :gin
+    t.index ["tsv_title"], name: "index_movies_on_tsv_title", using: :gin
+    t.index ["tsv_title_original"], name: "index_movies_on_tsv_title_original", using: :gin
+    t.index ["wiki_id"], name: "index_movies_on_wiki_id", unique: true
   end
 end

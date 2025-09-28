@@ -99,7 +99,7 @@ namespace :movies do
         {
           wiki_id: wiki_id,
           title: title,
-          title_normalized: MovieRecord.normalize(title),
+          title_normalized: Movie.normalize(title),
           title_original: title_original,
           imdb_id: imdb_id,
           rotten_id: rotten_id,
@@ -113,7 +113,7 @@ namespace :movies do
         }
       end
 
-      MovieRecord.upsert_all(attributes, unique_by: :wiki_id)
+      Movie.upsert_all(attributes, unique_by: :wiki_id)
 
       print "."
     end
@@ -157,11 +157,11 @@ namespace :movies do
         if ENV["FAILED_ONLY"]
           puts "Re-fetching failed...\n"
           error_input = File.readlines(log_errors).map(&:strip)
-          MovieRecord.where(wiki_id: error_input)
+          Movie.where(wiki_id: error_input)
         else
           puts "Fetching all...\n"
           existing = Dir.glob(Rails.root.join("public/posters/*")).map { File.basename(_1, ".jpg") }
-          MovieRecord.order("random()").where.not(imdb_id: nil).where.not(wiki_id: existing)
+          Movie.order("random()").where.not(imdb_id: nil).where.not(wiki_id: existing)
         end
 
       error_output = File.new(log_errors, "w")

@@ -8,14 +8,14 @@ class SearchController < ApplicationController
       params.fetch(:per, 0).to_i + PER,
       MAX_PER
     ].min
-    @movies = MovieRecord.search(params[:query], limit: @per + 1)
+    @movies = Movie.search(params[:query], limit: @per + 1)
     @show_more = @per < MAX_PER && @movies.size > @per
     @movies = @movies[0, @per]
   end
 
   def autocomplete
     @query = params[:q]
-    @movies = MovieRecord.search(@query, limit: 7)
+    @movies = Movie.search(@query, limit: 7)
 
     render layout: false
   end
