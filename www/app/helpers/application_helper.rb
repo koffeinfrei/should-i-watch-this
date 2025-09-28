@@ -20,4 +20,8 @@ module ApplicationHelper
       "<em>unknown release date</em>".html_safe
     end
   end
+
+  def movie_path_for(movie)
+    movie_path(movie.wiki_id, movie.title, movie.year)
+  end
 end

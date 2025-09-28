@@ -67,6 +67,18 @@ textarea {
   border-radius: 2px;
 }
 
+button.secondary {
+  padding: 0.1em 0.3em;
+  background: transparent;
+  color: #fff;
+  line-height: 1;
+
+  &:hover {
+    background: #fff;
+    color: #1c2b3e;
+  }
+}
+
 input:disabled {
   color: #ccc;
 }
@@ -363,4 +375,13 @@ a.result-more {
 .total-movies {
   font-size: 0.7em;
   color: #96a2ae;
+}
+
+// utilities
+.mb-1 {
+  margin-bottom: 1em;
+}
+
+.text-end {
+  text-align: end;
 }
