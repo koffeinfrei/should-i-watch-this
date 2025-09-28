@@ -2,7 +2,7 @@
   - @movies.each do |movie|
     li.search-result-item[
         role="option"
-        data-autocomplete-value= movie_path(movie.wiki_id, movie.title, movie.year)
+        data-autocomplete-value= movie_path_for(movie)
       ]
       = render 'search/item', movie: movie
 

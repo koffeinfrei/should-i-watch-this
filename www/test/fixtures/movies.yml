@@ -8,6 +8,8 @@ her:
   metacritic_id: "movie/her"
   omdb_id: "75296"
   release_date: "2013-10-12"
+  directors: ["Spike Jonze"]
+  actors: ["Joaquin Phoenix", "Amy Adams", "Rooney Mara"]
   tsv_title: "'her':1"
   tsv_title_original: "'her':1"
 

@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
       @recommendation = Recommender.new(@scores).run
       @movie = Movie.find_by(wiki_id: wiki_id)
       @page_title = "#{@movie.title} (#{@movie.year})"
+      @in_watchlist = WatchlistItem.exists?(movie: @movie, user: current_user)
     else
       @fetching = true
       @wiki_id = wiki_id
@@ -40,7 +41,7 @@ class MoviesController < ApplicationController
     end
 
     if movie
-      redirect_to movie_path(movie.wiki_id, movie.title, movie.year)
+      redirect_to movie_path_for(movie)
     else
       redirect_to not_found_path
     end
