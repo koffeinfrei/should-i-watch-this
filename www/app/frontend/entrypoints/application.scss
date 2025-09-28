@@ -20,7 +20,7 @@ body {
   color: #fff;
   background-color: #1c2b3e;
   margin: 0;
-  padding: 50px 8px 8px 8px;
+  padding: 8px;
   box-sizing: border-box;
   font-family: "Fetamont-9ExkzVmc3w";
   font-size: 24px;
@@ -62,7 +62,6 @@ textarea {
   font-family: inherit;
   font-size: inherit;
   padding: 0.4em;
-  margin: 0 0.3em 0.5em 0;
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 2px;
@@ -113,10 +112,6 @@ h3 {
 
 p {
   margin: 0 0 8px 0;
-}
-
-.box {
-  margin-bottom: 53px;
 }
 
 .padded {
@@ -230,6 +225,53 @@ a.result-more {
   font-weight: normal;
   font-size: 0.9em;
   margin-left: 8px;
+}
+
+// header
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  > * {
+    width: 33.33333%;
+  }
+
+  .flashes {
+    text-align: center;
+
+    .flash {
+      border-radius: 2px;
+      padding: 0.4em;
+      margin-bottom: $box-bottom-spacing / 2;
+      display: inline-block;
+
+      &.success, &.notice {
+        border: 1px solid #76c47670;
+        background: #76c4760d;
+
+        &:before {
+          content: "🗸";
+          margin-right: 0.6em;
+        }
+      }
+
+      &.alert {
+        border: 1px solid #f58c8c82;
+        background: #f58c8c0a;
+
+        &:before {
+          content: "✗";
+          margin-right: 0.6em;
+        }
+
+      }
+    }
+  }
+
+  .user {
+    text-align: right;
+  }
 }
 
 // footer

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  passwordless_for :users, controller: "sessions"
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
@@ -12,6 +14,7 @@ Rails.application.routes.draw do
   resource :search, only: :new, controller: "search" do
     get :autocomplete, on: :collection
   end
+
   get ":wiki_id(/:title)(/:year)", to: "movies#show", as: :movie, constraints: { wiki_id: /Q\d+/ }
   get ":title/:year", to: "movies#legacy", as: :legacy_movie
   post ":wiki_id(/:title)(/:year)", to: "movies#fetch", as: :fetch_movie

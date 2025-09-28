@@ -1,0 +1,10 @@
+.header
+  div
+  .flashes
+    - flash.each do |type, message|
+      .flash class=type
+        = message
+
+  .user
+    - if current_user
+      .signed-in ☻
