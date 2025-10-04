@@ -1,12 +1,12 @@
 - if @movies.any?
   - @movies.each do |movie|
-    li.search-result-item[
+    li.movie-list-item[
         role="option"
         data-autocomplete-value= movie_path_for(movie)
       ]
-      = render 'search/item', movie: movie
+      = render 'movies/list_item', movie: movie
 
-  li.search-result-item[
+  li.movie-list-item[
     role="option"
     aria-disabled="true"
     data-action="click->search-autocomplete#showAll"
@@ -14,4 +14,4 @@
   ] Show all results
 
 - else
-  li.search-result-item role="option" aria-disabled="true" There's nothing.
+  li.movie-list-item role="option" aria-disabled="true" There's nothing.
