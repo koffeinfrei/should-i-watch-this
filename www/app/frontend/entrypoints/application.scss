@@ -275,7 +275,7 @@ a.result-more {
   .flash {
     border-radius: 2px;
     padding: 0.4em;
-    margin-bottom: $box-bottom-spacing / 2;
+    margin-bottom: calc($box-bottom-spacing / 2);
     display: inline-block;
 
     &.success, &.notice {
