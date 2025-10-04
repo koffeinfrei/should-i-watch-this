@@ -12,7 +12,7 @@ class HttpGrabber
     page = Nokogiri::HTML(response.body_str)
     page.at_css(selector)&.content
   rescue StandardError => e
-    Rails.logger.error("event=http_grabber_error error=#{e.inspect}")
+    Rails.logger.error("event=http_grabber_error url=\"#{@url}\" error=\"#{e.inspect}\"")
     nil
   end
 end

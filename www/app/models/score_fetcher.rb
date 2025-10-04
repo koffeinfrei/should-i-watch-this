@@ -18,9 +18,10 @@ class ScoreFetcher
   private
 
   def fetch_imdb
-    return unless @result.movie.imdb_url
+    url = @result.movie.imdb_url
+    return unless url
 
-    if html = HttpGrabber.new(@result.movie.imdb_url).run('script[type="application/ld+json"]')
+    if html = HttpGrabber.new(url).run('script[type="application/ld+json"]')
       data = JSON.parse(html)
 
       if score = data.dig("aggregateRating", "ratingValue")
@@ -30,14 +31,15 @@ class ScoreFetcher
       @result.trailer_url = data.dig("trailer", "embedUrl")
     else
       @result.scores[:imdb] = Score::Incomplete.new
-      Rails.logger.error("event=fetch_imdb_failed wiki_id=#{@result.movie.wiki_id}")
+      Rails.logger.error("event=fetch_imdb_failed wiki_id=#{@result.movie.wiki_id} url=\"#{url}\"")
     end
   end
 
   def fetch_metacritic
-    return unless @result.movie.metacritic_url
+    url = @result.movie.metacritic_url
+    return unless url
 
-    if html = HttpGrabber.new(@result.movie.metacritic_url).run('script[type="application/ld+json"]')
+    if html = HttpGrabber.new(url).run('script[type="application/ld+json"]')
       data = JSON.parse(html)
 
       if score = data.dig("aggregateRating", "ratingValue")
@@ -45,14 +47,15 @@ class ScoreFetcher
       end
     else
       @result.scores[:metacritic] = Score::Incomplete.new
-      Rails.logger.error("event=fetch_metacritic_failed wiki_id=#{@result.movie.wiki_id}")
+      Rails.logger.error("event=fetch_metacritic_failed wiki_id=#{@result.movie.wiki_id} url=\"#{url}\"")
     end
   end
 
   def fetch_rotten_tomatoes
-    return unless @result.movie.rotten_id
+    url = @result.movie.rotten_url
+    return unless url
 
-    if html = HttpGrabber.new(@result.movie.rotten_url).run("#media-scorecard-json")
+    if html = HttpGrabber.new(url).run("#media-scorecard-json")
       data = JSON.parse(html)
 
       if critics_score = data.dig("criticsScore", "score")
@@ -67,7 +70,7 @@ class ScoreFetcher
     else
       @result.scores[:rotten_tomatoes] = Score::Incomplete.new
       @result.scores[:rotten_tomatoes_audience] = Score::Incomplete.new
-      Rails.logger.error("event=fetch_rotten_tomatoes_failed wiki_id=#{@result.movie.wiki_id}")
+      Rails.logger.error("event=fetch_rotten_tomatoes_failed wiki_id=#{@result.movie.wiki_id} url=\"#{url}\"")
     end
   end
 
