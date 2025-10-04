@@ -13,7 +13,7 @@
   - @poster_url = poster_url(@movie, :show)
 
   section.box
-    = button_to [:watchlist_items], \
+    = button_to [:toggle, :watchlist_items], \
         params: { movie_id: @movie.id, return_to: movie_path(@movie.wiki_id, @movie.title, @movie.year) }, \
         class: 'secondary', \
         form_class: 'mb-1 text-end' do

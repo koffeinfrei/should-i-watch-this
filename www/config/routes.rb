@@ -15,7 +15,10 @@ Rails.application.routes.draw do
     get :autocomplete, on: :collection
   end
 
-  resources :watchlist_items, only: :create
+  resources :watchlist_items, only: [] do
+    post :toggle, on: :collection
+  end
+  get "watchlist", to: "watchlist#show", as: :watchlist
 
   get ":wiki_id(/:title)(/:year)", to: "movies#show", as: :movie, constraints: { wiki_id: /Q\d+/ }
   get ":title/:year", to: "movies#legacy", as: :legacy_movie

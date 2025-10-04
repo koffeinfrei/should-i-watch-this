@@ -1,5 +1,5 @@
 class WatchlistItemsController < ApplicationController
-  def create
+  def toggle
     if current_user
       movie = Movie.find(params[:movie_id])
       item = WatchlistItem.find_or_initialize_by(user: current_user, movie: movie)

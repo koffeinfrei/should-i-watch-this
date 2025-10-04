@@ -5,7 +5,7 @@ class WatchlistsTest < ApplicationSystemTestCase
 
   fixtures :movies
 
-  test "signed in: add a movie to the watchlist" do
+  test "signed in: add a movie to and remove it from the watchlist" do
     MovieScore.save(
       "Q788822",
       {
@@ -28,6 +28,7 @@ class WatchlistsTest < ApplicationSystemTestCase
     assert_button "﹢watchlist"
     assert_no_button "🗸 in watchlist"
 
+    # add to watchlist
     click_on "﹢watchlist"
     assert_text "The movie 'Her' was added to your watchlist"
     assert [[movie.id, user.id]], WatchlistItem.pluck(:movie_id, :user_id)
@@ -35,8 +36,28 @@ class WatchlistsTest < ApplicationSystemTestCase
     assert_no_button "﹢watchlist"
     assert_button "🗸 in watchlist"
 
+    # remove from watchlist
     click_on "🗸 in watchlist"
     assert_text "The movie 'Her' was removed from your watchlist"
     assert 0, WatchlistItem.count
+  end
+
+  test "show watchlist" do
+    user = User.create!(email: "user@example.com")
+    movie = movies(:her)
+    WatchlistItem.create! user: user, movie: movie
+
+    sign_in user
+
+    click_on "Watchlist"
+
+    within ".movie-list-item" do
+      assert_text "Her"
+
+      click_on "Remove from watchlist"
+    end
+
+    assert_content "The movie 'Her' was removed from your watchlist"
+    assert_content "Well. You should definitely add some movies to your watchlist."
   end
 end
