@@ -13,7 +13,7 @@ gem "capistrano-rails"
 gem "capistrano-rbenv"
 gem "capistrano3-puma", github: "seuros/capistrano-puma"
 gem "pg"
-gem "mechanize"
+gem "mechanize", require: false
 gem "pg_search"
 gem "oj"
 gem "curb"
