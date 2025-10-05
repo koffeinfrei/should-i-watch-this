@@ -23,6 +23,8 @@ terminator:
   metacritic_id: "movie/the-terminator"
   omdb_id: "218"
   release_date: "1984-10-26"
+  directors: ["James Cameron"]
+  actors: ["Arnold Schwarzenegger", "Michael Biehn", "Linda Hamilton"]
   tsv_title: "'terminator':2 'the':1"
   tsv_title_original: "'terminator':2 'the':1"
 

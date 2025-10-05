@@ -60,4 +60,37 @@ class WatchlistsTest < ApplicationSystemTestCase
     assert_content "The movie 'Her' was removed from your watchlist"
     assert_content "Well. You should definitely add some movies to your watchlist."
   end
+
+  test "import imdb watchlist" do
+    user = User.create!(email: "user@example.com")
+    movie = movies(:her)
+    WatchlistItem.create! user: user, movie: movie
+
+    sign_in user
+
+    click_on "Watchlist"
+
+    within ".movie-list-item" do
+      assert_text "Her"
+    end
+
+    click_on "Import from IMDb"
+
+    attach_file "file", file_fixture("imdb_watchlist_export.csv")
+    click_on "Import"
+
+    assert_content "Your IMDb watchlist was imported:"
+    assert_content "New items: 1"
+    assert_content "Existing items: 1"
+    assert_content "Failed items: 1"
+
+    items = all ".movie-list-item"
+    assert_equal 2, items.size
+    within items.first do
+      assert_text "The Terminator"
+    end
+    within items.last do
+      assert_text "Her"
+    end
+  end
 end
