@@ -120,6 +120,10 @@ button:focus {
   border-color: #666;
 }
 
+input[type="file"] {
+  border: none;
+}
+
 h1 {
   font-size: 2.8em;
   margin: 0 0 16px 0;
@@ -133,11 +137,15 @@ h1 {
 h2,
 h3 {
   font-size: 1em;
-  margin: 0 0 8px 0;
+  margin: 0 0 16px 0;
 }
 
 p {
   margin: 0 0 8px 0;
+}
+
+ol {
+  line-height: 1.2;
 }
 
 .padded {
@@ -398,6 +406,10 @@ a.result-more {
   margin-bottom: 1em;
 }
 
+.text-start {
+  text-align: start;
+}
+
 .text-end {
   text-align: end;
 }
@@ -412,6 +424,14 @@ a.result-more {
 
 .flex-items-center {
   align-items: center;
+}
+
+.flex-justify-between {
+  justify-content: space-between;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
 }
 
 .w-100 {

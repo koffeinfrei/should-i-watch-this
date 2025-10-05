@@ -19,6 +19,9 @@ Rails.application.routes.draw do
     post :toggle, on: :collection
   end
   get "watchlist", to: "watchlist#show", as: :watchlist
+  scope "watchlist", as: :watchlist do
+    resource :import, only: [:new, :create], controller: "watchlist_import"
+  end
 
   get ":wiki_id(/:title)(/:year)", to: "movies#show", as: :movie, constraints: { wiki_id: /Q\d+/ }
   get ":title/:year", to: "movies#legacy", as: :legacy_movie
