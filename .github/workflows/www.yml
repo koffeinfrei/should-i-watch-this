@@ -85,6 +85,14 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: 'www/.nvmrc'
+
+      - name: Install npm packages
+        run: cd www && npm ci
+
       - name: Run tests
         env:
           RAILS_ENV: test
