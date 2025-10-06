@@ -9,11 +9,11 @@ class ImdbWatchlistImportTest < ActiveSupport::TestCase
     file = File.new(file_fixture("imdb_watchlist_export.csv"))
 
     import = ImdbWatchlistImport.new(user, file)
-    result = import.build
+    result = import.create
 
-    assert_equal 1, result.new
+    assert_equal 2, result.new
     assert_equal 1, result.existing
-    assert_equal 1, result.failed
+    assert_equal 3, result.failed
 
     assert_equal [
       {
@@ -22,10 +22,15 @@ class ImdbWatchlistImportTest < ActiveSupport::TestCase
         "movie_id" => movies(:her).id
       },
       {
-        "id" => nil,
+        "id" => WatchlistItem.second.id,
         "user_id" => user.id,
         "movie_id" => movies(:terminator).id
+      },
+      {
+        "id" => WatchlistItem.last.id,
+        "user_id" => user.id,
+        "movie_id" => movies(:here_we_go_round_the_mulberry_bush).id
       }
-    ], result.records.map { _1.attributes.slice("id", "user_id", "movie_id") }
+    ], WatchlistItem.all.map { _1.attributes.slice("id", "user_id", "movie_id") }
   end
 end
