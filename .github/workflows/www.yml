@@ -68,15 +68,14 @@ jobs:
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git pkg-config google-chrome-stable
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y build-essential git pkg-config google-chrome-stable  redis-server
+          # dependencies for the curb gem
+          sudo apt-get install --no-install-recommends -y libcurl4 libcurl4-openssl-dev
 
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Install libcurl
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libcurl4 libcurl4-openssl-dev
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -85,9 +84,18 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: 'www/.nvmrc'
+
+      - name: Install npm packages
+        run: cd www && npm ci
+
       - name: Run tests
         env:
           RAILS_ENV: test
+          APPLICATION_NAME: Should I Watch This?
           POSTGRES_HOST: localhost
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
