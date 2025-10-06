@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_28_095522) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_28_101009) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -40,4 +40,38 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_28_095522) do
     t.index ["tsv_title_original"], name: "index_movies_on_tsv_title_original", using: :gin
     t.index ["wiki_id"], name: "index_movies_on_wiki_id", unique: true
   end
+
+  create_table "passwordless_sessions", force: :cascade do |t|
+    t.string "authenticatable_type"
+    t.integer "authenticatable_id"
+    t.datetime "timeout_at", precision: nil, null: false
+    t.datetime "expires_at", precision: nil, null: false
+    t.datetime "claimed_at", precision: nil
+    t.string "token_digest", null: false
+    t.string "identifier", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["authenticatable_type", "authenticatable_id"], name: "authenticatable"
+    t.index ["identifier"], name: "index_passwordless_sessions_on_identifier", unique: true
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "lower((email)::text)", name: "index_users_on_LOWER_email", unique: true
+  end
+
+  create_table "watchlist_items", force: :cascade do |t|
+    t.bigint "movie_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["movie_id", "user_id"], name: "index_watchlist_items_on_movie_id_and_user_id", unique: true
+    t.index ["movie_id"], name: "index_watchlist_items_on_movie_id"
+    t.index ["user_id"], name: "index_watchlist_items_on_user_id"
+  end
+
+  add_foreign_key "watchlist_items", "movies"
+  add_foreign_key "watchlist_items", "users"
 end

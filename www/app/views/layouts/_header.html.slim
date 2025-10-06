@@ -1,0 +1,11 @@
+.header
+  .navigation
+    = link_to 'Watchlist', watchlist_path
+    - if current_user
+      .user
+        .signed-in ☻
+
+.flashes
+  - flash.each do |type, message|
+    .flash class=type
+      == message
