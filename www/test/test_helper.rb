@@ -8,8 +8,8 @@ module ActiveSupport
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
-    def sign_in(user)
-      visit users_sign_in_path
+    def sign_in(user, skip_visit: false)
+      visit users_sign_in_path unless skip_visit
 
       # submit email
       fill_in "E-mail address", with: "user@example.com"
