@@ -96,6 +96,7 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
+          APPLICATION_NAME: Should I Watch This?
           POSTGRES_HOST: localhost
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
