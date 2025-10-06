@@ -4,9 +4,7 @@ class WatchlistImportController < ApplicationController
 
   def create
     file = params.require(:file)
-    result = ImdbWatchlistImport.new(current_user, file.to_io).build
-
-    result.records.each(&:save!)
+    result = ImdbWatchlistImport.new(current_user, file.to_io).create
 
     flash[:success] = <<~MESSAGE.strip
       Your IMDb watchlist was imported:

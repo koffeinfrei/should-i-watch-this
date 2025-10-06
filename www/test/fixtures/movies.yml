@@ -38,6 +38,8 @@ here_we_go_round_the_mulberry_bush:
   metacritic_id:
   omdb_id:
   release_date: "1967-01-01"
+  directors: ["Clive Donner"]
+  actors: ["Barry Joseph Evans", "Judy Geeson", "Angela Scoular"]
   tsv_title: "'bush':7 'go':3 'here':1 'mulberry':6 'round':4 'the':5"
   tsv_title_original: "'bush':7 'go':3 'here':1 'mulberry':6 'round':4 'the':5"
 

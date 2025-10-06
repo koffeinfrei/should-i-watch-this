@@ -80,16 +80,19 @@ class WatchlistsTest < ApplicationSystemTestCase
     click_on "Import"
 
     assert_content "Your IMDb watchlist was imported:"
-    assert_content "New items: 1"
+    assert_content "New items: 2"
     assert_content "Existing items: 1"
-    assert_content "Failed items: 1"
+    assert_content "Failed items: 3"
 
     items = all ".movie-list-item"
-    assert_equal 2, items.size
-    within items.first do
+    assert_equal 3, items.size
+    within items[0] do
+      assert_text "Here We Go Round the Mulberry Bush"
+    end
+    within items[1] do
       assert_text "The Terminator"
     end
-    within items.last do
+    within items[2] do
       assert_text "Her"
     end
   end

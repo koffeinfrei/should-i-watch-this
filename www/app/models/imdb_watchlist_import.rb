@@ -1,31 +1,45 @@
 require "csv"
 
 class ImdbWatchlistImport
-  Result = Data.define(:records, :new, :existing, :failed)
+  Result = Data.define(:new, :existing, :failed)
 
   def initialize(user, io)
     @user = user
     @io = io
   end
 
-  def build
+  def create
     csv = CSV.new(@io, headers: true)
 
-    ids = csv.map { _1["Const"] }
-    movie_ids = Movie.where(imdb_id: ids).pluck(:id)
+    imdb_ids = csv.map { _1["Const"] }
+    movie_ids = Movie.where(imdb_id: imdb_ids).pluck(:imdb_id, :id).to_h
+    csv.rewind
 
-    existing_records = WatchlistItem.where(user: @user, movie_id: movie_ids)
+    missing = []
+    attributes = csv.map do |row|
+      imdb_id = row["Const"]
+      movie_id = movie_ids[imdb_id]
+      if movie_id
+        {
+          movie_id: movie_id,
+          user_id: @user.id,
+          created_at: row["Created"],
+          updated_at: row["Modified"]
+        }
+      else
+        missing << imdb_id
+        nil
+      end
+    end.compact
 
-    leftover_ids = movie_ids - existing_records.map(&:movie_id)
-    new_records = leftover_ids.map { WatchlistItem.new(user: @user, movie_id: _1) }
+    existing_count = WatchlistItem.where(user: @user, movie_id: movie_ids.values).count
 
-    imported_records = existing_records + new_records
+    result = WatchlistItem.upsert_all(attributes, unique_by: [:movie_id, :user_id])
 
     Result.new(
-      imported_records,
-      new_records.size,
-      existing_records.size,
-      (ids.size - imported_records.size)
+      result.length - existing_count,
+      existing_count,
+      missing.size
     )
   end
 end
