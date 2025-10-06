@@ -6,6 +6,8 @@ class WatchlistController < ApplicationController
         .where(user: current_user)
         .order(updated_at: :desc, id: :desc)
         .map(&:movie)
+    else
+      save_passwordless_redirect_location!(User)
     end
   end
 end

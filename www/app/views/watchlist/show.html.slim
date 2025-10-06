@@ -4,7 +4,7 @@ section.box.padded
   h2 Watchlist
 
   - if !current_user
-    | You need to #{link_to 'Sign in', users_sign_in_path} to be able to add have a watchlist.
+    | You need to #{link_to 'Sign in', users_sign_in_path} to be able to have a watchlist.
 
   - elsif @movies.any?
     ul.movie-list
@@ -22,5 +22,6 @@ section.box.padded
   - else
     | Well. You should definitely add some movies to your watchlist.
 
-section.box.padded
-  = link_to 'Import from IMDb', [:new, :watchlist, :import]
+- if current_user
+  section.box.padded
+    = link_to 'Import from IMDb', [:new, :watchlist, :import]

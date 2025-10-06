@@ -5,7 +5,7 @@ class WatchlistsTest < ApplicationSystemTestCase
 
   fixtures :movies
 
-  test "signed in: add a movie to and remove it from the watchlist" do
+  test "add a movie to and remove it from the watchlist" do
     MovieScore.save(
       "Q788822",
       {
@@ -95,5 +95,21 @@ class WatchlistsTest < ApplicationSystemTestCase
     within items[2] do
       assert_text "Her"
     end
+  end
+
+  test "unauthenticated" do
+    user = User.create!(email: "user@example.com")
+
+    visit root_path
+    click_on "Watchlist"
+
+    assert_content "You need to Sign in to be able to have a watchlist."
+    assert_no_link "Import from IMDb"
+
+    click_on "Sign in"
+    sign_in user, skip_visit: true
+
+    assert_content "Well. You should definitely add some movies to your watchlist."
+    assert_link "Import from IMDb"
   end
 end
