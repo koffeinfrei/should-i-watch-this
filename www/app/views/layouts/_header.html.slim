@@ -1,9 +1,11 @@
 .header
   .navigation
-    = link_to 'Watchlist', watchlist_path
+    = link_to 'Watchlist', watchlist_path, class: 'me-05'
     - if current_user
       .user
         .signed-in ☻
+    - else
+      = link_to 'Sign in', users_sign_in_path
 
 .flashes
   - flash.each do |type, message|
