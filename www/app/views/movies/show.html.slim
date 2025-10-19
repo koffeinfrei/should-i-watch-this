@@ -14,7 +14,7 @@
 
   section.box
     = button_to [:toggle, :watchlist_items], \
-        params: { movie_id: @movie.id, return_to: movie_path(@movie.wiki_id, @movie.title, @movie.year) }, \
+        params: { movie_id: @movie.id, return_to: movie_path_for(@movie) }, \
         class: 'secondary', \
         form_class: 'mb-1 text-end' do
       - if @in_watchlist
