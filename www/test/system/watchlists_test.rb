@@ -113,5 +113,16 @@ class WatchlistsTest < ApplicationSystemTestCase
 
     assert_content "Well. You should definitely add some movies to your watchlist."
     assert_link "Import from IMDb"
+
+    # "Add" button
+    within ".header" do
+      click_on "Sign out"
+    end
+    assert_content "Signed out successfully"
+
+    visit movie_path_for(movies(:her))
+    click_on "﹢watchlist"
+    sign_in user, skip_visit: true
+    assert_selector "h2", text: "Her"
   end
 end
