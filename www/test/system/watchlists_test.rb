@@ -106,7 +106,9 @@ class WatchlistsTest < ApplicationSystemTestCase
     assert_content "You need to Sign in to be able to have a watchlist."
     assert_no_link "Import from IMDb"
 
-    click_on "Sign in"
+    within ".header" do
+      click_on "Sign in"
+    end
     sign_in user, skip_visit: true
 
     assert_content "Well. You should definitely add some movies to your watchlist."

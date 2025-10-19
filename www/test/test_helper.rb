@@ -15,7 +15,9 @@ module ActiveSupport
 
       # submit email
       fill_in "E-mail address", with: "user@example.com"
-      click_on "Sign in"
+      within "main" do
+        click_on "Sign in"
+      end
       assert_text "We've sent you an email with a secret token"
 
       # submit token
@@ -24,8 +26,7 @@ module ActiveSupport
       fill_in "Token", with: token
       click_on "Confirm"
 
-      # TODO: show an avatar or the email or something better
-      assert_selector ".signed-in"
+      assert_link "Sign out"
     end
   end
 end
