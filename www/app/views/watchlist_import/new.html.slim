@@ -1,0 +1,22 @@
+= render 'shared/search_box', query: @query
+
+section.box.padded
+  h2 Watchlist import
+
+  ol
+    li
+      | Go to 
+      =< link_to 'IMDb', 'https://www.imdb.com/', class: 'external', target: '_blank', rel: 'noopener external'
+    li Sign in
+    li Go to "Watchlist"
+    li Click on "Export" (one of the buttons at the top right)
+    li Follow the instructions and download the export file
+    li Back here: Attach the downloaded file and click "Import"
+
+  p You can safely import the file multiple times. The imported items will be merged with your existing watchlist.
+
+section.box.padded
+  = form_tag [:watchlist, :import], multipart: true, 'data-turbo': false do
+    .d-flex.flex-justify-between.flex-wrap
+      input type="file" name="file" accept=".csv"
+      button Import

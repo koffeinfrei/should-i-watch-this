@@ -4,19 +4,19 @@ turbo-frame id="search-results" data-turbo-action="advance"
   section.box.padded data-turbo-permanent=true
     - if @query.present?
       - if @movies.any?
-        ul.search-results
+        ul.movie-list
           - @movies.each do |movie|
-            li.search-result-item
-              = link_to movie_path(movie.wiki_id, movie.title, movie.year), target: "_top" do
-                = render 'search/item', movie: movie
+            li.movie-list-item
+              = link_to movie_path_for(movie), target: "_top" do
+                = render 'movies/list_item', movie: movie
 
           - if @show_more
-            li.search-result-item= link_to "Show more results", new_search_path(query: @query, per: @per)
+            li.movie-list-item= link_to "Show more results", new_search_path(query: @query, per: @per)
           - else
-            li.search-result-item.disabled Not what you're looking for? Please refine your search term
+            li.movie-list-item.disabled Not what you're looking for? Please refine your search term
 
       - else
-        li.search-result-item There's nothing.
+        li.movie-list-item There's nothing.
 
     - else
       .error Hmm? I think you forgot to enter the movie title.

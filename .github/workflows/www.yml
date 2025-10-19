@@ -99,6 +99,7 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+          SMTP_SENDER: info@should-i-watch-this.com
         run: cd www && bin/rails db:test:prepare db:fixtures:load test test:system
 
       - name: Keep screenshots from failed system tests
@@ -106,5 +107,5 @@ jobs:
         if: failure()
         with:
           name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
+          path: ${{ github.workspace }}/www/tmp/screenshots
           if-no-files-found: ignore

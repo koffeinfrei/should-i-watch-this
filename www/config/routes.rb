@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  passwordless_for :users, controller: "sessions"
+
+  mount GoodJob::Engine => "good_job"
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
@@ -12,6 +16,15 @@ Rails.application.routes.draw do
   resource :search, only: :new, controller: "search" do
     get :autocomplete, on: :collection
   end
+
+  resources :watchlist_items, only: [] do
+    post :toggle, on: :collection
+  end
+  get "watchlist", to: "watchlist#show", as: :watchlist
+  scope "watchlist", as: :watchlist do
+    resource :import, only: [:new, :create], controller: "watchlist_import"
+  end
+
   get ":wiki_id(/:title)(/:year)", to: "movies#show", as: :movie, constraints: { wiki_id: /Q\d+/ }
   get ":title/:year", to: "movies#legacy", as: :legacy_movie
   post ":wiki_id(/:title)(/:year)", to: "movies#fetch", as: :fetch_movie

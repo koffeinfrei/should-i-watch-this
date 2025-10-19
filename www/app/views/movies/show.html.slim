@@ -13,6 +13,15 @@
   - @poster_url = poster_url(@movie, :show)
 
   section.box
+    = button_to [:toggle, :watchlist_items], \
+        params: { movie_id: @movie.id, return_to: movie_path_for(@movie) }, \
+        class: 'secondary', \
+        form_class: 'mb-1 text-end' do
+      - if @in_watchlist
+        | 🗸 in watchlist
+      - else
+        | ﹢watchlist
+
     .summary.box
       .description
         h2.box.movie= @movie.title
