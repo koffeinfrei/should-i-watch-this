@@ -21,7 +21,6 @@ module ActiveSupport
       assert_text "We've sent you an email with a secret token"
 
       # submit token
-      perform_enqueued_jobs
       token = ActionMailer::Base.deliveries.last.body.to_s.match(/sign in: ([^\n]+)\n/)[1]
       fill_in "Token", with: token
       click_on "Confirm"
