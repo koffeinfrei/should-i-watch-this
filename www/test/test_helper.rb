@@ -5,6 +5,8 @@ require "passwordless/test_helpers"
 
 module ActiveSupport
   class TestCase
+    include ActiveJob::TestHelper
+
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
@@ -17,6 +19,7 @@ module ActiveSupport
       assert_text "We've sent you an email with a secret token"
 
       # submit token
+      perform_enqueued_jobs
       token = ActionMailer::Base.deliveries.last.body.to_s.match(/sign in: ([^\n]+)\n/)[1]
       fill_in "Token", with: token
       click_on "Confirm"
