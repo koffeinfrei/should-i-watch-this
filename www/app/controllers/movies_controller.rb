@@ -1,4 +1,6 @@
 class MoviesController < ApplicationController
+  include ApplicationHelper
+
   def show
     wiki_id = params["wiki_id"]
 
