@@ -14,7 +14,7 @@ module ActiveSupport
       visit users_sign_in_path unless skip_visit
 
       # submit email
-      fill_in "E-mail address", with: "user@example.com"
+      fill_in "Email address", with: "user@example.com"
       within "main" do
         click_on "Sign in"
       end
