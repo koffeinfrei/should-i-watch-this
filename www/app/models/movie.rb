@@ -83,4 +83,10 @@ class Movie < ApplicationRecord
 
     I18n.transliterate(term).downcase.gsub(/[[:punct:]]/, "")
   end
+
+  def self.cached_count
+    SimpleStore.fetch("movie_count") do
+      Movie.count
+    end
+  end
 end

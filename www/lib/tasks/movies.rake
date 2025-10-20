@@ -131,6 +131,8 @@ namespace :movies do
             lower(coalesce(title_original,''))
           );
     SQL
+
+    SimpleStore.delete("movie_count")
   end
 
   namespace :fetch_posters do
