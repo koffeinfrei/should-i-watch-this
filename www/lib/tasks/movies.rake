@@ -120,7 +120,7 @@ namespace :movies do
 
     puts "\nGenerating tsv columns..."
     ActiveRecord::Base.connection.execute <<~SQL.squish
-      update movie_records
+      update movies
         set
           tsv_title = to_tsvector(
             'pg_catalog.simple',
