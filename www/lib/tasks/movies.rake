@@ -81,7 +81,12 @@ namespace :movies do
 
         wiki_id = json.dig("id")
         title = json.dig("labels", "en", "value") || json.dig("labels", "en-us", "value")
-        title_original = json.dig("claims", "P1476", 0, "mainsnak", "datavalue", "value", "text")
+
+        # Select the "preferred" entry if available
+        titles_json = json.dig("claims", "P1476")
+        title_original = titles_json&.find { _1["rank"] == "preferred" }&.dig("mainsnak", "datavalue", "value", "text") ||
+          titles_json&.dig(0, "mainsnak", "datavalue", "value", "text")
+
         imdb_id = json.dig("claims", "P345", 0, "mainsnak", "datavalue", "value")
         rotten_id = json.dig("claims", "P1258", 0, "mainsnak", "datavalue", "value")
         metacritic_id = json.dig("claims", "P1712", 0, "mainsnak", "datavalue", "value")
