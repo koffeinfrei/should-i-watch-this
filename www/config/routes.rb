@@ -25,9 +25,10 @@ Rails.application.routes.draw do
     resource :import, only: [:new, :create], controller: "watchlist_import"
   end
 
-  get ":wiki_id(/:title)(/:year)", to: "movies#show", as: :movie, constraints: { wiki_id: /Q\d+/ }
-  get ":title/:year", to: "movies#legacy", as: :legacy_movie
-  post ":wiki_id(/:title)(/:year)", to: "movies#fetch", as: :fetch_movie
+  title_year_constraint = { title: /.+/, year: /\d{4}/ }
+  get ":wiki_id(/:title)(/:year)", to: "movies#show", as: :movie, constraints: { wiki_id: /Q\d+/, **title_year_constraint }
+  get ":title/:year", to: "movies#legacy", as: :legacy_movie, constraints: title_year_constraint
+  post ":wiki_id(/:title)(/:year)", to: "movies#fetch", as: :fetch_movie, constraints: title_year_constraint
 
   get "error", to: "error#show"
   get "not_found", to: "error#not_found", as: :not_found
