@@ -1,9 +1,14 @@
 class Movie < ApplicationRecord
+  class ShortQueryError < StandardError; end
+  class UnspecificQueryError < StandardError; end
+
   IMDB_URL = "https://www.imdb.com"
   ROTTEN_URL = "https://www.rottentomatoes.com"
   METACRITIC_URL = "https://www.metacritic.com"
 
   ORDER_SQL = "title_normalized ASC, release_date DESC NULLS LAST, wiki_id ASC"
+
+  MIN_SEARCH_LENGTH = 3
 
   include PgSearch::Model
 
@@ -62,13 +67,21 @@ class Movie < ApplicationRecord
       ) AS movies
     SQL
 
-    # Fetch double the records since on the db level the records are not distinct due to `pg_search_rank`.
-    # We then make the records unique in memory and restrict by the actual limit
-    from(sql).limit(limit * 2).order("pg_search_rank DESC, #{ORDER_SQL}").uniq[0, limit]
+    transaction do
+      # Kill queries that take too long. That usually means that the query is not specific enough
+      connection.execute("SET LOCAL statement_timeout = '200ms';")
+      # Fetch double the records since on the db level the records are not distinct due to `pg_search_rank`.
+      # We then make the records unique in memory and restrict by the actual limit
+      from(sql).limit(limit * 2).order("pg_search_rank DESC, #{ORDER_SQL}").uniq[0, limit]
+    end
   end
 
   def self.search(query, limit:)
-    query_downcased = query.downcase
+    query_downcased = query&.strip.downcase
+
+    raise ShortQueryError, "min search length" if query_downcased.length < MIN_SEARCH_LENGTH
+    raise UnspecificQueryError, "term is only 'the'" if query_downcased == "the"
+
     if query_downcased =~ /^tt\d+$/
       where(imdb_id: query_downcased)
     elsif query_downcased =~ /^q\d+$/

@@ -1,8 +1,8 @@
-= render 'shared/search_box', query: @query
+= render 'shared/search_box', query: query
 
 turbo-frame id="search-results" data-turbo-action="advance"
   section.box.padded data-turbo-permanent=true
-    - if @query.present?
+    - if query.present?
       - if @movies.any?
         ul.movie-list
           - @movies.each do |movie|
@@ -11,7 +11,7 @@ turbo-frame id="search-results" data-turbo-action="advance"
                 = render 'movies/list_item', movie: movie
 
           - if @show_more
-            li.movie-list-item= link_to "Show more results", new_search_path(query: @query, per: @per)
+            li.movie-list-item= link_to "Show more results", new_search_path(query: query, per: @per)
           - else
             li.movie-list-item.disabled Not what you're looking for? Please refine your search term
 

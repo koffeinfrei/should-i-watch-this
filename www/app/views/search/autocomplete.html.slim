@@ -1,17 +1,23 @@
-- if @movies.any?
-  - @movies.each do |movie|
+- if @movies
+  - if @movies.any?
+    - @movies.each do |movie|
+      li.movie-list-item[
+          role="option"
+          data-autocomplete-value= movie_path_for(movie)
+        ]
+        = render 'movies/list_item', movie: movie
+
     li.movie-list-item[
-        role="option"
-        data-autocomplete-value= movie_path_for(movie)
-      ]
-      = render 'movies/list_item', movie: movie
+      role="option"
+      aria-disabled="true"
+      data-action="click->search-autocomplete#showAll"
+      data-search-autocomplete-url-param=new_search_path(query: query)
+    ] Show all results
 
-  li.movie-list-item[
-    role="option"
-    aria-disabled="true"
-    data-action="click->search-autocomplete#showAll"
-    data-search-autocomplete-url-param=new_search_path(query: @query)
-  ] Show all results
+  - else
+    li.movie-list-item role="option" aria-disabled="true" There's nothing.
 
-- else
-  li.movie-list-item role="option" aria-disabled="true" There's nothing.
+- elsif @error == :short_query
+  li.movie-list-item.no-result role="option" aria-disabled="true" #{Movie::MIN_SEARCH_LENGTH - query.length}…
+- elsif @error == :unspecific
+  li.movie-list-item.no-result role="option" aria-disabled="true" Not specific enough…
