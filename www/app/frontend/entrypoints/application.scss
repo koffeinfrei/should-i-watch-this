@@ -380,6 +380,10 @@ a.result-more {
     font-weight: bold;
   }
 
+  &.no-result {
+    font-size: 0.8em;
+  }
+
   &-poster {
     margin-right: 0.6em;
 

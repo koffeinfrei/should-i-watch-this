@@ -13,5 +13,10 @@ class MovieTest < ActiveSupport::TestCase
     assert_equal ["Here We Go Round the Mulberry Bush"], Movie.search("TT0063063", limit: 7).pluck(:title)
     assert_equal ["Here We Go Round the Mulberry Bush"], Movie.search("Q3133990", limit: 7).pluck(:title)
     assert_equal ["Here We Go Round the Mulberry Bush"], Movie.search("q3133990", limit: 7).pluck(:title)
+
+    assert_raises(Movie::ShortQueryError) { Movie.search("a", limit: 7) }
+    assert_raises(Movie::ShortQueryError) { Movie.search(" a ", limit: 7) }
+    assert_raises(Movie::UnspecificQueryError) { Movie.search("the", limit: 7) }
+    assert_raises(Movie::UnspecificQueryError) { Movie.search("the ", limit: 7) }
   end
 end
