@@ -98,6 +98,17 @@ class WatchlistsTest < ApplicationSystemTestCase
   end
 
   test "unauthenticated" do
+    MovieScore.save(
+      "Q788822",
+      {
+        rotten_tomatoes: Score::Percentage.new("95"),
+        rotten_tomatoes_audience: Score::Percentage.new("82"),
+        imdb: Score::Decimal.new("8.0"),
+        metacritic: Score::Percentage.new("91.0")
+      },
+      nil
+    )
+
     user = User.create!(email: "user@example.com")
 
     visit root_path
