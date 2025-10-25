@@ -16,11 +16,9 @@
     = button_to [:toggle, :watchlist_items], \
         params: { movie_id: @movie.id, return_to: movie_path_for(@movie) }, \
         class: 'secondary', \
-        form_class: 'mb-1 text-end' do
-      - if @in_watchlist
-        | 🗸 in watchlist
-      - else
-        | ﹢watchlist
+        form_class: 'mb-1 text-end', \
+        title: @button_title do
+      = @button_label
 
     .summary.box
       .description

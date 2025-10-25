@@ -9,7 +9,13 @@ class MoviesController < ApplicationController
       @recommendation = Recommender.new(@scores).run
       @movie = Movie.find_by(wiki_id: wiki_id)
       @page_title = "#{@movie.title} (#{@movie.year})"
-      @in_watchlist = WatchlistItem.exists?(movie: @movie, user: current_user)
+
+      @button_label, @button_title =
+        if WatchlistItem.exists?(movie: @movie, user: current_user)
+          ["🗸 in watchlist", "Remove from watchlist"]
+        else
+          ["﹢watchlist", "Add to watchlist"]
+        end
     else
       @fetching = true
       @wiki_id = wiki_id
