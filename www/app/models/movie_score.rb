@@ -1,5 +1,5 @@
 module MovieScore
-  KEY_PREFIX = "siwt_movie"
+  KEY_PREFIX = ENV.fetch("REDIS_MOVIE_SCORE_PREFIX", "siwt_movie")
   STD_TTL = 1.day
 
   def self.get(wiki_id)
@@ -48,5 +48,11 @@ module MovieScore
 
   def self.key(wiki_id)
     "#{KEY_PREFIX}_#{wiki_id}"
+  end
+
+  def self.delete_all
+    REDIS.scan_each(match: "#{KEY_PREFIX}_*") do |key|
+      REDIS.del(key)
+    end
   end
 end

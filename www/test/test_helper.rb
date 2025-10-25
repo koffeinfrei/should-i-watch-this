@@ -14,6 +14,10 @@ module ActiveSupport
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
+    setup do
+      MovieScore.delete_all
+    end
+
     def sign_in(user, skip_visit: false)
       visit users_sign_in_path unless skip_visit
 
