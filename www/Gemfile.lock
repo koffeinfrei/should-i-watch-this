@@ -122,6 +122,9 @@ GEM
       logger (~> 1.5)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.4)
+    crack (1.0.1)
+      bigdecimal
+      rexml
     crass (1.0.6)
     csv (3.3.5)
     curb (1.2.2)
@@ -149,6 +152,7 @@ GEM
       fugit (>= 1.11.0)
       railties (>= 6.1.0)
       thor (>= 1.0.0)
+    hashdiff (1.2.1)
     hotwire-rails (0.1.3)
       rails (>= 6.0.0)
       stimulus-rails
@@ -414,6 +418,10 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    webmock (3.25.1)
+      addressable (>= 2.8.0)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.9.1)
     webrobots (0.1.2)
     websocket (1.2.11)
@@ -466,6 +474,7 @@ DEPENDENCIES
   slim-rails
   vite_rails
   web-console
+  webmock
 
 BUNDLED WITH
    2.7.2

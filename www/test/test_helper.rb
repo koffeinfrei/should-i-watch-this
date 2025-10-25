@@ -2,6 +2,10 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 require "passwordless/test_helpers"
+require "webmock/minitest"
+
+# Disable all HTTP requests in tests, but allow localhost for Capybara
+WebMock.disable_net_connect!(allow_localhost: true)
 
 module ActiveSupport
   class TestCase
