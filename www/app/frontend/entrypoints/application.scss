@@ -1,13 +1,58 @@
+// ============================================================================
+// Variables
+// ============================================================================
+
+$color-primary: #fff;
+$color-text: #fff;
+$color-background: #1c2b3e;
+$color-link: #96a2ae;
+$color-link-hover: #fff;
+$color-border: #ccc;
+$color-button-bg: #f4f4f4;
+$color-button-text: #333;
+$color-button-active: #ddd;
+$color-error: #fba8a8;
+$color-success-border: #76c47670;
+$color-success-bg: #76c4760d;
+$color-alert-border: #f58c8c82;
+$color-alert-bg: #f58c8c0a;
+
+$font-family: "Fetamont-9ExkzVmc3w";
+$font-size-base: 24px;
+
+$spacing-xs: 8px;
+$spacing-sm: 10px;
+$spacing-md: 16px;
+$spacing-lg: 20px;
+$spacing-xl: 42px;
+$spacing-horizontal: 50px;
+
+$left-column-width: 9rem;
+$poster-width: 130px;
+
+$breakpoint-sm: 40em;
+$breakpoint-md: 800px;
+
+$border-radius: 2px;
+
+
+// ============================================================================
+// Fonts
+// ============================================================================
+
 @font-face {
   font-family: "Fetamont-9ExkzVmc3w";
   src: url("@/fonts/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.eot");
-  src: url("@/fonts/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.eot?#iefix")
-      format("embedded-opentype"),
+  src: url("@/fonts/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.eot?#iefix") format("embedded-opentype"),
     url("@/fonts/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.woff") format("woff"),
     url("@/fonts/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.ttf") format("truetype"),
-    url("@/fonts/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.svg#Fetamont-9ExkzVmc3w")
-      format("svg");
+    url("@/fonts/fetamont-9ExkzVmc3w/Fetamont-9ExkzVmc3w.svg#Fetamont-9ExkzVmc3w") format("svg");
 }
+
+
+// ============================================================================
+// Base Styles
+// ============================================================================
 
 html,
 body {
@@ -17,39 +62,79 @@ body {
 }
 
 body {
-  color: #fff;
-  background-color: #1c2b3e;
-  margin: 0;
-  padding: 8px;
-  box-sizing: border-box;
-  font-family: "Fetamont-9ExkzVmc3w";
-  font-size: 24px;
-  /* make footer stick to bottom initially */
-  height: 100%;
-  min-height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 100%;
+  margin: 0;
+  padding: $spacing-xs;
+  box-sizing: border-box;
+  color: $color-text;
+  background-color: $color-background;
+  font-family: $font-family;
+  font-size: $font-size-base;
   line-height: 1;
 }
 
-a,
-a:visited {
-  color: #96a2ae;
+
+// ============================================================================
+// Typography
+// ============================================================================
+
+h1 {
+  margin: 0 0 $spacing-md 0;
+  font-size: 2.8em;
+
+  @media (min-width: $breakpoint-sm) {
+    font-size: 4em;
+  }
+}
+
+h2,
+h3 {
+  margin: 0 0 $spacing-md 0;
+  font-size: 1em;
+}
+
+p {
+  margin: 0 0 $spacing-xs 0;
+}
+
+ol {
+  line-height: 1.2;
+}
+
+
+// ============================================================================
+// Links
+// ============================================================================
+
+a {
+  color: $color-link;
   text-decoration: none;
+
+  &:visited {
+    color: $color-link;
+  }
+
+  &:hover {
+    color: $color-link-hover;
+  }
+
+  &.external {
+    margin-right: 2px;
+
+    &:after {
+      content: "↗";
+      position: relative;
+      font-size: 0.9em;
+    }
+  }
 }
 
-a:hover {
-  color: #fff;
-}
 
-a.external {
-  margin-right: 2px;
-}
-a.external:after {
-  content: "↗";
-  position: relative;
-  font-size: 0.9em;
-}
+// ============================================================================
+// Form Elements
+// ============================================================================
 
 label {
   display: block;
@@ -59,236 +144,145 @@ input,
 button,
 select,
 textarea {
-  font-family: inherit;
-  font-size: inherit;
   padding: 0.4em;
   box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 2px;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  font-family: inherit;
+  font-size: inherit;
 }
 
-button {
-  cursor: pointer;
-}
+input {
+  &:disabled {
+    color: $color-border;
+  }
 
-button.secondary {
-  padding: 0.1em 0.3em;
-  background: transparent;
-  color: #fff;
-  line-height: 1;
+  &[type="range"] {
+    height: 0;
+  }
 
-  &:hover {
-    background: #fff;
-    color: #1c2b3e;
+  &[type="file"] {
+    border: none;
+  }
+
+  &.search {
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 
-button.link {
-  color: #96a2ae;
-  background: transparent;
-  border: none;
-
-  &:hover {
-    color: #fff;
-  }
-}
-
-input:disabled {
-  color: #ccc;
-}
-
-input[type="range"] {
-  height: 0;
-}
-
-input.search {
-  box-sizing: border-box;
-  width: 100%;
-}
-
 button {
-  color: #333;
-  background-color: #f4f4f4;
+  color: $color-button-text;
+  background-color: $color-button-bg;
   outline: none;
-}
+  cursor: pointer;
 
-button:active {
-  background-color: #ddd;
-}
+  &:active {
+    background-color: $color-button-active;
+  }
 
-button:focus {
-  border-color: #666;
-}
+  &:focus {
+    border-color: #666;
+  }
 
-input[type="file"] {
-  border: none;
-}
+  &.secondary {
+    padding: 0.1em 0.3em;
+    background: transparent;
+    color: $color-primary;
+    line-height: 1;
 
-h1 {
-  font-size: 2.8em;
-  margin: 0 0 16px 0;
-}
-@media (min-width: 40em) {
-  h1 {
-    font-size: 4em;
+    &:hover {
+      background: $color-primary;
+      color: $color-background;
+    }
+  }
+
+  &.link {
+    color: $color-link;
+    background: transparent;
+    border: none;
+
+    &:hover {
+      color: $color-link-hover;
+    }
   }
 }
 
-h2,
-h3 {
-  font-size: 1em;
-  margin: 0 0 16px 0;
-}
 
-p {
-  margin: 0 0 8px 0;
-}
-
-ol {
-  line-height: 1.2;
-}
-
-.padded {
-  padding-left: 50px;
-}
+// ============================================================================
+// Layout
+// ============================================================================
 
 main {
-  margin: 0 auto;
-  margin-bottom: 53px;
-}
+  margin: 0 auto $spacing-xl + 11px;
 
-@media (min-width: 800px) {
-  main {
-    width: 800px;
+  @media (min-width: $breakpoint-md) {
+    width: $breakpoint-md;
   }
 }
 
-// movie (result)
-$horizontal-spacing: 50px;
-$left-column-width: 9rem;
-$box-bottom-spacing: 42px;
-$poster-width: 130px;
-
-.icon-label {
-  position: relative;
-  padding-left: $horizontal-spacing;
-}
-
-.icon {
-  position: absolute;
-  left: 0;
-}
-
-h2.movie {
-  padding-left: $horizontal-spacing;
-}
-
-.disclaimer {
-  margin-top: -1em;
-  font-size: 0.7em;
-}
-
-table {
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-table.full-width {
-  width: 100%;
-}
-
-td {
-  vertical-align: top;
-}
-
-.label {
-  padding-left: $horizontal-spacing;
-  width: $left-column-width;
-}
-
-.value {
-  font-weight: bold;
-}
-
-.box {
-  margin-bottom: $box-bottom-spacing;
-}
-
-@media (min-width: 40em) {
-  .summary {
-    display: flex;
-    justify-content: space-between;
+.header,
+.footer {
+  @media (min-width: $breakpoint-md) {
+    width: $breakpoint-md;
   }
 }
 
-@media (min-width: 40em) {
-  .description {
-    margin-right: $horizontal-spacing;
-  }
-}
-
-.poster {
-  height: auto;
-  width: $poster-width;
-}
-
-.marketing {
-  display: flex;
-  margin: 0 0 $box-bottom-spacing $horizontal-spacing;
-}
-
-@media (min-width: 40em) {
-  .marketing {
-    flex-direction: column;
-    margin: 0;
-  }
-}
-
-.trailer {
-  margin-left: calc(#{$left-column-width} - #{$poster-width});
-}
-
-@media (min-width: 40em) {
-  .trailer {
-    margin: 0;
-  }
-}
-
-// result_more_link
-a.result-more {
-  font-weight: normal;
-  font-size: 0.9em;
-  margin-left: 8px;
-}
-
-// header
 .header {
-  margin: 10px 0 20px auto;
+  margin: $spacing-sm 0 $spacing-lg auto;
+
+  @media (min-width: $breakpoint-md) {
+    margin-right: auto;
+  }
 
   .navigation {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding-left: 50px;
+    padding-left: $spacing-horizontal;
 
     .user {
-      margin-left: 10px;
+      margin-left: $spacing-sm;
     }
   }
 }
+
+.footer {
+  margin: auto auto 0 auto;
+  padding-bottom: $spacing-xs;
+  font-size: 0.7em;
+
+  p {
+    padding-left: $spacing-horizontal;
+  }
+}
+
+.box {
+  margin-bottom: $spacing-xl;
+}
+
+.padded {
+  padding-left: $spacing-horizontal;
+}
+
+
+// ============================================================================
+// Flash Messages
+// ============================================================================
 
 .flashes {
   text-align: center;
 
   .flash {
-    border-radius: 2px;
-    padding: 0.4em;
-    margin-bottom: calc($box-bottom-spacing / 2);
     display: inline-block;
+    margin-bottom: calc($spacing-xl / 2);
+    padding: 0.4em;
+    border-radius: $border-radius;
 
-    &.success, &.notice {
-      border: 1px solid #76c47670;
-      background: #76c4760d;
+    &.success,
+    &.notice {
+      border: 1px solid $color-success-border;
+      background: $color-success-bg;
 
       &:before {
         content: "🗸";
@@ -297,8 +291,8 @@ a.result-more {
     }
 
     &.alert {
-      border: 1px solid #f58c8c82;
-      background: #f58c8c0a;
+      border: 1px solid $color-alert-border;
+      background: $color-alert-bg;
 
       &:before {
         content: "✗";
@@ -308,75 +302,97 @@ a.result-more {
   }
 }
 
-// footer
-.footer {
-  margin: auto auto 0 auto;
-  padding-bottom: 8px;
-  font-size: 0.7em;
 
-  p {
-    padding-left: 50px;
-  }
-}
+// ============================================================================
+// Movie Display
+// ============================================================================
 
-@media (min-width: 800px) {
-  .header, .footer {
-    width: 800px;
-  }
-
-  .header {
-    margin-right: auto;
-  }
-}
-
-// spinner
-.spinner {
-  font-size: 21px;
-  margin-right: 0.6em;
-}
-
-// error
-.error {
-  color: #fba8a8;
-}
-
-// disable turbo's progress bar
-.turbo-progress-bar {
-  visibility: hidden;
-}
-
-// autocomplete / search results
-.autocomplete-form {
+.icon-label {
   position: relative;
+  padding-left: $spacing-horizontal;
 }
 
-.autocomplete-results {
-  background: #fff;
-  color: #000;
-  list-style: none;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0.8em 0.4em;
-  border-radius: 2px;
+.icon {
   position: absolute;
-  z-index: 99;
-  top: 25px;
+  left: 0;
 }
+
+h2.movie {
+  padding-left: $spacing-horizontal;
+}
+
+.disclaimer {
+  margin-top: -1em;
+  font-size: 0.7em;
+}
+
+.label {
+  width: $left-column-width;
+  padding-left: $spacing-horizontal;
+}
+
+.value {
+  font-weight: bold;
+}
+
+.summary {
+  @media (min-width: $breakpoint-sm) {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.description {
+  @media (min-width: $breakpoint-sm) {
+    margin-right: $spacing-horizontal;
+  }
+}
+
+.poster {
+  width: $poster-width;
+  height: auto;
+}
+
+.marketing {
+  display: flex;
+  margin: 0 0 $spacing-xl $spacing-horizontal;
+
+  @media (min-width: $breakpoint-sm) {
+    flex-direction: column;
+    margin: 0;
+  }
+}
+
+.trailer {
+  margin-left: calc(#{$left-column-width} - #{$poster-width});
+
+  @media (min-width: $breakpoint-sm) {
+    margin: 0;
+  }
+}
+
+a.result-more {
+  margin-left: $spacing-xs;
+  font-size: 0.9em;
+  font-weight: normal;
+}
+
 .movie-list {
-  list-style: none;
   padding: 0;
+  list-style: none;
 }
 
 .movie-list-item {
-  box-sizing: border-box;
   margin-bottom: 0.3em;
+  box-sizing: border-box;
   cursor: pointer;
 
   &.disabled {
     cursor: default;
   }
 
-  &.active, &:hover {
+  &.active,
+  &:hover {
     font-weight: bold;
   }
 
@@ -385,10 +401,9 @@ a.result-more {
   }
 
   &-poster {
-    margin-right: 0.6em;
-
-    height: 90px;
     width: 65px;
+    height: 90px;
+    margin-right: 0.6em;
   }
 
   &-title {
@@ -401,14 +416,77 @@ a.result-more {
 }
 
 .total-movies {
+  color: $color-link;
   font-size: 0.7em;
-  color: #96a2ae;
 }
 
-// utilities
+
+// ============================================================================
+// Tables
+// ============================================================================
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+
+  &.full-width {
+    width: 100%;
+  }
+}
+
+td {
+  vertical-align: top;
+}
+
+
+// ============================================================================
+// Autocomplete
+// ============================================================================
+
+.autocomplete-form {
+  position: relative;
+}
+
+.autocomplete-results {
+  position: absolute;
+  z-index: 99;
+  top: 25px;
+  width: 100%;
+  padding: 0.8em 0.4em;
+  box-sizing: border-box;
+  background: $color-primary;
+  color: #000;
+  border-radius: $border-radius;
+  list-style: none;
+}
+
+
+// ============================================================================
+// UI Components
+// ============================================================================
+
+.spinner {
+  margin-right: 0.6em;
+  font-size: 21px;
+}
+
+.error {
+  color: $color-error;
+}
+
+.turbo-progress-bar {
+  visibility: hidden;
+}
+
+
+// ============================================================================
+// Utility Classes
+// ============================================================================
+
 .me-05 {
   margin-right: 0.5em;
 }
+
 .mb-1 {
   margin-bottom: 1em;
 }
