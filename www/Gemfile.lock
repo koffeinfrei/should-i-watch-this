@@ -1,12 +1,3 @@
-GIT
-  remote: https://github.com/seuros/capistrano-puma.git
-  revision: f7b9b61c19331565d7ac1646d2a80283e8d7e7ff
-  specs:
-    capistrano3-puma (7.0.0)
-      capistrano (~> 3.7)
-      capistrano-bundler
-      puma (>= 6.1, < 8.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -88,7 +79,7 @@ GEM
     ast (2.4.3)
     base64 (0.3.0)
     bcrypt (3.1.20)
-    benchmark (0.4.1)
+    benchmark (0.5.0)
     bigdecimal (3.3.1)
     bindex (0.8.1)
     bootsnap (1.18.6)
@@ -109,6 +100,10 @@ GEM
     capistrano-rbenv (2.2.0)
       capistrano (~> 3.1)
       sshkit (~> 1.3)
+    capistrano3-puma (7.1.0)
+      capistrano (~> 3.7)
+      capistrano-bundler
+      puma (>= 6.1, < 8.0)
     capybara (3.40.0)
       addressable
       matrix
@@ -166,7 +161,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    json (2.15.1)
+    json (2.15.2)
     language_server-protocol (3.17.0.5)
     launchy (3.1.1)
       addressable (~> 2.8)
@@ -179,7 +174,8 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    mail (2.8.1)
+    mail (2.9.0)
+      logger
       mini_mime (>= 0.1.1)
       net-imap
       net-pop
@@ -333,7 +329,7 @@ GEM
     reline (0.6.2)
       io-console (~> 0.5)
     rexml (3.4.4)
-    rubocop (1.81.1)
+    rubocop (1.81.6)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -364,9 +360,9 @@ GEM
     ruby-progressbar (1.13.0)
     rubyntlm (0.6.5)
       base64
-    rubyzip (3.2.0)
+    rubyzip (3.2.1)
     securerandom (0.4.1)
-    selenium-webdriver (4.37.0)
+    selenium-webdriver (4.38.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -418,7 +414,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webmock (3.25.1)
+    webmock (3.25.2)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -450,7 +446,7 @@ DEPENDENCIES
   capistrano (~> 3.19)
   capistrano-rails
   capistrano-rbenv
-  capistrano3-puma!
+  capistrano3-puma
   capybara
   csv
   curb
