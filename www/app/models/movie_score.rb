@@ -1,6 +1,6 @@
 module MovieScore
   KEY_PREFIX = ENV.fetch("REDIS_MOVIE_SCORE_PREFIX", "siwt_movie")
-  STD_TTL = 1.day
+  STD_TTL = 3.days
 
   def self.get(wiki_id)
     if scores = load(wiki_id)
