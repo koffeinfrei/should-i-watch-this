@@ -10,121 +10,146 @@ def as_proper_date(date)
   Date.parse(date)
 end
 
+def with_log
+  task = Rake.application.top_level_tasks.last
+
+  Rails.logger.tagged(Time.now.iso8601(4)) do
+    Rails.logger.info("event=rake_#{task.parameterize.underscore}_start")
+  end
+
+  yield
+
+  Rails.logger.tagged(Time.now.iso8601(4)) do
+    Rails.logger.info("event=rake_#{task.parameterize.underscore}_stop")
+  end
+end
+
 desc "Update the movie database"
 namespace :movies do
   desc "(1) Download the wiki data dump"
-  task :download_data do
-    output_dir = ENV.fetch("DIR")
+  task download_data: [:environment] do
+    with_log do
+      output_dir = ENV.fetch("DIR")
 
-    `curl -O https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2 --output-dir #{output_dir}`
+      `curl -O https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2 --output-dir #{output_dir}`
+    end
   end
 
   desc "(2) Decompress the downloaded wiki data dump"
-  task :decompress_data do
-    output_dir = ENV.fetch("DIR")
+  task decompress_data: [:environment] do
+    with_log do
+      output_dir = ENV.fetch("DIR")
 
-    `(cd #{output_dir} && lbzip2 -d latest-all.json.bz2)`
+      `(cd #{output_dir} && lbzip2 -d latest-all.json.bz2)`
+    end
   end
 
   desc "(3) Generate the movies file"
-  task :generate_movies do
-    output_dir = ENV.fetch("DIR")
-    input_file = File.join(output_dir, "latest-all.json")
-    output_file = File.join(output_dir, "movies.json")
-    claim_file = Rails.root.join("config/wikibase-dump-filter-movies-claim")
+  task generate_movies: [:environment] do
+    with_log do
+      output_dir = ENV.fetch("DIR")
+      input_file = File.join(output_dir, "latest-all.json")
+      output_file = File.join(output_dir, "movies.json")
+      claim_file = Rails.root.join("config/wikibase-dump-filter-movies-claim")
 
-    `cat #{input_file} | wikibase-dump-filter --claim #{claim_file} > #{output_file}`
+      `cat #{input_file} | wikibase-dump-filter --claim #{claim_file} > #{output_file}`
+    end
   end
 
   desc "(4) Generate the humans file"
-  task :generate_humans do
-    output_dir = ENV.fetch("DIR")
-    input_file = File.join(output_dir, "latest-all.json")
-    output_file = File.join(output_dir, "humans.json")
+  task generate_humans: [:environment] do
+    with_log do
+      output_dir = ENV.fetch("DIR")
+      input_file = File.join(output_dir, "latest-all.json")
+      output_file = File.join(output_dir, "humans.json")
 
-    `cat #{input_file} | wikibase-dump-filter --claim P31:Q5 > #{output_file}`
+      `cat #{input_file} | wikibase-dump-filter --claim P31:Q5 > #{output_file}`
+    end
   end
 
   desc "(5) Generate the minimized humans file"
-  task :generate_humans_minimized do
-    output_dir = ENV.fetch("DIR")
-    input_file = File.join(output_dir, "humans.json")
-    output_file = File.join(output_dir, "humans-min.json")
+  task generate_humans_minimized: [:environment] do
+    with_log do
+      output_dir = ENV.fetch("DIR")
+      input_file = File.join(output_dir, "humans.json")
+      output_file = File.join(output_dir, "humans-min.json")
 
-    `cat #{input_file} | jq -c '[.id, .labels.mul.value, .labels.en.value, .labels["en-us"].value]' > #{output_file}`
+      `cat #{input_file} | jq -c '[.id, .labels.mul.value, .labels.en.value, .labels["en-us"].value]' > #{output_file}`
+    end
   end
 
   desc "(6) Import movies from a wikidata json dump"
   task import: [:environment] do
-    output_dir = ENV.fetch("DIR")
+    with_log do
+      output_dir = ENV.fetch("DIR")
 
-    series_classes = File.readlines(Rails.root.join("config/wikidata_series_classes")).map(&:strip)
+      series_classes = File.readlines(Rails.root.join("config/wikidata_series_classes")).map(&:strip)
 
-    puts "Reading humans..."
-    file = File.new(File.join(output_dir, "humans-min.json"))
-    humans = file.each.map do |line|
-      json = JSON.parse(line)
-      [
-        json[0],
-        json[1] || json[2] || json[3]
-      ]
-    end.to_h
-
-    puts "Inserting movies..."
-    file = File.new(File.join(output_dir, "movies.json"))
-    file.lazy.each_slice(10_000) do |lines|
-      attributes = lines.map do |line|
+      puts "Reading humans..."
+      file = File.new(File.join(output_dir, "humans-min.json"))
+      humans = file.each.map do |line|
         json = JSON.parse(line)
+        [
+          json[0],
+          json[1] || json[2] || json[3]
+        ]
+      end.to_h
 
-        instance = json.dig("claims", "P31", 0, "mainsnak", "datavalue", "value", "id")
-        series = instance.in?(series_classes)
+      puts "Inserting movies..."
+      file = File.new(File.join(output_dir, "movies.json"))
+      file.lazy.each_slice(10_000) do |lines|
+        attributes = lines.map do |line|
+          json = JSON.parse(line)
 
-        wiki_id = json.dig("id")
-        title = json.dig("labels", "en", "value") || json.dig("labels", "en-us", "value")
+          instance = json.dig("claims", "P31", 0, "mainsnak", "datavalue", "value", "id")
+          series = instance.in?(series_classes)
 
-        # Select the "preferred" entry if available
-        titles_json = json.dig("claims", "P1476")
-        title_original = titles_json&.find { _1["rank"] == "preferred" }&.dig("mainsnak", "datavalue", "value", "text") ||
-          titles_json&.dig(0, "mainsnak", "datavalue", "value", "text")
+          wiki_id = json.dig("id")
+          title = json.dig("labels", "en", "value") || json.dig("labels", "en-us", "value")
 
-        imdb_id = json.dig("claims", "P345", 0, "mainsnak", "datavalue", "value")
-        rotten_id = json.dig("claims", "P1258", 0, "mainsnak", "datavalue", "value")
-        metacritic_id = json.dig("claims", "P1712", 0, "mainsnak", "datavalue", "value")
-        omdb_id = json.dig("claims", "P3302", 0, "mainsnak", "datavalue", "value")
+          # Select the "preferred" entry if available
+          titles_json = json.dig("claims", "P1476")
+          title_original = titles_json&.find { _1["rank"] == "preferred" }&.dig("mainsnak", "datavalue", "value", "text") ||
+            titles_json&.dig(0, "mainsnak", "datavalue", "value", "text")
 
-        directors = (json.dig("claims", "P57") || []).map { _1.dig("mainsnak", "datavalue", "value", "id") }
-        actors = (json.dig("claims", "P161") || []).take(3).map { _1.dig("mainsnak", "datavalue", "value", "id") }
+          imdb_id = json.dig("claims", "P345", 0, "mainsnak", "datavalue", "value")
+          rotten_id = json.dig("claims", "P1258", 0, "mainsnak", "datavalue", "value")
+          metacritic_id = json.dig("claims", "P1712", 0, "mainsnak", "datavalue", "value")
+          omdb_id = json.dig("claims", "P3302", 0, "mainsnak", "datavalue", "value")
 
-        # for films
-        release_date = as_proper_date(json.dig("claims", "P577", 0, "mainsnak", "datavalue", "value", "time"))
-        # for shows (mostly)
-        start_date = json.dig("claims", "P580", 0, "mainsnak", "datavalue", "value", "time")
-        end_date = json.dig("claims", "P582", 0, "mainsnak", "datavalue", "value", "time")
+          directors = (json.dig("claims", "P57") || []).map { _1.dig("mainsnak", "datavalue", "value", "id") }
+          actors = (json.dig("claims", "P161") || []).take(3).map { _1.dig("mainsnak", "datavalue", "value", "id") }
 
-        {
-          wiki_id: wiki_id,
-          title: title,
-          title_normalized: Movie.normalize(title),
-          title_original: title_original,
-          imdb_id: imdb_id,
-          rotten_id: rotten_id,
-          metacritic_id: metacritic_id,
-          omdb_id: omdb_id,
-          series: series,
-          release_date: start_date || release_date,
-          end_date: end_date,
-          directors: directors.map { humans[_1] }.compact,
-          actors: actors.map { humans[_1] }.compact
-        }
+          # for films
+          release_date = as_proper_date(json.dig("claims", "P577", 0, "mainsnak", "datavalue", "value", "time"))
+          # for shows (mostly)
+          start_date = json.dig("claims", "P580", 0, "mainsnak", "datavalue", "value", "time")
+          end_date = json.dig("claims", "P582", 0, "mainsnak", "datavalue", "value", "time")
+
+          {
+            wiki_id: wiki_id,
+            title: title,
+            title_normalized: Movie.normalize(title),
+            title_original: title_original,
+            imdb_id: imdb_id,
+            rotten_id: rotten_id,
+            metacritic_id: metacritic_id,
+            omdb_id: omdb_id,
+            series: series,
+            release_date: start_date || release_date,
+            end_date: end_date,
+            directors: directors.map { humans[_1] }.compact,
+            actors: actors.map { humans[_1] }.compact
+          }
+        end
+
+        Movie.upsert_all(attributes, unique_by: :wiki_id)
+
+        print "."
       end
 
-      Movie.upsert_all(attributes, unique_by: :wiki_id)
-
-      print "."
-    end
-
-    puts "\nGenerating tsv columns..."
-    ActiveRecord::Base.connection.execute <<~SQL.squish
+      puts "\nGenerating tsv columns..."
+      ActiveRecord::Base.connection.execute <<~SQL.squish
       update movies
         set
           tsv_title = to_tsvector(
@@ -135,9 +160,10 @@ namespace :movies do
             'pg_catalog.simple',
             lower(coalesce(title_original,''))
           );
-    SQL
+      SQL
 
-    SimpleStore.delete("movie_count")
+      SimpleStore.delete("movie_count")
+    end
   end
 
   namespace :fetch_posters do
