@@ -52,7 +52,7 @@ namespace :movies do
       output_file = File.join(output_dir, "movies.json")
       claim_file = Rails.root.join("config/wikibase-dump-filter-movies-claim")
 
-      `cat #{input_file} | wikibase-dump-filter --claim #{claim_file} > #{output_file}`
+      `cat #{input_file} | npx wikibase-dump-filter --claim #{claim_file} > #{output_file}`
     end
   end
 
@@ -63,7 +63,7 @@ namespace :movies do
       input_file = File.join(output_dir, "latest-all.json")
       output_file = File.join(output_dir, "humans.json")
 
-      `cat #{input_file} | wikibase-dump-filter --claim P31:Q5 > #{output_file}`
+      `cat #{input_file} | npx wikibase-dump-filter --claim P31:Q5 > #{output_file}`
     end
   end
 
