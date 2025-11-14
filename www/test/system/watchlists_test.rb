@@ -21,7 +21,7 @@ class WatchlistsTest < ApplicationSystemTestCase
 
     sign_in user
 
-    visit movie_path_for(movie)
+    visit movie_url_for(movie)
 
     assert_selector "h2", text: "Her"
 
@@ -131,7 +131,7 @@ class WatchlistsTest < ApplicationSystemTestCase
     end
     assert_content "Signed out successfully"
 
-    visit movie_path_for(movies(:her))
+    visit movie_url_for(movies(:her))
     click_on "﹢watchlist"
     sign_in user, skip_visit: true
     assert_selector "h2", text: "Her"

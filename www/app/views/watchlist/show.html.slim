@@ -11,7 +11,7 @@ section.box.padded
       - @movies.each do |movie|
         li.movie-list-item
           .d-flex
-            = link_to movie_path_for(movie), class: 'd-flex w-100'
+            = link_to movie_url_for(movie), class: 'd-flex w-100'
               = render 'movies/list_item', movie: movie
 
             .d-flex.flex-items-center

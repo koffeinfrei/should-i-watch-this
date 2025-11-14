@@ -3,7 +3,7 @@
     - @movies.each do |movie|
       li.movie-list-item[
           role="option"
-          data-autocomplete-value= movie_path_for(movie)
+          data-autocomplete-value= movie_url_for(movie)
         ]
         = render 'movies/list_item', movie: movie
 

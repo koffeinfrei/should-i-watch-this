@@ -10,15 +10,24 @@
       = hidden_field_tag :year, @year
 
 - else
-  - @poster_url = poster_url(@movie, :show)
+  - share_url = movie_url_for(@movie, only_path: false)
+  - share_description = "#{@recommendation.emoji} #{@recommendation.text}"
+  - poster_path = poster_url(@movie, :show)
+  - poster_url = poster_url(@movie, :show, only_path: false)
 
   section.box
-    = button_to [:toggle, :watchlist_items], \
-        params: { movie_id: @movie.id, return_to: movie_path_for(@movie) }, \
-        class: 'secondary', \
-        form_class: 'mb-1 text-end', \
-        title: @button_title do
-      = @button_label
+    .padded.d-flex.flex-justify-between
+      = button_tag '⤴', class: 'd-none secondary mb-1', title: 'Share with someone', \
+        data: { \
+          controller: 'share', action: 'share#share', \
+          'share-title-value': @movie.title, 'share-text-value': share_description, 'share-url-value': share_url \
+        }
+      = button_to [:toggle, :watchlist_items], \
+          params: { movie_id: @movie.id, return_to: movie_url_for(@movie) }, \
+          class: 'secondary', \
+          form_class: 'mb-1 text-end', \
+          title: @button_title do
+        = @button_label
 
     .summary.box
       .description
@@ -37,7 +46,7 @@
               td.value= @movie.actors.join(', ')
 
       .marketing
-        img.poster src=@poster_url width="130" alt="poster"
+        img.poster src=poster_path width="130" alt="poster"
         - if @trailer_url
           a.external.trailer href=@trailer_url target="_blank" rel="noopener external" Trailer
 
@@ -90,18 +99,16 @@
     == @page_title
 
   - content_for :head do
-    - url = url_for(only_path: false)
-
     /! Open Graph / Facebook
     meta property="og:type" content="website"
-    meta property="og:url" content=url
+    meta property="og:url" content=share_url
     meta property="og:title" content=@page_title
-    meta property="og:description" content="#{@recommendation.emoji} #{@recommendation.text}"
-    meta property="og:image" content=@poster_url
+    meta property="og:description" content=share_description
+    meta property="og:image" content=poster_url
 
     /! Twitter
     meta property="twitter:card" content="summary_large_image"
-    meta property="twitter:url" content=url
+    meta property="twitter:url" content=share_url
     meta property="twitter:title" content=@page_title
-    meta property="twitter:description" content="#{@recommendation.emoji} #{@recommendation.text}"
-    meta property="twitter:image" content=@poster_url
+    meta property="twitter:description" content=share_description
+    meta property="twitter:image" content=poster_url

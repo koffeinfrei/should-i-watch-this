@@ -49,7 +49,7 @@ class MoviesController < ApplicationController
     end
 
     if movie
-      redirect_to movie_path_for(movie)
+      redirect_to movie_url_for(movie)
     else
       redirect_to not_found_path
     end

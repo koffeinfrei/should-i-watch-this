@@ -1,13 +1,18 @@
 module ApplicationHelper
   include ViteRails::TagHelpers
 
-  def poster_url(movie, kind)
+  def poster_url(movie, kind, only_path: true)
     size = { show: 300, search: 100 }.fetch(kind)
-    poster_url = "/posters/#{size}/#{movie.wiki_id}.jpg"
-    if File.exist?(Rails.root.join("public#{poster_url}"))
-      poster_url
+    poster_path = "/posters/#{size}/#{movie.wiki_id}.jpg"
+
+    unless File.exist?(Rails.root.join("public#{poster_path}"))
+      poster_path = vite_asset_path("images/default-poster.png")
+    end
+
+    if only_path
+      poster_path
     else
-      vite_asset_path("images/default-poster.png")
+      "#{root_url.chomp('/')}#{poster_path}"
     end
   end
 
@@ -21,7 +26,12 @@ module ApplicationHelper
     end
   end
 
-  def movie_path_for(movie)
-    movie_path(movie.wiki_id, movie.title, movie.year)
+  def movie_url_for(movie, only_path: true)
+    args = [movie.wiki_id, movie.title, movie.year]
+    if only_path
+      movie_path(*args)
+    else
+      movie_url(*args)
+    end
   end
 end

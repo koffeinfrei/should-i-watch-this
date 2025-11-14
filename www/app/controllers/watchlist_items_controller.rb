@@ -16,7 +16,7 @@ class WatchlistItemsController < ApplicationController
 
       redirect_to params[:return_to]
     else
-      session[redirect_session_key(User)] = movie_path_for(movie)
+      session[redirect_session_key(User)] = movie_url_for(movie)
       redirect_to users_sign_in_path
     end
   end

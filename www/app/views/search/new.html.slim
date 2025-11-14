@@ -7,7 +7,7 @@ turbo-frame id="search-results" data-turbo-action="advance"
         ul.movie-list
           - @movies.each do |movie|
             li.movie-list-item
-              = link_to movie_path_for(movie), target: "_top" do
+              = link_to movie_url_for(movie), target: "_top" do
                 = render 'movies/list_item', movie: movie
 
           - if @show_more
