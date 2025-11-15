@@ -24,10 +24,17 @@ def with_log
   end
 end
 
+def movies_claim_file = Rails.root.join("config/wikibase-dump-filter-movies-claim")
+def humans_claim = "Q5"
+def all_claims
+  movies = File.read(movies_claim_file).strip.split(":").last.split(",")
+  [humans_claim] + movies
+end
+
 desc "Update the movie database"
 namespace :movies do
   desc "(1) Download the wiki data dump"
-  task download_data: [:environment] do
+  task download: [:environment] do
     with_log do
       output_dir = ENV.fetch("DIR")
 
@@ -36,11 +43,11 @@ namespace :movies do
   end
 
   desc "(2) Decompress the downloaded wiki data dump"
-  task decompress_data: [:environment] do
+  task decompress: [:environment] do
     with_log do
       output_dir = ENV.fetch("DIR")
 
-      `(cd #{output_dir} && lbzip2 -d latest-all.json.bz2)`
+      `(cd #{output_dir} && lbzcat latest-all.json.bz2 | rg '(#{all_claims.map { "\"#{_1}\"" }.join("|")})' > latest-all-reduced.json)`
     end
   end
 
@@ -48,11 +55,10 @@ namespace :movies do
   task generate_movies: [:environment] do
     with_log do
       output_dir = ENV.fetch("DIR")
-      input_file = File.join(output_dir, "latest-all.json")
+      input_file = File.join(output_dir, "latest-all-reduced.json")
       output_file = File.join(output_dir, "movies.json")
-      claim_file = Rails.root.join("config/wikibase-dump-filter-movies-claim")
 
-      `cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim #{claim_file}" > #{output_file}`
+      `cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim #{movies_claim_file}" > #{output_file}`
     end
   end
 
@@ -60,10 +66,10 @@ namespace :movies do
   task generate_humans: [:environment] do
     with_log do
       output_dir = ENV.fetch("DIR")
-      input_file = File.join(output_dir, "latest-all.json")
+      input_file = File.join(output_dir, "latest-all-reduced.json")
       output_file = File.join(output_dir, "humans.json")
 
-      `cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim P31:Q5" > #{output_file}`
+      `cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim P31:#{humans_claim}" > #{output_file}`
     end
   end
 
