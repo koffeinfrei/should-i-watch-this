@@ -31,13 +31,13 @@ def all_claims
   [humans_claim] + movies
 end
 
+def output_dir = ENV.fetch("DIR")
+
 desc "Update the movie database"
 namespace :movies do
   desc "(1) Download the wiki data dump"
   task download: [:environment] do
     with_log do
-      output_dir = ENV.fetch("DIR")
-
       `curl -O https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2 --output-dir #{output_dir}`
     end
   end
@@ -45,8 +45,6 @@ namespace :movies do
   desc "(2) Decompress the downloaded wiki data dump"
   task decompress: [:environment] do
     with_log do
-      output_dir = ENV.fetch("DIR")
-
       `(cd #{output_dir} && lbzcat latest-all.json.bz2 | rg '(#{all_claims.map { "\"#{_1}\"" }.join("|")})' > latest-all-reduced.json)`
     end
   end
@@ -54,7 +52,6 @@ namespace :movies do
   desc "(3) Generate the movies file"
   task generate_movies: [:environment] do
     with_log do
-      output_dir = ENV.fetch("DIR")
       input_file = File.join(output_dir, "latest-all-reduced.json")
       output_file = File.join(output_dir, "movies.json")
 
@@ -65,7 +62,6 @@ namespace :movies do
   desc "(4) Generate the humans file"
   task generate_humans: [:environment] do
     with_log do
-      output_dir = ENV.fetch("DIR")
       input_file = File.join(output_dir, "latest-all-reduced.json")
       output_file = File.join(output_dir, "humans.json")
 
@@ -76,7 +72,6 @@ namespace :movies do
   desc "(5) Generate the minimized humans file"
   task generate_humans_minimized: [:environment] do
     with_log do
-      output_dir = ENV.fetch("DIR")
       input_file = File.join(output_dir, "humans.json")
       output_file = File.join(output_dir, "humans-min.json")
 
@@ -87,8 +82,6 @@ namespace :movies do
   desc "(6) Import movies from a wikidata json dump"
   task import: [:environment] do
     with_log do
-      output_dir = ENV.fetch("DIR")
-
       series_classes = File.readlines(Rails.root.join("config/wikidata_series_classes")).map(&:strip)
 
       puts "Reading humans..."
