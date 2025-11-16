@@ -17,11 +17,12 @@
 
   section.box
     .padded.d-flex.flex-justify-between
-      = button_tag '⤴', class: 'd-none secondary mb-1', title: 'Share with someone', \
-        data: { \
-          controller: 'share', action: 'share#share', \
-          'share-title-value': @movie.title, 'share-text-value': share_description, 'share-url-value': share_url \
-        }
+      div
+        = button_tag '⤴', class: 'd-none secondary mb-1', title: 'Share with someone', \
+          data: { \
+            controller: 'share', action: 'share#share', \
+            'share-title-value': @movie.title, 'share-text-value': share_description, 'share-url-value': share_url \
+          }
       = button_to [:toggle, :watchlist_items], \
           params: { movie_id: @movie.id, return_to: movie_url_for(@movie) }, \
           class: 'secondary', \
