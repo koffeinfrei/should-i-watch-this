@@ -401,9 +401,10 @@ a.result-more {
   }
 
   &-poster {
-    width: 65px;
+    max-width: 65px;
     height: 90px;
     margin-right: 0.6em;
+    object-fit: cover;
   }
 
   &-title {
