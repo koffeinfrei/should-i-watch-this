@@ -1,5 +1,5 @@
 module MovieScore
-  KEY_PREFIX = ENV.fetch("REDIS_MOVIE_SCORE_PREFIX", "siwt_movie")
+  KEY_PREFIX = "#{KeyValueStore::KEY_PREFIX}:score:"
   STD_TTL = 3.days
 
   def self.get(wiki_id)
@@ -29,11 +29,11 @@ module MovieScore
   end
 
   def self.save(wiki_id, scores, trailer_url, ttl: STD_TTL)
-    REDIS.set(key(wiki_id), Oj.dump([scores, trailer_url]), ex: ttl)
+    KeyValueStore.client.set(key(wiki_id), Oj.dump([scores, trailer_url]), ex: ttl)
   end
 
   def self.load(wiki_id)
-    value = REDIS.get(key(wiki_id))
+    value = KeyValueStore.client.get(key(wiki_id))
     if value
       Oj.load(value)
     end
@@ -47,12 +47,12 @@ module MovieScore
   end
 
   def self.key(wiki_id)
-    "#{KEY_PREFIX}_#{wiki_id}"
+    "#{KEY_PREFIX}#{wiki_id}"
   end
 
   def self.delete_all
-    REDIS.scan_each(match: "#{KEY_PREFIX}_*") do |key|
-      REDIS.del(key)
+    KeyValueStore.client.scan_each(match: "#{KEY_PREFIX}:*") do |key|
+      KeyValueStore.client.del(key)
     end
   end
 end

@@ -1,28 +1,26 @@
 module SimpleStore
-  KEY_PREFIX = "siwt"
-
   def self.fetch(key)
     key = self.key(key)
 
-    value = REDIS.get(key)
+    value = KeyValueStore.client.get(key)
     return value if value
 
     new_value = yield
 
     # Only one thread should compute + set
-    REDIS.set(key, new_value, nx: true)
+    KeyValueStore.client.set(key, new_value, nx: true)
 
     # Return whichever value ended up stored
-    REDIS.get(key)
+    KeyValueStore.client.get(key)
   end
 
   def self.delete(key)
     key = self.key(key)
 
-    REDIS.del(key)
+    KeyValueStore.client.del(key)
   end
 
   def self.key(key)
-    "#{KEY_PREFIX}_#{key}"
+    "#{KeyValueStore::KEY_PREFIX}:#{key}"
   end
 end
