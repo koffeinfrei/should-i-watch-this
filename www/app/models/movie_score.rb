@@ -29,14 +29,11 @@ module MovieScore
   end
 
   def self.save(wiki_id, scores, trailer_url, ttl: STD_TTL)
-    KeyValueStore.client.set(key(wiki_id), Oj.dump([scores, trailer_url]), ex: ttl)
+    KeyValueStore.set_json(key(wiki_id), [scores, trailer_url], ex: ttl)
   end
 
   def self.load(wiki_id)
-    value = KeyValueStore.client.get(key(wiki_id))
-    if value
-      Oj.load(value)
-    end
+    KeyValueStore.get_json(key(wiki_id))
   end
 
   def self.fetch(wiki_id)
@@ -51,8 +48,6 @@ module MovieScore
   end
 
   def self.delete_all
-    KeyValueStore.client.scan_each(match: "#{KEY_PREFIX}:*") do |key|
-      KeyValueStore.client.del(key)
-    end
+    KeyValueStore.delete_all("#{KEY_PREFIX}*")
   end
 end
