@@ -129,6 +129,10 @@ a {
       font-size: 0.9em;
     }
   }
+
+  &.sm {
+    font-size: 0.8em;
+  }
 }
 
 
@@ -205,6 +209,11 @@ button {
     &:hover {
       color: $color-hover;
     }
+  }
+
+  &.sm {
+    font-size: 0.8em;
+    height: 30px;
   }
 }
 
