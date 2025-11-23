@@ -34,4 +34,17 @@ module ApplicationHelper
       movie_url(*args)
     end
   end
+
+  def rating_thumb(score, **options)
+    ratings = { 1 => "-180", 2 => "-135", 3 => "-90", 4 => "-45", 5 => "0" }
+
+    content_tag("div", **options) do
+      content_tag("div", style: "transform: rotate(#{ratings[score]}deg)") do
+        "👍"
+      end +
+      content_tag("div", class: "d-none") do
+        "#{score} points out of #{Rating::SCORES.max}"
+      end
+    end
+  end
 end

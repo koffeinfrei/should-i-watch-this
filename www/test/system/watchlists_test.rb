@@ -97,7 +97,7 @@ class WatchlistsTest < ApplicationSystemTestCase
     end
   end
 
-  test "unauthenticated" do
+  test "requires sign in to add to watchlist" do
     MovieScore.save(
       "Q788822",
       {
@@ -108,13 +108,12 @@ class WatchlistsTest < ApplicationSystemTestCase
       },
       nil
     )
-
     user = User.create!(email: "user@example.com")
 
     visit root_path
     click_on "Watchlist"
 
-    assert_content "You need to Sign in to be able to have a watchlist."
+    assert_content "You need to sign in to be able to have a watchlist."
     assert_no_link "Import from IMDb"
 
     within ".header" do

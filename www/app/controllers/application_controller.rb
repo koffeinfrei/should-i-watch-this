@@ -12,4 +12,11 @@ class ApplicationController < ActionController::Base
     @quote ||= Quote.random
   end
   helper_method :quote
+
+
+  def require_auth
+    return if current_user
+
+    redirect_to root_path, status: :forbidden
+  end
 end
