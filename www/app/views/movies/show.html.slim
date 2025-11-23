@@ -31,7 +31,7 @@
             - if @rating.new_record?
               | Rate
             - else
-              .d-flex
+              .d-flex.flex-items-center
                 span.me-05 Your rating:
                 = rating_thumb(@rating.score, class: 'rating-trigger d-flex')
 
