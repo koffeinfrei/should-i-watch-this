@@ -16,6 +16,7 @@ jobs:
       - name: Install libcurl
         run: |
           sudo apt-get update
+          # dependencies for the curb gem
           sudo apt-get install -y libcurl4 libcurl4-openssl-dev
 
       - name: Set up Ruby
@@ -37,6 +38,7 @@ jobs:
       - name: Install libcurl
         run: |
           sudo apt-get update
+          # dependencies for the curb gem
           sudo apt-get install -y libcurl4 libcurl4-openssl-dev
 
       - name: Set up Ruby
@@ -46,8 +48,14 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Lint code for consistent style
+      - name: Run RuboCop
         run: cd www && bin/rubocop -f github
+
+      - name: Install NPM packages
+        run: cd www && npm ci
+
+      - name: Run Prettier
+        run: cd www && npx prettier app/**/*.js --check
 
   test:
     runs-on: ubuntu-latest
@@ -89,7 +97,7 @@ jobs:
         with:
           node-version-file: 'www/.nvmrc'
 
-      - name: Install npm packages
+      - name: Install NPM packages
         run: cd www && npm ci
 
       - name: Run tests

@@ -1,11 +1,11 @@
-import { Autocomplete } from 'stimulus-autocomplete'
+import { Autocomplete } from "stimulus-autocomplete";
 
 export default class extends Autocomplete {
   connect() {
     super.connect();
 
-    this.element.addEventListener('autocomplete.change', (event) => {
-      this.inputTarget.value = '';
+    this.element.addEventListener("autocomplete.change", (event) => {
+      this.inputTarget.value = "";
       Turbo.visit(event.detail.value);
     });
   }
