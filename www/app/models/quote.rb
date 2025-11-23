@@ -1,7 +1,10 @@
 module Quote
   def self.random
-    quotes = from_file("afis-100.json") + from_file("lifehack-25.json")
-    quotes.sample
+    all.sample
+  end
+
+  def self.all
+    from_file("afis-100.json") + from_file("lifehack-25.json")
   end
 
   def self.from_file(file_name)
