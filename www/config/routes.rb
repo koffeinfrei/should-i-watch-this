@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     resource :import, only: [:new, :create], controller: "watchlist_import"
   end
 
-  resources :ratings, only: [:create, :update, :destroy]
+  resources :ratings, only: [:index, :create, :update, :destroy]
 
   title_year_constraint = { title: /.+/, year: /\d{4}/ }
   get ":wiki_id(/:title)(/:year)", to: "movies#show", as: :movie, constraints: { wiki_id: /Q\d+/, **title_year_constraint }

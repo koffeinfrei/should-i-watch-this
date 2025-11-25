@@ -52,4 +52,39 @@ class WatchlistsTest < ApplicationSystemTestCase
     click_on "2 points out of 5"
     assert_text "Nice! Rating added"
   end
+
+  test "list all ratings" do
+    user = User.create!(email: "user@example.com")
+    movie1 = movies(:her)
+    movie2 = movies(:terminator)
+    Rating.create! user: user, movie: movie1, score: 1
+    Rating.create! user: user, movie: movie2, score: 5
+
+    # other user
+    other_movie = movies(:here_we_go_round_the_mulberry_bush)
+    other_user = User.create!(email: "other_user@example.com")
+    Rating.create! user: other_user, movie: other_movie, score: 1
+
+    visit root_path
+    click_on "Ratings"
+    assert_selector "h2", text: "Your ratings"
+
+    assert_content "You need to sign in to be able to have ratings."
+    click_on "sign in"
+    sign_in user, skip_visit: true
+
+    assert_selector "h2", text: "Your ratings"
+
+    within "li.movie-list-item:nth-of-type(1)" do
+      assert_content "Terminator"
+      assert_content :all, "5 points out of 5"
+    end
+    within "li.movie-list-item:nth-of-type(2)" do
+      assert_content "Her"
+      assert_content :all, "1 points out of 5"
+    end
+
+    assert_no_selector "li.movie-list-item:nth-of-type(3)"
+    assert_no_text "Here We Go Round the Mulberry Bush"
+  end
 end

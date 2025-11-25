@@ -1,5 +1,6 @@
 .header
   .navigation
+    = link_to 'Ratings', ratings_path, class: 'sm me-05'
     = link_to 'Watchlist', watchlist_path, class: 'sm me-05'
     - if current_user
       .user

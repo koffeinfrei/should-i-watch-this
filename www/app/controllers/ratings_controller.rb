@@ -1,7 +1,19 @@
 class RatingsController < ApplicationController
   include ApplicationHelper
 
-  before_action :require_auth
+  before_action :require_auth, except: :index
+
+  def index
+    if current_user
+      @ratings = Rating
+        .preload(:movie)
+        .where(user: current_user)
+        .order(updated_at: :desc, id: :desc)
+        .to_a
+    else
+      save_passwordless_redirect_location!(User)
+    end
+  end
 
   def create
     rating_params = params.expect(rating: [:movie_id, :score])
