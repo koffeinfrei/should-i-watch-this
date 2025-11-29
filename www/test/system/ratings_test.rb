@@ -37,6 +37,42 @@ class WatchlistsTest < ApplicationSystemTestCase
     assert_button "Rate"
   end
 
+  test "import imdb ratings" do
+    user = User.create!(email: "user@example.com")
+    movie = movies(:her)
+    Rating.create! user: user, movie: movie, score: 4
+
+    sign_in user
+
+    click_on "Ratings"
+
+    within ".movie-list-item" do
+      assert_text "Her"
+    end
+
+    click_on "Import from IMDb"
+
+    attach_file "file", file_fixture("imdb_ratings_export.csv")
+    click_on "Import"
+
+    assert_content "Your IMDb ratings were imported:"
+    assert_content "New items: 2"
+    assert_content "Existing items: 1"
+    assert_content "Failed items: 3"
+
+    items = all ".movie-list-item"
+    assert_equal 3, items.size
+    within items[0] do
+      assert_text "Here We Go Round the Mulberry Bush"
+    end
+    within items[1] do
+      assert_text "Her"
+    end
+    within items[2] do
+      assert_text "The Terminator"
+    end
+  end
+
   test "requires sign in to rate" do
     MovieScore.save("Q788822", {}, nil)
     movie = movies(:her)

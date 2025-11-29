@@ -21,3 +21,7 @@ section.box.padded
 
   - else
     | Now. Let's watch a movie or two and rate it afterwards.
+
+- if current_user
+  section.box.padded
+    = link_to 'Import from IMDb', [:new, :ratings, :import]

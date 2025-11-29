@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   end
 
   resources :ratings, only: [:index, :create, :update, :destroy]
+  scope :ratings, as: :ratings do
+    resource :import, only: [:new, :create], controller: "ratings_import"
+  end
 
   title_year_constraint = { title: /.+/, year: /\d{4}/ }
   get ":wiki_id(/:title)(/:year)", to: "movies#show", as: :movie, constraints: { wiki_id: /Q\d+/, **title_year_constraint }
