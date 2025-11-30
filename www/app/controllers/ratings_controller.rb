@@ -49,6 +49,6 @@ class RatingsController < ApplicationController
     rating.destroy!
 
     flash[:success] = "Fair enough. Rating removed"
-    redirect_to movie_url_for(rating.movie)
+    redirect_to movie_url_for(rating.movie), status: :see_other
   end
 end
