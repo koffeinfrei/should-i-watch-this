@@ -154,6 +154,10 @@ textarea {
   border-radius: $border-radius;
   font-family: inherit;
   font-size: inherit;
+
+  &.sm {
+    font-size: 0.8em;
+  }
 }
 
 input {

@@ -93,6 +93,8 @@ class WatchlistsTest < ApplicationSystemTestCase
     user = User.create!(email: "user@example.com")
     movie1 = movies(:her)
     movie2 = movies(:terminator)
+    show = movies(:the_bear)
+    Rating.create! user: user, movie: show, score: 5
     Rating.create! user: user, movie: movie1, score: 1
     Rating.create! user: user, movie: movie2, score: 5
 
@@ -111,16 +113,41 @@ class WatchlistsTest < ApplicationSystemTestCase
 
     assert_selector "h2", text: "Your ratings"
 
-    within "li.movie-list-item:nth-of-type(1)" do
+    items = all ".movie-list-item", count: 3
+    within items[0] do
       assert_content "Terminator"
       assert_content :all, "5 points out of 5"
     end
-    within "li.movie-list-item:nth-of-type(2)" do
+    within items[1] do
       assert_content "Her"
       assert_content :all, "1 points out of 5"
     end
+    within items[2] do
+      assert_content "The Bear"
+      assert_content :all, "5 points out of 5"
+    end
 
-    assert_no_selector "li.movie-list-item:nth-of-type(3)"
     assert_no_text "Here We Go Round the Mulberry Bush"
+
+    # change collection filter
+    select "Shows", from: "collection"
+    assert_no_text "Her"
+    items = all ".movie-list-item", count: 1
+    within items[0] do
+      assert_content "The Bear"
+      assert_content :all, "5 points out of 5"
+    end
+
+    select "Movies", from: "collection"
+    assert_no_text "The Bear"
+    items = all ".movie-list-item", count: 2
+    within items[0] do
+      assert_content "Terminator"
+      assert_content :all, "5 points out of 5"
+    end
+    within items[1] do
+      assert_content "Her"
+      assert_content :all, "1 points out of 5"
+    end
   end
 end

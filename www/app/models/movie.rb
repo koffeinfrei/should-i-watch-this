@@ -34,6 +34,8 @@ class Movie < ApplicationRecord
     ranked_by: ":trigram",
     order_within_rank: ORDER_SQL
 
+  has_many :watchlist_items
+
   def imdb_url
     return unless imdb_id
 

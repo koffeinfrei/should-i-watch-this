@@ -7,6 +7,8 @@ section.box.padded
     | You need to #{link_to 'sign in', users_sign_in_path} to be able to have a watchlist.
 
   - elsif @movies.any?
+    = render 'movies/collection_filter'
+
     ul.movie-list
       - @movies.each do |movie|
         li.movie-list-item

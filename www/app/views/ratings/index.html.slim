@@ -7,6 +7,8 @@ section.box.padded
     | You need to #{link_to 'sign in', users_sign_in_path} to be able to have ratings.
 
   - elsif @ratings.any?
+    = render 'movies/collection_filter'
+
     ul.movie-list
       - @ratings.each do |rating|
         - movie = rating.movie

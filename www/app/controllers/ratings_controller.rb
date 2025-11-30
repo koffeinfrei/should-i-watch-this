@@ -6,10 +6,18 @@ class RatingsController < ApplicationController
   def index
     if current_user
       @ratings = Rating
-        .preload(:movie)
+        .eager_load(:movie)
         .where(user: current_user)
         .order(updated_at: :desc, id: :desc)
-        .to_a
+
+      case params[:collection]
+      when "movies"
+        @ratings = @ratings.where(movies: { series: false })
+      when "shows"
+        @ratings = @ratings.where(movies: { series: true })
+      end
+
+      @ratings = @ratings.to_a
     else
       save_passwordless_redirect_location!(User)
     end

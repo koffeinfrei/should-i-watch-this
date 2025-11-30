@@ -45,19 +45,47 @@ class WatchlistsTest < ApplicationSystemTestCase
   test "show watchlist" do
     user = User.create!(email: "user@example.com")
     movie = movies(:her)
+    show = movies(:the_bear)
+    WatchlistItem.create! user: user, movie: show
     WatchlistItem.create! user: user, movie: movie
 
     sign_in user
 
     click_on "Watchlist"
 
-    within ".movie-list-item" do
+    items = all ".movie-list-item", count: 2
+    within items[0] do
       assert_text "Her"
+    end
+    within items[1] do
+      assert_text "The Bear"
+    end
 
+    # change collection filter
+    select "Shows", from: "collection"
+    assert_no_text "Her"
+    items = all ".movie-list-item", count: 1
+    within items[0] do
+      assert_text "The Bear"
+    end
+
+    select "Movies", from: "collection"
+    assert_no_text "The Bear"
+    items = all ".movie-list-item", count: 1
+    within items[0] do
+      assert_text "Her"
       click_on "Remove from watchlist"
     end
 
     assert_content "The movie 'Her' was removed from your watchlist"
+
+    items = all ".movie-list-item", count: 1
+    within items[0] do
+      assert_text "The Bear"
+      click_on "Remove from watchlist"
+    end
+
+    assert_content "The movie 'The Bear' was removed from your watchlist"
     assert_content "Well. You should definitely add some movies to your watchlist."
   end
 
@@ -84,8 +112,7 @@ class WatchlistsTest < ApplicationSystemTestCase
     assert_content "Existing items: 1"
     assert_content "Failed items: 3"
 
-    items = all ".movie-list-item"
-    assert_equal 3, items.size
+    items = all ".movie-list-item", count: 3
     within items[0] do
       assert_text "Here We Go Round the Mulberry Bush"
     end

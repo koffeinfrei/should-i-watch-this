@@ -8,6 +8,8 @@ her:
   metacritic_id: "movie/her"
   omdb_id: "75296"
   release_date: "2013-10-12"
+  end_date: nil
+  series: false
   directors: ["Spike Jonze"]
   actors: ["Joaquin Phoenix", "Amy Adams", "Rooney Mara"]
   tsv_title: "'her':1"
@@ -23,6 +25,8 @@ terminator:
   metacritic_id: "movie/the-terminator"
   omdb_id: "218"
   release_date: "1984-10-26"
+  end_date: nil
+  series: false
   directors: ["James Cameron"]
   actors: ["Arnold Schwarzenegger", "Michael Biehn", "Linda Hamilton"]
   tsv_title: "'terminator':2 'the':1"
@@ -38,6 +42,8 @@ here_we_go_round_the_mulberry_bush:
   metacritic_id:
   omdb_id:
   release_date: "1967-01-01"
+  end_date: nil
+  series: false
   directors: ["Clive Donner"]
   actors: ["Barry Joseph Evans", "Judy Geeson", "Angela Scoular"]
   tsv_title: "'bush':7 'go':3 'here':1 'mulberry':6 'round':4 'the':5"
@@ -53,6 +59,8 @@ pokemon:
   metacritic_id:
   omdb_id:
   release_date: "1997-04-01"
+  end_date: nil
+  series: false
   tsv_title: "'pokemon':1"
   tsv_title_original: "'ポケットモンスター':1"
 
@@ -68,5 +76,25 @@ dont_worry_darling:
   omdb_id:
   directors: ["Olivia Wilde"]
   actors: ["Florence Pugh", "Harry Styles", "Chris Pine"]
+  end_date: nil
+  series: false
   tsv_title: "'darling':3 'dont':1 'worry':2"
   tsv_title_original: "'darling':4 'don':1 't':2 'worry':3"
+
+the_bear:
+  id: 435059,
+  title: "The Bear"
+  title_normalized: "the bear"
+  title_original: "The Bear"
+  wiki_id: "Q112761982"
+  imdb_id: "tt14452776"
+  rotten_id: "tv/the_bear"
+  metacritic_id: "tv/the-bear"
+  release_date: "2022-06-23"
+  end_date: nil
+  series: true
+  omdb_id:
+  directors: []
+  actors: ["Jeremy Allen White", "Ebon Moss-Bachrach", "Ayo Edebiri"]
+  tsv_title: "'bear':2 'the':1"
+  tsv_title_original: "'bear':2 'the':1"
