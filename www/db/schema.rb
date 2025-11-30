@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_19_144339) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_21_205126) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -146,6 +146,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_19_144339) do
     t.index ["identifier"], name: "index_passwordless_sessions_on_identifier", unique: true
   end
 
+  create_table "ratings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "movie_id", null: false
+    t.integer "score"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["movie_id", "user_id"], name: "index_ratings_on_movie_id_and_user_id", unique: true
+    t.index ["movie_id"], name: "index_ratings_on_movie_id"
+    t.index ["user_id"], name: "index_ratings_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", null: false
@@ -163,6 +174,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_19_144339) do
     t.index ["user_id"], name: "index_watchlist_items_on_user_id"
   end
 
+  add_foreign_key "ratings", "movies"
+  add_foreign_key "ratings", "users"
   add_foreign_key "watchlist_items", "movies"
   add_foreign_key "watchlist_items", "users"
 end

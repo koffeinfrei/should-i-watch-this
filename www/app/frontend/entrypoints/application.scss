@@ -6,7 +6,7 @@ $color-primary: #fff;
 $color-text: #fff;
 $color-background: #1c2b3e;
 $color-link: #96a2ae;
-$color-link-hover: #fff;
+$color-hover: #fff;
 $color-border: #ccc;
 $color-button-bg: #f4f4f4;
 $color-button-text: #333;
@@ -117,7 +117,7 @@ a {
   }
 
   &:hover {
-    color: $color-link-hover;
+    color: $color-hover;
   }
 
   &.external {
@@ -128,6 +128,10 @@ a {
       position: relative;
       font-size: 0.9em;
     }
+  }
+
+  &.sm {
+    font-size: 0.8em;
   }
 }
 
@@ -192,7 +196,7 @@ button {
     line-height: 1;
 
     &:hover {
-      background: $color-primary;
+      background: $color-hover;
       color: $color-background;
     }
   }
@@ -203,8 +207,13 @@ button {
     border: none;
 
     &:hover {
-      color: $color-link-hover;
+      color: $color-hover;
     }
+  }
+
+  &.sm {
+    font-size: 0.8em;
+    height: 30px;
   }
 }
 
@@ -422,6 +431,19 @@ a.result-more {
   font-size: 0.7em;
 }
 
+.rating {
+  width: 45px;
+  height: 45px;
+
+  &.active {
+    background-color: $color-hover;
+  }
+}
+
+.rating-trigger {
+  font-size: 0.7em;
+}
+
 
 // ============================================================================
 // Tables
@@ -466,6 +488,17 @@ td {
 // ============================================================================
 // UI Components
 // ============================================================================
+
+dialog {
+  background-color: $color-background;
+  border: none;
+  box-shadow: 0 0 10px #000;
+  color: $color-text;
+
+  &::backdrop {
+    background-color: #000000bf;
+  }
+}
 
 .spinner {
   margin-right: 0.6em;
@@ -519,6 +552,10 @@ td {
 
 .flex-items-center {
   align-items: center;
+}
+
+.flex-items-start {
+  align-items: flex-start;
 }
 
 .flex-justify-between {

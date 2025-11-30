@@ -16,6 +16,8 @@ class MoviesController < ApplicationController
         else
           ["﹢watchlist", "Add to watchlist"]
         end
+
+      @rating = Rating.find_or_initialize_by(movie: @movie, user: current_user)
     else
       @fetching = true
       @wiki_id = wiki_id

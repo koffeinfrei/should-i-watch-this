@@ -23,12 +23,47 @@
             controller: 'share', action: 'share#share', \
             'share-title-value': @movie.title, 'share-text-value': share_description, 'share-url-value': share_url \
           }
-      = button_to [:toggle, :watchlist_items], \
-          params: { movie_id: @movie.id, return_to: movie_url_for(@movie) }, \
-          class: 'secondary', \
-          form_class: 'mb-1 text-end', \
-          title: @button_title do
-        = @button_label
+
+      .d-flex data-controller='dialog'
+        / rating
+        - if current_user
+          = button_tag class: 'sm secondary mb-1 me-05 text-end', 'data-action': 'dialog#open' do
+            - if @rating.new_record?
+              | Rate
+            - else
+              .d-flex.flex-items-center
+                span.me-05 Your rating:
+                = rating_thumb(@rating.score, class: 'rating-trigger d-flex')
+
+          dialog data-dialog-target='dialog'
+            .d-flex.flex-justify-between.flex-items-start.mb-1
+              h2 Rate this
+              = button_tag class: 'sm secondary', 'data-action': 'dialog#close' do
+                | ⨯
+
+            .d-flex.mb-1
+              - Rating::SCORES.each do |score|
+                = form_for @rating do |f|
+                  = f.hidden_field :movie_id
+                  = f.hidden_field :score, value: score
+                  = button_tag class: ['secondary', 'rating', 'me-05', (@rating.score == score && 'active')], \
+                    'data-action': 'dialog#close' do
+                    = rating_thumb(score)
+
+            - if @rating.persisted?
+              = link_to 'Remove my rating', rating_url(@rating), 'data-turbo-method': :delete
+
+        - else
+          = button_to 'Rate', users_sign_in_path(), class: 'sm secondary mb-1 me-05 text-end', method: :get, \
+              params: { flash_notice: 'You need to sign in to be able to rate this', redirect_to: movie_url_for(@movie) }
+
+        / watchlist
+        = button_to [:toggle, :watchlist_items], \
+            params: { movie_id: @movie.id, return_to: movie_url_for(@movie) }, \
+            class: 'sm secondary', \
+            form_class: 'mb-1 text-end', \
+            title: @button_title do
+          = @button_label
 
     .summary.box
       .description

@@ -1,0 +1,27 @@
+= render 'shared/search_box', query: @query
+
+section.box.padded
+  h2 Your ratings
+
+  - if !current_user
+    | You need to #{link_to 'sign in', users_sign_in_path} to be able to have ratings.
+
+  - elsif @ratings.any?
+    ul.movie-list
+      - @ratings.each do |rating|
+        - movie = rating.movie
+
+        li.movie-list-item
+          .d-flex
+            = link_to movie_url_for(movie), class: 'd-flex w-100'
+              = render 'movies/list_item', movie: movie
+
+            .d-flex.flex-items-center
+              = rating_thumb(rating.score)
+
+  - else
+    | Now. Let's watch a movie or two and rate it afterwards.
+
+- if current_user
+  section.box.padded
+    = link_to 'Import from IMDb', [:new, :ratings, :import]

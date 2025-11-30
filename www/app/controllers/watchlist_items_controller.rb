@@ -1,6 +1,7 @@
 class WatchlistItemsController < ApplicationController
   include ApplicationHelper
 
+  # TODO: use `before_action :require_auth` (see `RatingsController`)
   def toggle
     movie = Movie.find(params[:movie_id])
 

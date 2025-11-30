@@ -11,6 +11,18 @@ class SessionsController < Passwordless::SessionsController
     super
   end
 
+  def new
+    if message = params[:flash_notice]
+      flash.now[:notice] = message
+    end
+
+    if redirect_to = params[:redirect_to]
+      session[redirect_session_key(User)] = redirect_to
+    end
+
+    super
+  end
+
   private
 
   def require_unauth
