@@ -30,7 +30,7 @@ Rails.application.routes.draw do
     resource :import, only: [:new, :create], controller: "ratings_import"
   end
 
-  title_year_constraint = { title: /.+/, year: /\d{4}/ }
+  title_year_constraint = { title: /[^\/]+/, year: /\d{4}/ }
   get ":wiki_id(/:title)(/:year)", to: "movies#show", as: :movie, constraints: { wiki_id: /Q\d+/, **title_year_constraint }
   get ":title/:year", to: "movies#legacy", as: :legacy_movie, constraints: title_year_constraint
   post ":wiki_id(/:title)(/:year)", to: "movies#fetch", as: :fetch_movie, constraints: title_year_constraint
