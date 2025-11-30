@@ -3,7 +3,7 @@ require "test_helper"
 class ImdbWatchlistImportTest < ActiveSupport::TestCase
   fixtures :movies
 
-  test "#build" do
+  test "#create" do
     user = User.create!(email: "user@example.com")
     existing_item = WatchlistItem.create!(user: user, movie: movies(:her))
     file = File.new(file_fixture("imdb_watchlist_export.csv"))
