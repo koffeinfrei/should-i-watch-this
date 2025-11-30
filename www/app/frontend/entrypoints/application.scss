@@ -110,7 +110,7 @@ ol {
 
 a {
   color: $color-link;
-  text-decoration: none;
+  text-decoration: underline 0.1px #96a2ae;
 
   &:visited {
     color: $color-link;
