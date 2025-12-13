@@ -20,6 +20,7 @@ class Movie < ApplicationRecord
         tsvector_column: :tsv_title
       }
     },
+    ranked_by: ":trigram",
     order_within_rank: ORDER_SQL
 
   pg_search_scope :search_by_tsv_title_original,
@@ -30,6 +31,7 @@ class Movie < ApplicationRecord
         tsvector_column: :tsv_title_original
       }
     },
+    ranked_by: ":trigram",
     order_within_rank: ORDER_SQL
 
   has_many :watchlist_items
