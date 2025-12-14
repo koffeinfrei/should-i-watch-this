@@ -104,13 +104,18 @@ namespace :movies do
           series = instance.in?(series_classes)
 
           wiki_id = json.dig("id")
-          title = json.dig("labels", "en", "value") || json.dig("labels", "en-us", "value")
 
           # Select the "preferred" entry if available
           titles_json = json.dig("claims", "P1476")
           title_original = titles_json&.find { _1["rank"] == "preferred" }&.dig("mainsnak", "datavalue", "value", "text") ||
             titles_json&.dig(0, "mainsnak", "datavalue", "value", "text") ||
             json.dig("labels")&.values&.first&.dig("value")
+
+          title = json.dig("labels", "en", "value") ||
+            json.dig("labels", "en-us", "value") ||
+            json.dig("labels", "mul", "value") ||
+            json.dig("labels", 0, "value") ||
+            title_original
 
           imdb_id = json.dig("claims", "P345", 0, "mainsnak", "datavalue", "value")
           rotten_id = json.dig("claims", "P1258", 0, "mainsnak", "datavalue", "value")
