@@ -64,7 +64,7 @@ class Movie < ApplicationRecord
     sql = <<~SQL.squish
       (
         (#{search_by_tsv_title(title_normalized).with_pg_search_rank.to_sql})
-          UNION
+          UNION ALL
         (#{search_by_tsv_title_original(title.downcase).with_pg_search_rank.to_sql})
       ) AS movies
     SQL
