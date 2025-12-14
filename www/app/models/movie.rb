@@ -69,13 +69,21 @@ class Movie < ApplicationRecord
       ) AS movies
     SQL
 
-    transaction do
-      # Kill queries that take too long. That usually means that the query is not specific enough
-      connection.execute("SET LOCAL statement_timeout = '200ms';")
-      # Fetch double the records since on the db level the records are not distinct due to `pg_search_rank`.
-      # We then make the records unique in memory and restrict by the actual limit
-      from(sql).limit(limit * 2).order("pg_search_rank DESC, #{ORDER_SQL}").uniq[0, limit]
+    # Exact match is a very fast query. In case that the main query times out we still have
+    # the exact matches as a result
+    movies = where(title_normalized: title).to_a
+    begin
+      transaction do
+        # Kill queries that take too long. That usually means that the query is not specific enough
+        connection.execute("SET LOCAL statement_timeout = '200ms';")
+        # Fetch double the records since on the db level the records are not distinct due to `pg_search_rank`.
+        # We then make the records unique in memory and restrict by the actual limit
+        movies += from(sql).limit(limit * 2).order("pg_search_rank DESC, #{ORDER_SQL}")
+      end
+    rescue => e
+      raise unless e.is_a?(ActiveRecord::QueryCanceled)
     end
+    movies.uniq[0, limit]
   end
 
   def self.search(query, limit:)
