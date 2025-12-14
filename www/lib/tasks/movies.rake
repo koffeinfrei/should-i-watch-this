@@ -174,15 +174,15 @@ namespace :movies do
       agent.read_timeout = 5
       agent.open_timeout = 5
 
-      out_dir = Rails.root.join("public/posters")
+      out_dir = Rails.root.join("public/posters/original")
       out_dir_100 = Rails.root.join("public/posters/100")
       out_dir_300 = Rails.root.join("public/posters/300")
       log_none = Rails.root.join("tmp/fetch_posters_imdb_none")
       log_errors = Rails.root.join("tmp/fetch_posters_imdb_errors")
 
       FileUtils.touch(log_none) unless File.exist?(log_none)
-      FileUtils.mkdir_p(out_dir_300)
       FileUtils.mkdir_p(out_dir_100)
+      FileUtils.mkdir_p(out_dir_300)
 
       no_poster_input = File.readlines(log_none).map(&:strip)
 
@@ -224,8 +224,8 @@ namespace :movies do
           `convert #{tmp_path} #{target_path}`
           FileUtils.rm tmp_path
         end
-        `convert -resize 100x #{target_path} #{out_dir.join("100/#{wiki_id}.jpg")}`
-        `convert -resize 300x #{target_path} #{out_dir.join("300/#{wiki_id}.jpg")}`
+        `convert -resize 100x #{target_path} #{out_dir_100.join("#{wiki_id}.jpg")}`
+        `convert -resize 300x #{target_path} #{out_dir_300.join("#{wiki_id}.jpg")}`
 
         print "."
       rescue Mechanize::ResponseCodeError, Net::ReadTimeout, Net::OpenTimeout => error

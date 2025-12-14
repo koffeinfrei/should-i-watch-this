@@ -29,6 +29,7 @@ $spacing-horizontal: 50px;
 
 $left-column-width: 9rem;
 $poster-width: 130px;
+$poster-border: 1px solid #000;
 
 $breakpoint-sm: 40em;
 $breakpoint-md: 800px;
@@ -364,6 +365,7 @@ h2.movie {
 .poster {
   width: $poster-width;
   height: auto;
+  border: $poster-border;
 }
 
 .marketing {
@@ -418,7 +420,7 @@ a.result-more {
     height: 90px;
     margin-right: 0.6em;
     object-fit: cover;
-    border: 1px solid #000;
+    border: $poster-border;
   }
 
   &-title {
