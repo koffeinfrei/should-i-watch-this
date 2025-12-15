@@ -8,7 +8,7 @@ gem "hotwire-rails"
 gem "vite_rails"
 gem "slim-rails"
 gem "redis"
-gem "capistrano", "~> 3.19", require: false
+gem "capistrano", "~> 3.20", require: false
 gem "capistrano-rails", require: false
 gem "capistrano-rbenv", require: false
 gem "capistrano3-puma", require: false
