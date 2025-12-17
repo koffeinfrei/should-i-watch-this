@@ -43,3 +43,6 @@ node_modules
 
 # Posters
 /public/posters/*
+
+# movie rake tasks / capistrano
+/system
