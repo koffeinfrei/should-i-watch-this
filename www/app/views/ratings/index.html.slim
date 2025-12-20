@@ -7,7 +7,10 @@ section.box.padded
     | You need to #{link_to 'sign in', users_sign_in_path} to be able to have ratings.
 
   - elsif @ratings.any?
-    = render 'movies/collection_filter'
+    = render 'movies/collection_filter' do
+      = select nil, :sort, [['Latest first', :latest_first], ['Best first', :best_first]], \
+        { selected: params[:sort] }, \
+        { class: 'sm', data: { action: 'submit#submit' } }
 
     ul.movie-list
       - @ratings.each do |rating|

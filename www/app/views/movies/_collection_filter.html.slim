@@ -1,4 +1,6 @@
 = form_tag url_for, 'data-controller': 'submit', method: :get
   = select nil, :collection, [['All', :all], ['Movies', :movies], ['Shows', :shows]], \
     { selected: params[:collection] }, \
-    { class: 'sm', data: { action: 'submit#submit' } }
+    { class: 'sm me-05', data: { action: 'submit#submit' } }
+
+  = yield

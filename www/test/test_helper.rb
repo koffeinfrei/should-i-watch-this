@@ -35,5 +35,11 @@ module ActiveSupport
 
       assert_link "Sign out"
     end
+
+    # Only use this method when we can't use the page's content to synchronize
+    def wait_for_turbo
+      has_selector? "html[aria-busy]"
+      assert_no_selector "html[aria-busy]"
+    end
   end
 end

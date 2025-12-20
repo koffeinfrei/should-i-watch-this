@@ -8,13 +8,19 @@ class RatingsController < ApplicationController
       @ratings = Rating
         .eager_load(:movie)
         .where(user: current_user)
-        .order(updated_at: :desc, id: :desc)
 
       case params[:collection]
       when "movies"
         @ratings = @ratings.where(movies: { series: false })
       when "shows"
         @ratings = @ratings.where(movies: { series: true })
+      end
+
+      case params[:sort]
+      when "latest_first", nil
+        @ratings = @ratings.order(created_at: :desc, updated_at: :desc, id: :desc)
+      when "best_first"
+        @ratings = @ratings.order(score: :desc, created_at: :desc, updated_at: :desc, id: :desc)
       end
 
       @ratings = @ratings.to_a

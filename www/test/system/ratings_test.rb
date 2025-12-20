@@ -94,9 +94,9 @@ class WatchlistsTest < ApplicationSystemTestCase
     movie1 = movies(:her)
     movie2 = movies(:terminator)
     show = movies(:the_bear)
-    Rating.create! user: user, movie: show, score: 5
-    Rating.create! user: user, movie: movie1, score: 1
-    Rating.create! user: user, movie: movie2, score: 5
+    Rating.create! user: user, movie: show, score: 5, created_at: "03.02.2025"
+    Rating.create! user: user, movie: movie1, score: 1, created_at: "03.12.2025"
+    Rating.create! user: user, movie: movie2, score: 5, created_at: "03.09.2025"
 
     # other user
     other_movie = movies(:here_we_go_round_the_mulberry_bush)
@@ -115,12 +115,12 @@ class WatchlistsTest < ApplicationSystemTestCase
 
     items = all ".movie-list-item", count: 3
     within items[0] do
-      assert_content "Terminator"
-      assert_content :all, "5 points out of 5"
-    end
-    within items[1] do
       assert_content "Her"
       assert_content :all, "1 points out of 5"
+    end
+    within items[1] do
+      assert_content "Terminator"
+      assert_content :all, "5 points out of 5"
     end
     within items[2] do
       assert_content "The Bear"
@@ -140,6 +140,19 @@ class WatchlistsTest < ApplicationSystemTestCase
 
     select "Movies", from: "collection"
     assert_no_text "The Bear"
+    items = all ".movie-list-item", count: 2
+    within items[0] do
+      assert_content "Her"
+      assert_content :all, "1 points out of 5"
+    end
+    within items[1] do
+      assert_content "Terminator"
+      assert_content :all, "5 points out of 5"
+    end
+
+    # change sorting
+    select "Best first", from: "sort"
+    wait_for_turbo
     items = all ".movie-list-item", count: 2
     within items[0] do
       assert_content "Terminator"
