@@ -253,10 +253,10 @@ namespace :movies do
     ensure
       puts
       File.open(log_errors, "w") do |file|
-        file.puts(errors)
+        file.puts(errors.sort.uniq)
       end
       File.open(log_none, "w") do |file|
-        file.puts(no_posters)
+        file.puts(no_posters.sort.uniq)
       end
     end
   end
