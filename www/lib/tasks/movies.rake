@@ -200,6 +200,8 @@ namespace :movies do
 
       no_posters = File.readlines(log_none).map(&:strip)
       errors = File.readlines(log_errors).map(&:strip)
+      # discard movies that don't have an imdb id anymore
+      errors = errors & Movie.where(wiki_id: errors).where.not(imdb_id: nil).pluck(:wiki_id)
 
       records =
         if ENV["FAILED_ONLY"]
