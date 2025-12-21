@@ -10,6 +10,17 @@ def as_proper_date(date)
   Date.parse(date)
 end
 
+def parse_external_reference(json, id)
+  json.dig("claims", id, 0).yield_self do |claim|
+    break unless claim
+
+    deprecated = claim.dig("qualifiers", "P2241")
+    unless deprecated
+      claim.dig("mainsnak", "datavalue", "value")
+    end
+  end
+end
+
 def with_log(task)
   Rails.logger.tagged(Time.now.iso8601(4)) do
     Rails.logger.info("event=rake_#{task.to_s.underscore}_start")
@@ -115,10 +126,10 @@ namespace :movies do
             json.dig("labels", 0, "value") ||
             title_original
 
-          imdb_id = json.dig("claims", "P345", 0, "mainsnak", "datavalue", "value")
-          rotten_id = json.dig("claims", "P1258", 0, "mainsnak", "datavalue", "value")
-          metacritic_id = json.dig("claims", "P1712", 0, "mainsnak", "datavalue", "value")
-          omdb_id = json.dig("claims", "P3302", 0, "mainsnak", "datavalue", "value")
+          imdb_id = parse_external_reference(json, "P345")
+          rotten_id = parse_external_reference(json, "P1258")
+          metacritic_id = parse_external_reference(json, "P1712")
+          omdb_id = parse_external_reference(json, "P3302")
 
           directors = (json.dig("claims", "P57") || []).map { _1.dig("mainsnak", "datavalue", "value", "id") }
           actors = (json.dig("claims", "P161") || []).take(3).map { _1.dig("mainsnak", "datavalue", "value", "id") }
