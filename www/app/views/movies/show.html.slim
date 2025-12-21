@@ -82,7 +82,7 @@
               td.value= @movie.actors.join(', ')
 
       .marketing
-        img.poster src=poster_path width="130" alt="poster"
+        img.poster src=poster_path width="130" height="195" alt="poster"
         - if @trailer_url
           a.external.trailer href=@trailer_url target="_blank" rel="noopener external" Trailer
 

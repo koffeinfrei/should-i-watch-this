@@ -29,7 +29,9 @@ $spacing-horizontal: 50px;
 
 $left-column-width: 9rem;
 $poster-width: 130px;
-$poster-border: 1px solid #000;
+$poster-height: $poster-width * 1.5;
+$poster-width-sm: 60px;
+$poster-height-sm: $poster-width-sm * 1.5;
 
 $breakpoint-sm: 40em;
 $breakpoint-md: 800px;
@@ -364,8 +366,9 @@ h2.movie {
 
 .poster {
   width: $poster-width;
-  height: auto;
-  border: $poster-border;
+  height: $poster-height;
+  object-fit: cover;
+  border: 1px solid #000;
 }
 
 .marketing {
@@ -416,11 +419,10 @@ a.result-more {
   }
 
   &-poster {
-    width: 60px;
-    height: 90px;
+    @extend .poster;
+    width: $poster-width-sm;
+    height: $poster-height-sm;
     margin-right: 0.6em;
-    object-fit: cover;
-    border: $poster-border;
   }
 
   &-title {
