@@ -204,8 +204,7 @@ namespace :movies do
       records =
         if ENV["FAILED_ONLY"]
           puts "Re-fetching failed...\n"
-          error_input = File.readlines(log_errors).map(&:strip)
-          Movie.where(wiki_id: error_input)
+          Movie.where(wiki_id: errors)
         else
           puts "Fetching all...\n"
           existing = Dir.glob(Rails.root.join(out_dir, "*.jpg")).map { File.basename(_1, ".jpg") }
