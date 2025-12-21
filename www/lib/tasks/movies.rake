@@ -187,7 +187,8 @@ namespace :movies do
       FileUtils.mkdir_p(out_dir_100)
       FileUtils.mkdir_p(out_dir_300)
 
-      no_poster_input = File.readlines(log_none).map(&:strip)
+      no_posters = File.readlines(log_none).map(&:strip)
+      errors = File.readlines(log_errors).map(&:strip)
 
       records =
         if ENV["FAILED_ONLY"]
@@ -202,10 +203,7 @@ namespace :movies do
           Movie.where(wiki_id: remaining).order("random()")
         end
 
-      error_output = File.new(log_errors, "w")
-      no_poster_output = File.new(log_none, "a")
-
-      records.where.not(wiki_id: no_poster_input).find_each do |movie|
+      records.where.not(wiki_id: no_posters).find_each do |movie|
         wiki_id = movie.wiki_id
 
         imdb_id = movie.imdb_id
@@ -215,7 +213,7 @@ namespace :movies do
 
         if filename == "imdb_logo.png"
           print "X"
-          no_poster_output.puts wiki_id
+          no_posters << wiki_id
           next
         end
         pp ["Different type", wiki_id, url] unless filename =~ /(\.jpg)|(.jpeg)$/
@@ -233,11 +231,20 @@ namespace :movies do
         `convert -resize 300x #{target_path} #{out_dir_300.join("#{wiki_id}.jpg")}`
 
         print "."
+        errors.delete(wiki_id)
       rescue Mechanize::ResponseCodeError, Net::ReadTimeout, Net::OpenTimeout => error
         print "F"
         pp ["Get failed", { wiki_id:, imdb_id:, error: error }]
-        error_output.puts wiki_id
+        errors << wiki_id
         next
+      end
+    ensure
+      puts
+      File.open(log_errors, "w") do |file|
+        file.puts(errors)
+      end
+      File.open(log_none, "w") do |file|
+        file.puts(no_posters)
       end
     end
   end
