@@ -37,7 +37,7 @@ end
 group :test do
   # Keep at 5 for now, as long as `rails test` doesn't pick up any tests:
   # https://github.com/minitest/minitest/issues/1040#issuecomment-3668131216
-  gem "minitest", "< 6"
+  gem "minitest", "< 7"
   gem "capybara"
   gem "selenium-webdriver"
   gem "webmock"
