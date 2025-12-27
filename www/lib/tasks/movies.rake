@@ -21,15 +21,22 @@ def parse_external_reference(json, id)
   end
 end
 
-def with_log(task)
+def instrument(task)
+  task_name = task.to_s.underscore
+
   Rails.logger.tagged(Time.now.iso8601(4)) do
-    Rails.logger.info("event=rake_#{task.to_s.underscore}_start")
+    Rails.logger.info("event=rake_#{task_name}_start")
   end
 
-  yield
+  success = yield
+  if success
+    Rails.logger.info("✅ #{task} succeeded.")
+  else
+    Rails.logger.error("❌ #{task} failed. Abort.")
+  end
 
   Rails.logger.tagged(Time.now.iso8601(4)) do
-    Rails.logger.info("event=rake_#{task.to_s.underscore}_stop")
+    Rails.logger.info("event=rake_#{task_name}_stop")
   end
 end
 
@@ -46,51 +53,51 @@ desc "Update the movie database"
 namespace :movies do
   desc "(1) Download the wiki data dump"
   task download: [:environment] do
-    with_log(:download) do
-      `curl -O https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2 --output-dir #{output_dir}`
+    instrument(:download) do
+      system "curl --fail -O https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2 --output-dir #{output_dir}"
     end
   end
 
   desc "(2) Decompress the downloaded wiki data dump"
   task decompress: [:environment] do
-    with_log(:decompress) do
-      `(cd #{output_dir} && lbzcat latest-all.json.bz2 | rg '(#{all_claims.map { "\"#{_1}\"" }.join("|")})' > latest-all-reduced.json)`
+    instrument(:decompress) do
+      system "(cd #{output_dir} && lbzcat latest-all.json.bz2 | rg '(#{all_claims.map { "\"#{_1}\"" }.join("|")})' > latest-all-reduced.json)"
     end
   end
 
   desc "(3) Generate the movies file"
   task generate_movies: [:environment] do
-    with_log(:generate_movies) do
+    instrument(:generate_movies) do
       input_file = File.join(output_dir, "latest-all-reduced.json")
       output_file = File.join(output_dir, "movies.json")
 
-      `cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim #{movies_claim_file}" > #{output_file}`
+      system %Q(cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim #{movies_claim_file}" > #{output_file})
     end
   end
 
   desc "(4) Generate the humans file"
   task generate_humans: [:environment] do
-    with_log(:generate_humans) do
+    instrument(:generate_humans) do
       input_file = File.join(output_dir, "latest-all-reduced.json")
       output_file = File.join(output_dir, "humans.json")
 
-      `cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim P31:#{humans_claim}" > #{output_file}`
+      system %Q(cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim P31:#{humans_claim}" > #{output_file})
     end
   end
 
   desc "(5) Generate the minimized humans file"
   task generate_humans_minimized: [:environment] do
-    with_log(:generate_humans_minimized) do
+    instrument(:generate_humans_minimized) do
       input_file = File.join(output_dir, "humans.json")
       output_file = File.join(output_dir, "humans-min.json")
 
-      `cat #{input_file} | jq -c '[.id, .labels.mul.value, .labels.en.value, .labels["en-us"].value]' > #{output_file}`
+      system %Q(cat #{input_file} | jq -c '[.id, .labels.mul.value, .labels.en.value, .labels["en-us"].value]' > #{output_file})
     end
   end
 
   desc "(6) Import movies from a wikidata json dump"
   task import: [:environment] do
-    with_log(:import) do
+    instrument(:import) do
       series_classes = File.readlines(Rails.root.join("config/wikidata_series_classes")).map(&:strip)
 
       puts "Reading humans..."
