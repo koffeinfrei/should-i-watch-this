@@ -49,6 +49,17 @@ end
 
 def output_dir = ENV.fetch("DIR")
 
+desc "Executes all movies tasks 1-7"
+task movies: [
+  "movies:download",
+  "movies:decompress",
+  "movies:generate_movies",
+  "movies:generate_humans",
+  "movies:generate_humans_minimized",
+  "movies:import",
+  "movies:fetch_posters:imdb"
+]
+
 desc "Update the movie database"
 namespace :movies do
   desc "(1) Download the wiki data dump"
