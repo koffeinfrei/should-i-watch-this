@@ -65,7 +65,7 @@ namespace :movies do
   desc "(1) Download the wiki data dump"
   task download: [:environment] do
     instrument(:download) do
-      system "curl --fail -O https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2 --output-dir #{output_dir}"
+      system "curl --fail --continue-at - -O https://dumps.wikimedia.org/wikidatawiki/entities/latest-all.json.bz2 --output-dir #{output_dir}"
     end
   end
 
