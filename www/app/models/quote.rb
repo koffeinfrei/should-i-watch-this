@@ -4,7 +4,9 @@ module Quote
   end
 
   def self.all
-    from_file("afis-100.json") + from_file("lifehack-25.json")
+    from_file("afis-100.json") +
+      from_file("lifehack-25.json") +
+      from_file("should-i-watch-this.json")
   end
 
   def self.from_file(file_name)
