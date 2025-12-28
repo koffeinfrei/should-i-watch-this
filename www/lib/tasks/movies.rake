@@ -113,13 +113,13 @@ namespace :movies do
 
       puts "Reading humans..."
       file = File.new(File.join(output_dir, "humans-min.json"))
-      humans = file.each.map do |line|
+      humans = file.each.to_h do |line|
         json = JSON.parse(line)
         [
           json[0],
           json[1] || json[2] || json[3]
         ]
-      end.to_h
+      end
 
       puts "Inserting movies..."
       file = File.new(File.join(output_dir, "movies.json"))
