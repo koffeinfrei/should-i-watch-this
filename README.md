@@ -2,43 +2,47 @@
 
 <div align="center">
 
-[![GitHub release](https://img.shields.io/github/v/release/koffeinfrei/should-i-watch-this.svg?style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/releases)
-&nbsp;
-![WWW Build](https://img.shields.io/github/actions/workflow/status/koffeinfrei/should-i-watch-this/www.yml?style=flat-square&label=www%20build)
-&nbsp;
-![CLI Build](https://img.shields.io/github/actions/workflow/status/koffeinfrei/should-i-watch-this/cli.yml?style=flat-square&label=cli%20build)
-&nbsp;
-![License](https://img.shields.io/github/license/koffeinfrei/should-i-watch-this.svg?style=flat-square)
+  [![GitHub release](https://img.shields.io/github/v/release/koffeinfrei/should-i-watch-this.svg?style=flat-square)](https://github.com/koffeinfrei/should-i-watch-this/releases)
+  &nbsp;
+  ![WWW Build](https://img.shields.io/github/actions/workflow/status/koffeinfrei/should-i-watch-this/www.yml?style=flat-square&label=www%20build)
+  &nbsp;
+  ![CLI Build](https://img.shields.io/github/actions/workflow/status/koffeinfrei/should-i-watch-this/cli.yml?style=flat-square&label=cli%20build)
+  &nbsp;
+  ![License](https://img.shields.io/github/license/koffeinfrei/should-i-watch-this.svg?style=flat-square)
 
 </div>
 
 > I watch a lot of movies. This is exactly what I was looking for.<br> -- myself
 
-<br>
+<div align="center">
+
+  ![logo](logo.svg)
+
+</div>
 
 <div align="center">
 
-This is a tool to ask the internet if it's worth watching a movie or show.
+  This is a tool to ask the internet if it's worth watching a movie or show.
 
-There are 3 versions to this:
+  There are 3 versions to this:
 
-[CLI](#1-cli)
-&nbsp;·&nbsp;
-[web application](#2-web-application-at-should-i-watch-thiscom)
-&nbsp;·&nbsp;
-[openfaas function](#3-openfaas-function)
+  [web application](#1-web-application-at-should-i-watch-thiscom)
+  &nbsp;·&nbsp;
+  [CLI](#2-cli)
+  &nbsp;·&nbsp;
+  [openfaas function](#3-openfaas-function)
 
 </div>
 
 <br>
 
-### 1. CLI
+### 1. Web application at should-i-watch-this.com
 
-![Demo](demo.gif)
+![website](doc/readme-www.png)
 
-### 2. Web application at should-i-watch-this.com
+### 2. CLI
 
-![website](screen.jpg)
+![Demo](doc/readme-cli.gif)
 
 ### 3. OpenFaaS function
 
@@ -64,6 +68,7 @@ curl -H 'X-Auth-Token: <your omdb token>' \
 > The function on faasd.koffeinfrei.org is not running anymore. I don't
 > maintain that public instance anymore.
 
+
 ## About
 
 The web application is based on data from [wikidata](https://www.wikidata.org).
@@ -79,6 +84,12 @@ The ratings are fetched from the following sources:
 
 
 ## Usage
+
+### Web application
+
+1. Go to [www.should-i-watch-this.com](https://www.should-i-watch-this.com)
+
+2. Type the title or the IMDb id in the search box
 
 ### CLI
 
@@ -107,12 +118,6 @@ Crystal](https://crystal-lang.org/reference/installation/).
  $ shards build --release
  $ cp bin/should-i-watch-this <some directory in your $PATH>
  ```
-
-### Web application
-
-1. Go to https://www.should-i-watch-this.com
-
-2. Type the title or the IMDb id in the search box
 
 ### OpenFaaS function
 
@@ -146,6 +151,7 @@ Crystal](https://crystal-lang.org/reference/installation/).
        https://your-instance.example.com/function/should-i-watch-this?show_links=true\&year=1984 \
        -d "the terminator"
    ```
+
 
 ## Development
 
