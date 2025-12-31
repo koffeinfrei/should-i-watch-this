@@ -42,10 +42,8 @@ class MoviesController < ApplicationController
     title = params["title"]
     year = params["year"]
 
-    movie, *more_movies = Movie
-      .where(title_original: title)
-      .where("EXTRACT(YEAR FROM release_date) = ?", year)
-      .all
+    movie, *more_movies = Movie.search_by_title_and_year(title, year)
+
     if more_movies.any?
       Rails.logger.warn("event=legacy_redirect_ambiguous title=#{title} year=#{year}")
     end

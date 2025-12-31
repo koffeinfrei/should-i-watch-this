@@ -1,18 +1,9 @@
-module Quote
+class Quote < ApplicationRecord
+  belongs_to :movie
+
+  validates :quote, presence: true
+
   def self.random
-    all.sample
-  end
-
-  def self.all
-    from_file("afis-100.json") +
-      from_file("lifehack-25.json") +
-      from_file("should-i-watch-this.json")
-  end
-
-  def self.from_file(file_name)
-    json = Oj.load(
-      File.read(File.join(__dir__, "quotes", file_name))
-    )
-    json.map { RecursiveOstruct.from(_1) }
+    order("random()").first
   end
 end

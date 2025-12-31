@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_14_155919) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_29_201048) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -147,6 +147,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_14_155919) do
     t.index ["identifier"], name: "index_passwordless_sessions_on_identifier", unique: true
   end
 
+  create_table "quotes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "movie_id", null: false
+    t.string "quote"
+    t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_quotes_on_movie_id"
+  end
+
   create_table "ratings", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "movie_id", null: false
@@ -175,6 +183,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_14_155919) do
     t.index ["user_id"], name: "index_watchlist_items_on_user_id"
   end
 
+  add_foreign_key "quotes", "movies"
   add_foreign_key "ratings", "movies"
   add_foreign_key "ratings", "users"
   add_foreign_key "watchlist_items", "movies"

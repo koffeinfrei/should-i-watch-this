@@ -101,6 +101,11 @@ class Movie < ApplicationRecord
     end
   end
 
+  def self.search_by_title_and_year(title, year)
+    where(title_original: title)
+      .where("EXTRACT(YEAR FROM release_date) = ?", year)
+  end
+
   def self.normalize(term)
     return unless term
 

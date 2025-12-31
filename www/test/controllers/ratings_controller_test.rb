@@ -2,6 +2,7 @@ require "test_helper"
 
 class RatingsControllerTest < ActionDispatch::IntegrationTest
   fixtures :movies
+  fixtures :quotes
 
   test "returns 403 when trying to update another user's rating" do
     user1 = User.create!(email: "user1@example.com")

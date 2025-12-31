@@ -2,4 +2,4 @@
   .icon-label
     span.icon 💭
     div= "“ #{quote.quote} ”"
-    a href=legacy_movie_path(quote.movie, quote.year) = quote.movie
+    a href=movie_url_for(quote.movie) = quote.movie.title
