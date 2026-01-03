@@ -71,7 +71,7 @@ class Movie < ApplicationRecord
 
     # Exact match is a very fast query. In case that the main query times out we still have
     # the exact matches as a result
-    movies = where(title_normalized: title).to_a
+    movies = where(title_normalized: title_normalized).to_a
     begin
       transaction do
         # Kill queries that take too long. That usually means that the query is not specific enough
