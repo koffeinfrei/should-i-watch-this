@@ -19,6 +19,7 @@ $color-alert-bg: #f58c8c0a;
 
 $font-family: "Fetamont-9ExkzVmc3w";
 $font-size-base: 24px;
+$font-size-small: 0.7em;
 
 $spacing-xs: 8px;
 $spacing-sm: 10px;
@@ -175,11 +176,6 @@ input {
   &[type="file"] {
     border: none;
   }
-
-  &.search {
-    width: 100%;
-    box-sizing: border-box;
-  }
 }
 
 button {
@@ -266,7 +262,7 @@ main {
 .footer {
   margin: auto auto 0 auto;
   padding-bottom: $spacing-xs;
-  font-size: 0.7em;
+  font-size: $font-size-small;
 
   p {
     padding-left: $spacing-horizontal;
@@ -339,7 +335,7 @@ h2.movie {
 
 .disclaimer {
   margin-top: -1em;
-  font-size: 0.7em;
+  font-size: $font-size-small;
 }
 
 .label {
@@ -436,7 +432,7 @@ a.result-more {
 
 .total-movies {
   color: $color-link;
-  font-size: 0.7em;
+  font-size: $font-size-small;
 }
 
 .rating {
@@ -449,7 +445,7 @@ a.result-more {
 }
 
 .rating-trigger {
-  font-size: 0.7em;
+  font-size: $font-size-small;
 }
 
 
@@ -479,6 +475,13 @@ td {
   position: relative;
 }
 
+.autocomplete-input {
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    padding-right: 42px;
+  }
+
 .autocomplete-results {
   position: absolute;
   z-index: 99;
@@ -490,6 +493,25 @@ td {
   color: #000;
   border-radius: $border-radius;
   list-style: none;
+}
+
+.autocomplete-help {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  right: 0;
+  top: 0;
+  z-index: 99;
+  height: 100%;
+
+  a {
+    text-decoration: none;
+    border: 2px solid $color-border;
+    border-radius: 50%;
+    margin-bottom: $font-size-small;
+    margin-right: 0.4em;
+    text-align: center;
+  }
 }
 
 
@@ -532,6 +554,11 @@ dialog {
 
 .mb-1 {
   margin-bottom: 1em;
+}
+
+.px-md {
+  padding-left: $spacing-md;
+  padding-right: $spacing-md;
 }
 
 .text-start {
