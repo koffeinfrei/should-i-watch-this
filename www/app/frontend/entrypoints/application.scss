@@ -506,11 +506,16 @@ td {
 
   a {
     text-decoration: none;
-    border: 2px solid $color-border;
+    border: 2px solid $color-link;
     border-radius: 50%;
     margin-bottom: $font-size-small;
     margin-right: 0.4em;
     text-align: center;
+
+    &:hover {
+      color: $color-background;
+      border-color: $color-background;
+    }
   }
 }
 
