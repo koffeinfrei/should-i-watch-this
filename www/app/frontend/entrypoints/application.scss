@@ -19,7 +19,8 @@ $color-alert-bg: #f58c8c0a;
 
 $font-family: "Fetamont-9ExkzVmc3w";
 $font-size-base: 24px;
-$font-size-small: 0.7em;
+$font-size-sm: 0.8em;
+$font-size-xs: 0.7em;
 
 $spacing-xs: 8px;
 $spacing-sm: 10px;
@@ -135,7 +136,7 @@ a {
   }
 
   &.sm {
-    font-size: 0.8em;
+    font-size: $font-size-sm;
   }
 }
 
@@ -160,7 +161,7 @@ textarea {
   font-size: inherit;
 
   &.sm {
-    font-size: 0.8em;
+    font-size: $font-size-sm;
   }
 }
 
@@ -215,7 +216,7 @@ button {
   }
 
   &.sm {
-    font-size: 0.8em;
+    font-size: $font-size-sm;
     height: 30px;
   }
 }
@@ -262,7 +263,7 @@ main {
 .footer {
   margin: auto auto 0 auto;
   padding-bottom: $spacing-xs;
-  font-size: $font-size-small;
+  font-size: $font-size-xs;
 
   p {
     padding-left: $spacing-horizontal;
@@ -335,7 +336,7 @@ h2.movie {
 
 .disclaimer {
   margin-top: -1em;
-  font-size: $font-size-small;
+  font-size: $font-size-xs;
 }
 
 .label {
@@ -411,7 +412,7 @@ a.result-more {
   }
 
   &.no-result {
-    font-size: 0.8em;
+    font-size: $font-size-sm;
   }
 
   &-poster {
@@ -426,13 +427,13 @@ a.result-more {
   }
 
   &-description {
-    font-size: 0.8em;
+    font-size: $font-size-sm;
   }
 }
 
 .total-movies {
   color: $color-link;
-  font-size: $font-size-small;
+  font-size: $font-size-xs;
 }
 
 .rating {
@@ -445,7 +446,7 @@ a.result-more {
 }
 
 .rating-trigger {
-  font-size: $font-size-small;
+  font-size: $font-size-xs;
 }
 
 
@@ -505,10 +506,11 @@ td {
   height: 100%;
 
   a {
+    font-size: $font-size-sm;
     text-decoration: none;
     border: 2px solid $color-link;
     border-radius: 50%;
-    margin-bottom: $font-size-small;
+    margin-bottom: $font-size-xs;
     margin-right: 0.4em;
     text-align: center;
 
