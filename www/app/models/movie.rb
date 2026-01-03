@@ -61,17 +61,28 @@ class Movie < ApplicationRecord
   def self.search_by_title(title, limit:)
     title_normalized = normalize(title)
 
+    by_title = search_by_tsv_title(title_normalized).with_pg_search_rank
+    by_title_original = search_by_tsv_title_original(title.downcase).with_pg_search_rank
+    if block_given?
+      by_title = yield by_title
+      by_title_original = yield by_title_original
+    end
+
     sql = <<~SQL.squish
       (
-        (#{search_by_tsv_title(title_normalized).with_pg_search_rank.to_sql})
+        (#{by_title.to_sql})
           UNION ALL
-        (#{search_by_tsv_title_original(title.downcase).with_pg_search_rank.to_sql})
+        (#{by_title_original.to_sql})
       ) AS movies
     SQL
 
     # Exact match is a very fast query. In case that the main query times out we still have
     # the exact matches as a result
-    movies = where(title_normalized: title_normalized).to_a
+    movies = where(title_normalized: title_normalized)
+    if block_given?
+      movies = yield movies
+    end
+    movies = movies.to_a
     begin
       transaction do
         # Kill queries that take too long. That usually means that the query is not specific enough
@@ -83,11 +94,12 @@ class Movie < ApplicationRecord
     rescue => e
       raise unless e.is_a?(ActiveRecord::QueryCanceled)
     end
-    movies.uniq[0, limit]
+    movies.uniq.take(limit)
   end
 
   def self.search(query, limit:)
-    query_downcased = query&.strip.downcase
+    query = query&.strip
+    query_downcased = query&.downcase
 
     raise ShortQueryError, "min search length" if query_downcased.length < MIN_SEARCH_LENGTH
     raise UnspecificQueryError, "term is only 'the'" if query_downcased == "the"
@@ -96,6 +108,39 @@ class Movie < ApplicationRecord
       where(imdb_id: query_downcased)
     elsif query_downcased =~ /^q\d+$/
       where(wiki_id: query_downcased.upcase)
+    elsif query_downcased.include?(" with ") || query_downcased.include?(" by ")
+      tokens = query_downcased.split(/ |( with )|( by )/)
+      person_queries = []
+
+      from_indexes = []
+      if tokens.include?("with")
+        from_index = tokens.rindex("with")
+        from_indexes << from_index
+        actor_query = tokens[(from_index + 1)..].take_while { _1 != "by" }.join(" ")
+
+        person_queries << ->(relation) { relation.where("array_to_string(actors, ',') ILIKE ?", "%#{actor_query}%") }
+      end
+
+      if tokens.include?("by")
+        from_index = tokens.rindex("by")
+        from_indexes << from_index
+        director_query = tokens[(from_index + 1)..].take_while { _1 != "with" }.join(" ")
+
+        person_queries << ->(relation) { relation.where("array_to_string(directors, ',') ILIKE ?", "%#{director_query}%") }
+      end
+
+      title_query = tokens[0...from_indexes.min].join(" ")
+      person_result = search_by_title(title_query, limit:) do |relation|
+        person_queries.each do |person_query|
+          relation = person_query.call(relation)
+        end
+        relation
+      end
+
+      # also search by the whole term, as the split tokens can be part of the title
+      title_result = search_by_title(query, limit:)
+
+      (person_result + title_result).uniq.take(limit)
     else
       search_by_title(query, limit:)
     end
