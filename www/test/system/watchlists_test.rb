@@ -26,7 +26,7 @@ class WatchlistsTest < ApplicationSystemTestCase
     assert_selector "h2", text: "Her"
 
     assert_button "﹢watchlist"
-    assert_no_button "🗸 in watchlist"
+    assert_no_button "✓ in watchlist"
 
     # add to watchlist
     click_on "﹢watchlist"
@@ -34,10 +34,10 @@ class WatchlistsTest < ApplicationSystemTestCase
     assert [[movie.id, user.id]], WatchlistItem.pluck(:movie_id, :user_id)
 
     assert_no_button "﹢watchlist"
-    assert_button "🗸 in watchlist"
+    assert_button "✓ in watchlist"
 
     # remove from watchlist
-    click_on "🗸 in watchlist"
+    click_on "✓ in watchlist"
     assert_text "The movie 'Her' was removed from your watchlist"
     assert 0, WatchlistItem.count
   end

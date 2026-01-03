@@ -13,7 +13,7 @@ class WatchlistsTest < ApplicationSystemTestCase
     # search help
     click_on "Search help"
     within "dialog" do
-      assert_text 'Search by title 🠖 "Hero"'
+      assert_text 'Search by title → "Hero"'
       click_on "Close dialog"
     end
 

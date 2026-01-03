@@ -12,7 +12,7 @@ class MoviesController < ApplicationController
 
       @button_label, @button_title =
         if WatchlistItem.exists?(movie: @movie, user: current_user)
-          ["🗸 in watchlist", "Remove from watchlist"]
+          ["✓ in watchlist", "Remove from watchlist"]
         else
           ["﹢watchlist", "Add to watchlist"]
         end
