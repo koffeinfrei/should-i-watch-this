@@ -79,7 +79,7 @@
               td.value= @movie.directors.join(', ')
             tr
               td.label Actors
-              td.value= @movie.actors.join(', ')
+              td.value= @movie.actors.take(6).join(', ')
 
       .marketing
         img.poster src=poster_path width="130" height="195" alt="poster"

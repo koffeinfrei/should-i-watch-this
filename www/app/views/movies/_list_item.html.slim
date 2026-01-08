@@ -5,4 +5,4 @@
     .movie-list-item-description
       = movie_date(movie)
       div= movie.directors.join(', ')
-      div= movie.actors.join(', ')
+      div= movie.actors.take(3).join(', ')

@@ -150,7 +150,7 @@ namespace :movies do
           omdb_id = parse_external_reference(json, "P3302")
 
           directors = (json.dig("claims", "P57") || []).map { _1.dig("mainsnak", "datavalue", "value", "id") }
-          actors = (json.dig("claims", "P161") || []).take(3).map { _1.dig("mainsnak", "datavalue", "value", "id") }
+          actors = (json.dig("claims", "P161") || []).map { _1.dig("mainsnak", "datavalue", "value", "id") }
 
           # for films
           release_date = as_proper_date(json.dig("claims", "P577", 0, "mainsnak", "datavalue", "value", "time"))
