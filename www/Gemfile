@@ -21,6 +21,7 @@ gem "nokogiri"
 gem "passwordless"
 gem "csv", require: false
 gem "good_job"
+gem "sparql", require: false
 
 group :development, :test do
   gem "debug", require: "debug/prelude"

@@ -1,6 +1,7 @@
 require "mechanize"
 require "uri"
 require "fileutils"
+require "sparql/client"
 
 def as_proper_date(date)
   return unless date
@@ -40,10 +41,43 @@ def instrument(task)
   end
 end
 
-def movies_claim_file = Rails.root.join("config/wikibase-dump-filter-movies-claim")
+def movies_claims_file
+  file = Rails.root.join("tmp/wikibase-dump-filter-movies-claim")
+
+  unless file.exist?
+    sparql = <<~SPARQL.strip
+    SELECT DISTINCT ?film ?filmLabel WHERE {
+      {
+        ?film wdt:P279* wd:Q11424 .
+      }
+      UNION
+      {
+        ?film wdt:P279* wd:Q5398426 .
+      }
+    }
+    SPARQL
+
+    client = SPARQL::Client.new(
+      "https://query.wikidata.org/sparql",
+      method: :get,
+      headers: { "User-Agent" => "ShouldIWatchThisBot/0.0 (https://www.should-i-watch-this.com; info@should-i-watch-this.com)" }
+    )
+    rows = client.query(sparql)
+
+    values = rows.map { |row| row.each_value.map { _1.to_s.split("/").last } }.flatten.sort
+    File.write(file, "P31:#{values.join(',')}")
+  end
+
+  puts "With movie claims:"
+  puts File.read(file)
+
+  file
+end
+
 def humans_claim = "Q5"
+
 def all_claims
-  movies = File.read(movies_claim_file).strip.split(":").last.split(",")
+  movies = File.read(movies_claims_file).strip.split(":").last.split(",")
   [humans_claim] + movies
 end
 
@@ -82,7 +116,7 @@ namespace :movies do
       input_file = File.join(output_dir, "latest-all-reduced.json")
       output_file = File.join(output_dir, "movies.json")
 
-      system %Q(cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim #{movies_claim_file}" > #{output_file})
+      system %Q(cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim #{movies_claims_file}" > #{output_file})
     end
   end
 
