@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@hotwired/turbo-rails": "^8.0.12",
+    "@hotwired/turbo-rails": "^8.0.23",
     "stimulus-autocomplete": "^3.1.0",
     "wikibase-dump-filter": "^6.1.1"
   }
