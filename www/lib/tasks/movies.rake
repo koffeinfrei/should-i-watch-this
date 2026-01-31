@@ -12,11 +12,14 @@ def as_proper_date(date)
 end
 
 def parse_external_reference(json, id)
-  json.dig("claims", id, 0).yield_self do |claim|
-    break unless claim
+  claims = json.dig("claims", id)
+  if claims
+    claim = claims
+      # filter out deprecated entries
+      .reject { _1.dig("qualifiers", "P2241") || _1.dig("rank") == "deprecated" }
+      .first
 
-    deprecated = claim.dig("qualifiers", "P2241")
-    unless deprecated
+    if claim
       claim.dig("mainsnak", "datavalue", "value")
     end
   end
