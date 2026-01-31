@@ -160,6 +160,7 @@ namespace :movies do
 
       puts "Inserting movies..."
       file = File.new(File.join(output_dir, "movies.json"))
+      wiki_ids = []
       file.lazy.each_slice(10_000) do |lines|
         attributes = lines.map do |line|
           json = JSON.parse(line)
@@ -213,11 +214,17 @@ namespace :movies do
         end
 
         Movie.upsert_all(attributes, unique_by: :wiki_id)
+        wiki_ids += attributes.map { _1[:wiki_id] }
 
         print "."
       end
 
-      puts "\nGenerating tsv columns..."
+      existing = Movie.pluck(:wiki_id)
+      obsolete = existing - wiki_ids
+      puts "\nDeleting #{obsolete.length} obsolete records..."
+      Movie.where(wiki_id: obsolete).delete_all
+
+      puts "Generating tsv columns..."
       ActiveRecord::Base.connection.execute <<~SQL.squish
         update movies
           set
@@ -231,6 +238,7 @@ namespace :movies do
             );
       SQL
 
+      # reset movie count
       SimpleStore.delete("movie_count")
     end
   end
