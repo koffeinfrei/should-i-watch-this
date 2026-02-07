@@ -1,4 +1,4 @@
-/# locals: (query: nil)
+/# locals: (query: nil, autofocus: false)
 
 section.box.padded[
     data-controller="search-autocomplete"
@@ -14,7 +14,7 @@ section.box.padded[
       value=query
       data-search-autocomplete-target="input"
       data-action="click->search-autocomplete#reopen"
-      autofocus=true
+      autofocus=autofocus
     ]
 
     dialog data-dialog-target='dialog'
