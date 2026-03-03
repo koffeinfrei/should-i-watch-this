@@ -21,7 +21,7 @@ class ScoreFetcher
     url = @result.movie.imdb_url
     return unless url
 
-    if html = HttpGrabber.new(url).run('script[type="application/ld+json"]')
+    if html = HttpGrabber::Selenium.new(url).run('script[type="application/ld+json"]')
       data = JSON.parse(html)
 
       if score = data.dig("aggregateRating", "ratingValue")
@@ -39,7 +39,7 @@ class ScoreFetcher
     url = @result.movie.metacritic_url
     return unless url
 
-    if html = HttpGrabber.new(url).run('script[type="application/ld+json"]')
+    if html = HttpGrabber::Curl.new(url).run('script[type="application/ld+json"]')
       data = JSON.parse(html)
 
       if score = data.dig("aggregateRating", "ratingValue")
@@ -55,7 +55,7 @@ class ScoreFetcher
     url = @result.movie.rotten_url
     return unless url
 
-    if html = HttpGrabber.new(url).run("#media-scorecard-json")
+    if html = HttpGrabber::Curl.new(url).run("#media-scorecard-json")
       data = JSON.parse(html)
 
       if critics_score = data.dig("criticsScore", "score")

@@ -22,6 +22,7 @@ gem "passwordless"
 gem "csv", require: false
 gem "good_job"
 gem "sparql", require: false
+gem "selenium-webdriver"
 
 group :development, :test do
   gem "debug", require: "debug/prelude"
@@ -40,6 +41,5 @@ group :test do
   # https://github.com/minitest/minitest/issues/1040#issuecomment-3668131216
   gem "minitest", "< 6"
   gem "capybara"
-  gem "selenium-webdriver"
   gem "webmock"
 end
