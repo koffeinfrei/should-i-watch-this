@@ -45,7 +45,7 @@ class MoviesController < ApplicationController
     movie, *more_movies = Movie.search_by_title_and_year(title, year)
 
     if more_movies.any?
-      Rails.logger.warn("event=legacy_redirect_ambiguous title=#{title} year=#{year}")
+      logger.warn("event=legacy_redirect_ambiguous title=#{title} year=#{year}")
     end
 
     if movie

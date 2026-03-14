@@ -31,7 +31,7 @@ class ScoreFetcher
       @result.trailer_url = data.dig("trailer", "embedUrl")
     else
       @result.scores[:imdb] = Score::Incomplete.new
-      Rails.logger.error("event=fetch_imdb_failed wiki_id=#{@result.movie.wiki_id} url=\"#{url}\"")
+      Rails.logger.tagged(Time.now.iso8601(4)) { Rails.logger.error("event=fetch_imdb_failed wiki_id=#{@result.movie.wiki_id} url=\"#{url}\"") }
     end
   end
 
@@ -47,7 +47,7 @@ class ScoreFetcher
       end
     else
       @result.scores[:metacritic] = Score::Incomplete.new
-      Rails.logger.error("event=fetch_metacritic_failed wiki_id=#{@result.movie.wiki_id} url=\"#{url}\"")
+      Rails.logger.tagged(Time.now.iso8601(4)) { Rails.logger.error("event=fetch_metacritic_failed wiki_id=#{@result.movie.wiki_id} url=\"#{url}\"") }
     end
   end
 
@@ -70,7 +70,7 @@ class ScoreFetcher
     else
       @result.scores[:rotten_tomatoes] = Score::Incomplete.new
       @result.scores[:rotten_tomatoes_audience] = Score::Incomplete.new
-      Rails.logger.error("event=fetch_rotten_tomatoes_failed wiki_id=#{@result.movie.wiki_id} url=\"#{url}\"")
+      Rails.logger.tagged(Time.now.iso8601(4)) { Rails.logger.error("event=fetch_rotten_tomatoes_failed wiki_id=#{@result.movie.wiki_id} url=\"#{url}\"") }
     end
   end
 

@@ -15,7 +15,7 @@ module HttpGrabber
       page = Nokogiri::HTML(response.body_str)
       page.at_css(selector)&.content
     rescue StandardError => e
-      Rails.logger.error("event=http_grabber_error url=\"#{@url}\" error=\"#{e.inspect}\"")
+      Rails.logger.tagged(Time.now.iso8601(4)) { Rails.logger.error("event=http_grabber_error url=\"#{@url}\" error=\"#{e.inspect}\"") }
       nil
     end
   end
@@ -46,7 +46,7 @@ module HttpGrabber
 
       content
     rescue StandardError => e
-      Rails.logger.error("event=http_grabber_error url=\"#{@url}\" error=\"#{e.inspect}\"")
+      Rails.logger.tagged(Time.now.iso8601(4)) { Rails.logger.error("event=http_grabber_error url=\"#{@url}\" error=\"#{e.inspect}\"") }
       nil
     end
   end
