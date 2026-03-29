@@ -246,20 +246,8 @@ namespace :movies do
   namespace :fetch_posters do
     desc "(7) Fetch movie posters from imdb"
     task imdb: [:environment] do
-      agent = Mechanize.new
-      agent.user_agent_alias = "Mac Safari"
-      agent.read_timeout = 5
-      agent.open_timeout = 5
-
-      options = ::Selenium::WebDriver::Options.chrome
-      options.add_argument("--headless=new")
-      options.add_argument("user-agent=mozilla/5.0 (x11; ubuntu; linux x86_64; rv:147.0) gecko/20100101 firefox/147.0")
-      options.timeouts = {
-        page_load: 5_000, # 5 seconds
-        script: 5_000     # 5 seconds
-      }
-      options.page_load_strategy = :none
-      driver = ::Selenium::WebDriver.for(:chrome, options: options)
+      mechanize = HttpClient::Mechanize.new
+      selenium = HttpClient::Selenium.new
 
       out_dir = Rails.root.join("public/posters/original")
       out_dir_100 = Rails.root.join("public/posters/100")
@@ -292,10 +280,7 @@ namespace :movies do
         wiki_id = movie.wiki_id
         imdb_id = movie.imdb_id
 
-        driver.get("https://www.imdb.com/title/#{imdb_id}")
-        wait = ::Selenium::WebDriver::Wait.new(timeout: 5)
-        element = wait.until { driver.find_element(css: "meta[property='og:image']") }
-        url = element.attribute("content")
+        url = selenium.content("https://www.imdb.com/title/#{imdb_id}", "meta[property='og:image']")
         filename = url.split("/").last
 
         if filename == "imdb_logo.png"
@@ -306,7 +291,7 @@ namespace :movies do
         pp ["Different type", wiki_id, url] unless filename =~ /(\.jpg)|(.jpeg)$/
 
         tmp_path = out_dir.join(filename)
-        agent.get(url).save(tmp_path)
+        mechanize.download(url, tmp_path)
 
         target_path = out_dir.join("#{wiki_id}.jpg")
 
