@@ -251,6 +251,16 @@ namespace :movies do
       agent.read_timeout = 5
       agent.open_timeout = 5
 
+      options = ::Selenium::WebDriver::Options.chrome
+      options.add_argument("--headless=new")
+      options.add_argument("user-agent=mozilla/5.0 (x11; ubuntu; linux x86_64; rv:147.0) gecko/20100101 firefox/147.0")
+      options.timeouts = {
+        page_load: 5_000, # 5 seconds
+        script: 5_000     # 5 seconds
+      }
+      options.page_load_strategy = :none
+      driver = ::Selenium::WebDriver.for(:chrome, options: options)
+
       out_dir = Rails.root.join("public/posters/original")
       out_dir_100 = Rails.root.join("public/posters/100")
       out_dir_300 = Rails.root.join("public/posters/300")
@@ -280,11 +290,13 @@ namespace :movies do
 
       records.where.not(wiki_id: no_posters).find_each do |movie|
         wiki_id = movie.wiki_id
-
         imdb_id = movie.imdb_id
-        page = agent.get("https://www.imdb.com/title/#{imdb_id}")
-        url = URI(page.search("meta[property='og:image']").first[:content])
-        filename = url.path.split("/").last
+
+        driver.get("https://www.imdb.com/title/#{imdb_id}")
+        wait = ::Selenium::WebDriver::Wait.new(timeout: 5)
+        element = wait.until { driver.find_element(css: "meta[property='og:image']") }
+        url = element.attribute("content")
+        filename = url.split("/").last
 
         if filename == "imdb_logo.png"
           print "X"
@@ -307,7 +319,7 @@ namespace :movies do
 
         print "."
         errors.delete(wiki_id)
-      rescue Mechanize::ResponseCodeError, Net::ReadTimeout, Net::OpenTimeout => error
+      rescue Mechanize::ResponseCodeError, Net::ReadTimeout, Net::OpenTimeout, Selenium::WebDriver::Error::TimeoutError => error
         print "F"
         pp ["Get failed", { wiki_id:, imdb_id:, error: error }]
         errors << wiki_id
