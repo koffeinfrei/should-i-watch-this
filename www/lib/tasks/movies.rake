@@ -1,4 +1,3 @@
-require "mechanize"
 require "uri"
 require "fileutils"
 require "sparql/client"
@@ -246,7 +245,7 @@ namespace :movies do
   namespace :fetch_posters do
     desc "(7) Fetch movie posters from imdb"
     task imdb: [:environment] do
-      mechanize = HttpClient::Mechanize.new
+      curl = HttpClient::Curl.new
       selenium = HttpClient::Selenium.new
 
       out_dir = Rails.root.join("public/posters/original")
@@ -291,7 +290,7 @@ namespace :movies do
         pp ["Different type", wiki_id, url] unless filename =~ /(\.jpg)|(.jpeg)$/
 
         tmp_path = out_dir.join(filename)
-        mechanize.download(url, tmp_path)
+        curl.download(url, tmp_path)
 
         target_path = out_dir.join("#{wiki_id}.jpg")
 
@@ -304,7 +303,7 @@ namespace :movies do
 
         print "."
         errors.delete(wiki_id)
-      rescue Mechanize::ResponseCodeError, Net::ReadTimeout, Net::OpenTimeout, Selenium::WebDriver::Error::TimeoutError => error
+      rescue Net::ReadTimeout, Net::OpenTimeout, Selenium::WebDriver::Error::TimeoutError => error
         print "F"
         pp ["Get failed", { wiki_id:, imdb_id:, error: error }]
         errors << wiki_id

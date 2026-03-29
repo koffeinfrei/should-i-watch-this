@@ -130,7 +130,6 @@ GEM
     debug (1.11.1)
       irb (~> 1.10)
       reline (>= 0.3.8)
-    domain_name (0.6.20240107)
     dotenv (3.2.0)
     drb (2.2.3)
     dry-cli (1.4.1)
@@ -163,8 +162,6 @@ GEM
       stimulus-rails
       turbo-rails
     htmlentities (4.4.2)
-    http-cookie (1.1.0)
-      domain_name (~> 0.5)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     io-console (0.8.2)
@@ -200,28 +197,10 @@ GEM
     matrix (0.4.3)
     mcp (0.8.0)
       json-schema (>= 4.1)
-    mechanize (2.14.0)
-      addressable (~> 2.8)
-      base64
-      domain_name (~> 0.5, >= 0.5.20190701)
-      http-cookie (~> 1.0, >= 1.0.3)
-      mime-types (~> 3.3)
-      net-http-digest_auth (~> 1.4, >= 1.4.1)
-      net-http-persistent (>= 2.5.2, < 5.0.dev)
-      nkf
-      nokogiri (~> 1.11, >= 1.11.2)
-      rubyntlm (~> 0.6, >= 0.6.3)
-      webrick (~> 1.7)
-      webrobots (~> 0.1.2)
-    mime-types (3.7.0)
-      logger
-      mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2026.0303)
     mini_mime (1.1.5)
     minitest (5.27.0)
     msgpack (1.8.0)
     mutex_m (0.3.0)
-    net-http-digest_auth (1.4.1)
     net-http-persistent (4.0.8)
       connection_pool (>= 2.2.4, < 4)
     net-imap (0.6.3)
@@ -239,7 +218,6 @@ GEM
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.5)
-    nkf (0.2.0)
     nokogiri (1.19.1-aarch64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.19.1-aarch64-linux-musl)
@@ -387,8 +365,6 @@ GEM
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
-    rubyntlm (0.6.5)
-      base64
     rubyzip (3.2.2)
     scanf (1.0.0)
     securerandom (0.4.1)
@@ -464,8 +440,6 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webrick (1.9.2)
-    webrobots (0.1.2)
     websocket (1.2.11)
     websocket-driver (0.8.0)
       base64
@@ -501,7 +475,6 @@ DEPENDENCIES
   good_job
   hotwire-rails
   letter_opener
-  mechanize
   minitest (< 6)
   nokogiri
   oj
