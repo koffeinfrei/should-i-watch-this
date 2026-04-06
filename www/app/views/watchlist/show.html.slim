@@ -21,6 +21,8 @@ section.box.padded
                   class: 'link js-item', title: "Remove from watchlist"
                 | ⨯
 
+    = render 'shared/pagination', pagination: @pagination, filter_params: filter_params
+
   - else
     | Well. You should definitely add some movies to your watchlist.
 

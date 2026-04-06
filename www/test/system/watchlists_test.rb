@@ -162,4 +162,86 @@ class WatchlistsTest < ApplicationSystemTestCase
     sign_in user, skip_visit: true
     assert_selector "h2", text: "Her"
   end
+
+  test "paginates the watchlist" do
+    user = User.create!(email: "user@example.com")
+    movie1 = movies(:her)
+    movie2 = movies(:terminator)
+    movie3 = movies(:the_bear)
+    WatchlistItem.create! user: user, movie: movie3
+    WatchlistItem.create! user: user, movie: movie2
+    WatchlistItem.create! user: user, movie: movie1
+
+    sign_in user
+
+    with_mocked_const "Pagination::PER", 1 do
+      click_on "Watchlist"
+
+      # 1st page
+      assert_no_link "First"
+      assert_no_link "Previous"
+      assert_link "Next"
+      items = all ".movie-list-item", count: 1
+      within items[0] do
+        assert_content "Her"
+      end
+
+      # 2nd page
+      click_on "Next"
+      assert_link "First"
+      assert_link "Previous"
+      assert_link "Next"
+      items = all ".movie-list-item", count: 1
+      within items[0] do
+        assert_content "The Terminator"
+      end
+
+      # 3rd page
+      click_on "Next"
+      assert_link "First"
+      assert_link "Previous"
+      assert_no_link "Next"
+      items = all ".movie-list-item", count: 1
+      within items[0] do
+        assert_content "The Bear"
+      end
+
+      click_on "Previous"
+
+      assert_link "First"
+      assert_link "Previous"
+      assert_link "Next"
+
+      click_on "First"
+
+      assert_no_link "First"
+      assert_no_link "Previous"
+      assert_link "Next"
+
+      # selecting a filter resets to the first page
+      click_on "Next"
+      assert_link "First"
+      assert_link "Previous"
+      assert_link "Next"
+      select "Shows", from: "collection"
+      assert_no_link "First"
+      assert_no_link "Previous"
+      assert_no_link "Next"
+      assert_content "The Bear"
+
+      select "All", from: "collection"
+      assert_no_link "First"
+      assert_no_link "Previous"
+      assert_link "Next"
+      assert_content "Her"
+      click_on "Next"
+      assert_link "First"
+      assert_link "Previous"
+      assert_link "Next"
+      items = all ".movie-list-item", count: 1
+      within items[0] do
+        assert_content "The Terminator"
+      end
+    end
+  end
 end

@@ -13,9 +13,17 @@ class WatchlistController < ApplicationController
         @movies = @movies.where(series: true)
       end
 
-      @movies = @movies.to_a
+      page = params.fetch(:page, 1).to_i
+      @movies, @pagination = Pagination.apply(@movies, page)
     else
       save_passwordless_redirect_location!(User)
     end
   end
+
+  private
+
+  def filter_params
+    params.permit(:collection)
+  end
+  helper_method :filter_params
 end

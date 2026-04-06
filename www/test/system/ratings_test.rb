@@ -164,7 +164,7 @@ class WatchlistsTest < ApplicationSystemTestCase
     end
   end
 
-  test "paginates the list" do
+  test "paginates the ratings list" do
     user = User.create!(email: "user@example.com")
     movie1 = movies(:her)
     movie2 = movies(:terminator)
