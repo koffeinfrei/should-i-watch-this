@@ -41,5 +41,15 @@ module ActiveSupport
       has_selector? "html[aria-busy]"
       assert_no_selector "html[aria-busy]"
     end
+
+    def with_mocked_const(const_name, value)
+      mod = const_name.deconstantize.constantize
+      const_name = const_name.demodulize
+      original_value = mod.const_get(const_name)
+      silence_warnings { mod.const_set(const_name, value) }
+      yield
+    ensure
+      silence_warnings { mod.const_set(const_name, original_value) }
+    end
   end
 end
