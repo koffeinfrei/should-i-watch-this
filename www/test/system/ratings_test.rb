@@ -163,4 +163,90 @@ class WatchlistsTest < ApplicationSystemTestCase
       assert_content :all, "1 points out of 5"
     end
   end
+
+  test "paginates the list" do
+    user = User.create!(email: "user@example.com")
+    movie1 = movies(:her)
+    movie2 = movies(:terminator)
+    movie3 = movies(:the_bear)
+    Rating.create! user: user, movie: movie1, score: 4, created_at: "03.12.2025"
+    Rating.create! user: user, movie: movie2, score: 5, created_at: "03.09.2025"
+    Rating.create! user: user, movie: movie3, score: 5, created_at: "02.09.2025"
+
+    original_per = Pagination::PER
+    silence_warnings { Pagination.const_set("PER", 1) }
+
+    sign_in user
+    click_on "Ratings"
+
+    # 1st page
+    assert_no_link "First"
+    assert_no_link "Previous"
+    assert_link "Next"
+    items = all ".movie-list-item", count: 1
+    within items[0] do
+      assert_content "Her"
+    end
+
+    # 2nd page
+    click_on "Next"
+    assert_link "First"
+    assert_link "Previous"
+    assert_link "Next"
+    items = all ".movie-list-item", count: 1
+    within items[0] do
+      assert_content "The Terminator"
+    end
+
+    # 3rd page
+    click_on "Next"
+    assert_link "First"
+    assert_link "Previous"
+    assert_no_link "Next"
+    items = all ".movie-list-item", count: 1
+    within items[0] do
+      assert_content "The Bear"
+    end
+
+    click_on "Previous"
+
+    assert_link "First"
+    assert_link "Previous"
+    assert_link "Next"
+
+    click_on "First"
+
+    assert_no_link "First"
+    assert_no_link "Previous"
+    assert_link "Next"
+
+    # selecting a filter resets to the first page
+    click_on "Next"
+    assert_link "First"
+    assert_link "Previous"
+    assert_link "Next"
+    select "Shows", from: "collection"
+    assert_no_link "First"
+    assert_no_link "Previous"
+    assert_no_link "Next"
+    assert_content "The Bear"
+
+    select "All", from: "collection"
+    assert_no_link "First"
+    assert_no_link "Previous"
+    assert_link "Next"
+    assert_content "Her"
+    select "Best first", from: "sort"
+    assert_content "The Terminator"
+    click_on "Next"
+    assert_link "First"
+    assert_link "Previous"
+    assert_link "Next"
+    items = all ".movie-list-item", count: 1
+    within items[0] do
+      assert_content "The Bear"
+    end
+  ensure
+    silence_warnings { Pagination.const_set("PER", original_per) }
+  end
 end

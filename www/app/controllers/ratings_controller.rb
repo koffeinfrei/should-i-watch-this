@@ -23,7 +23,8 @@ class RatingsController < ApplicationController
         @ratings = @ratings.order(score: :desc, created_at: :desc, updated_at: :desc, id: :desc)
       end
 
-      @ratings = @ratings.to_a
+      page = params.fetch(:page, 1).to_i
+      @ratings, @pagination = Pagination.apply(@ratings, page)
     else
       save_passwordless_redirect_location!(User)
     end
@@ -65,4 +66,11 @@ class RatingsController < ApplicationController
     flash[:success] = "Fair enough. Rating removed"
     redirect_to movie_url_for(rating.movie), status: :see_other
   end
+
+  private
+
+  def filter_params
+    params.permit(:collection, :sort)
+  end
+  helper_method :filter_params
 end
