@@ -1,0 +1,14 @@
+/# locals: (pagination:, filter_params: {})
+
+section.box.d-flex.flex-justify-between
+  div
+    - if pagination.current > 1
+      a.me-05 href=url_for(**filter_params, page: nil) « First
+
+    - if pagination.previous
+      a href=url_for(**filter_params, page: pagination.previous) ‹ Previous
+    - else
+      div
+
+  - if pagination.next
+    a href=url_for(**filter_params, page: pagination.next) Next ›

@@ -24,18 +24,7 @@ section.box.padded
             .d-flex.flex-items-center
               = rating_thumb(rating.score)
 
-    section.box.d-flex.flex-justify-between
-      div
-        - if @pagination.current > 1
-          a.me-05 href=url_for(**filter_params, page: nil) « First
-
-        - if @pagination.previous
-          a href=url_for(**filter_params, page: @pagination.previous) ‹ Previous
-        - else
-          div
-
-      - if @pagination.next
-        a href=url_for(**filter_params, page: @pagination.next) Next ›
+    = render 'shared/pagination', pagination: @pagination, filter_params: filter_params
 
   - else
     | Now. Let's watch a movie or two and rate it afterwards.
