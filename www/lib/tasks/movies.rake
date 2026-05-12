@@ -147,14 +147,27 @@ namespace :movies do
     instrument(:import) do
       series_classes = File.readlines(Rails.root.join("config/wikidata_series_classes")).map(&:strip)
 
-      puts "Reading humans..."
-      file = File.new(File.join(output_dir, "humans-min.json"))
-      humans = file.each.to_h do |line|
-        json = JSON.parse(line)
-        [
-          json[0],
-          json[1] || json[2] || json[3]
-        ]
+      class Human < ActiveRecord::Base
+        self.table_name = "humans"
+      end
+      connection = ActiveRecord::Base.connection
+      connection.create_table :humans, id: :string, temporary: true do |t|
+        t.string :name
+      end
+
+      puts "Creating temporary human records..."
+      File.foreach(File.join(output_dir, "humans-min.json")).each_slice(100_000) do |lines|
+        attributes = lines.map do |line|
+          json = JSON.parse(line)
+          [
+            json[0],
+            json[1] || json[2] || json[3]
+          ]
+        end
+        # Using `insert_all` / `upsert_all` results in a `ArgumentError: No unique index found for id` error,
+        # likely due to the methods' index validation
+        values = attributes.map { "(#{connection.quote(_1.first)}, #{connection.quote(_1.last)})" }
+        connection.execute("INSERT INTO humans (id, name) VALUES #{values.join(',')}")
       end
 
       puts "Inserting movies..."
@@ -207,8 +220,8 @@ namespace :movies do
             series: series,
             release_date: start_date || release_date,
             end_date: end_date,
-            directors: directors.map { humans[_1] }.compact,
-            actors: actors.map { humans[_1] }.compact
+            directors: Human.where(id: directors).pluck(:name),
+            actors: Human.where(id: actors).pluck(:name)
           }
         end
 
