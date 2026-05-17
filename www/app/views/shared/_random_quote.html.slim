@@ -1,5 +1,5 @@
 .box
   .icon-label
     span.icon 💭
-    div= "“ #{quote.quote} ”"
+    = format_quote(quote.quote)
     a href=movie_url_for(quote.movie) = quote.movie.title

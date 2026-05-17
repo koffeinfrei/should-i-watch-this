@@ -47,4 +47,13 @@ module ApplicationHelper
       end
     end
   end
+
+  def format_quote(quote)
+    if quote.count("\n") >= 1
+      quote = quote.gsub(/(^[^:]+:)/, '<span class="quote-dialog">\1</span>')
+    end
+    content_tag "blockquote", class: "quote" do
+      "“ #{quote.gsub("\n", "<br>")} ”".html_safe
+    end
+  end
 end
