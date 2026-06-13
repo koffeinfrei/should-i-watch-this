@@ -59,6 +59,31 @@ class MovieTest < ActiveSupport::TestCase
     assert_equal ["By War & By God"], Movie.search("by war & by god by kent", limit: 7).pluck(:title)
     assert_equal ["By War & By God"], Movie.search("by war & by god by williamson", limit: 7).pluck(:title)
     assert_equal ["By War & By God"], Movie.search("by war & by god by kent c. williamson", limit: 7).pluck(:title)
+
+    # titles have precedence over "by" searches
+    Movie.create!(
+      title: "Stand by Me",
+      wiki_id: "Q494722",
+      title_normalized: "stand by me",
+      title_original: "Stand by Me",
+      directors: ["Rob Reiner"],
+      actors: ["Wil Wheaton", "River Phoenix", "Corey Feldman"],
+      tsv_title: "'by':2 'me':3 'stand':1",
+      tsv_title_original: "'by':2 'me':3 'stand':1",
+    )
+
+    Movie.create!(
+      title: "Stand and Deliver",
+      wiki_id: "Q211206",
+      title_normalized: "stand and deliver",
+      title_original: "Stand and Deliver",
+      directors: ["Ramón Menéndez"],
+      actors: ["Edward James Olmos", "Rosanna DeSoto", "Lou Diamond Phillips"],
+      tsv_title: "'and':2 'deliver':3 'stand':1",
+      tsv_title_original: "'and':2 'deliver':3 'stand':1",
+    )
+
+    assert_equal ["Stand by Me", "Stand and Deliver"], Movie.search("stand by me", limit: 7).pluck(:title)
   end
 
   test '.search "with actor" and "by director"' do

@@ -140,7 +140,7 @@ class Movie < ApplicationRecord
       # also search by the whole term, as the split tokens can be part of the title
       title_result = search_by_title(query, limit:)
 
-      (person_result + title_result).uniq.take(limit)
+      (title_result + person_result).uniq.take(limit)
     else
       search_by_title(query, limit:)
     end
