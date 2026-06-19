@@ -220,8 +220,8 @@ namespace :movies do
             series: series,
             release_date: start_date || release_date,
             end_date: end_date,
-            directors: Human.where(id: directors).pluck(:name),
-            actors: Human.where(id: actors).pluck(:name)
+            directors: Human.where(id: directors).order(Arel.sql("array_position(ARRAY[?]::varchar[], id)", directors)).pluck(:name),
+            actors: Human.where(id: actors).order(Arel.sql("array_position(ARRAY[?]::varchar[], id)", actors)).pluck(:name)
           }
         end
 
