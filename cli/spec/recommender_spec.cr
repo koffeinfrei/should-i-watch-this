@@ -2,7 +2,6 @@ require "spec"
 
 require "../src/recommender"
 
-# TODO "Hmm, there's no rating about this at all..."
 # TODO "Not sure. You may fall asleep, or you may be delighted."
 SAMPLES = [
   [
@@ -156,6 +155,14 @@ SAMPLES = [
     "6.3",
     "66/100",
     "This seems to be rather something that's not actually good.",
+  ],
+  [
+    "First Swiss Rockstar",
+    nil,
+    nil,
+    nil,
+    nil,
+    "Hmm, there's no rating about this at all...",
   ],
 ]
 
