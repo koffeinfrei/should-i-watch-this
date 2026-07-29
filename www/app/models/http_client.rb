@@ -46,7 +46,9 @@ module HttpClient
         begin
           options = ::Selenium::WebDriver::Options.chrome
           options.add_argument("--headless=new")
-          options.add_argument("user-agent=mozilla/5.0 (x11; ubuntu; linux x86_64; rv:147.0) gecko/20100101 firefox/147.0")
+          options.add_argument("--disable-blink-features=AutomationControlled")
+          options.add_argument("user-agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0")
+
           options.timeouts = {
             page_load: TIMEOUT * 1000,
             script: TIMEOUT * 1000
