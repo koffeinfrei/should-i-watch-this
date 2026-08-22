@@ -16,18 +16,18 @@
   - poster_url = poster_url(@movie, :show, only_path: false)
 
   section.box
-    .padded.d-flex.flex-justify-between
+    .padded.d-flex.flex-justify-between.mb-05
       div
-        = button_tag '⤴', class: 'd-none secondary mb-1', title: 'Share with someone', \
+        = button_tag '⤴', class: 'd-none secondary me-05', title: 'Share with someone', \
           data: { \
             controller: 'share', action: 'share#share', \
             'share-title-value': @movie.title, 'share-text-value': share_description, 'share-url-value': share_url \
           }
 
-      .d-flex data-controller='dialog'
+      .d-flex.flex-wrap data-controller='dialog'
         / rating
         - if current_user
-          = button_tag class: 'sm secondary mb-1 me-05 text-end', 'data-action': 'dialog#open' do
+          = button_tag class: 'sm secondary text-end me-05 mb-05', 'data-action': 'dialog#open' do
             - if @rating.new_record?
               | Rate
             - else
