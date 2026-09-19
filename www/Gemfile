@@ -22,6 +22,7 @@ gem "csv", require: false
 gem "good_job"
 gem "sparql", require: false
 gem "selenium-webdriver"
+gem "json", "< 3" # TODO: workaround for https://github.com/rails/rails/issues/58685
 
 group :development, :test do
   gem "debug", require: "debug/prelude"
