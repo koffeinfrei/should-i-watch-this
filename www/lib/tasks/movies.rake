@@ -1,6 +1,5 @@
 require "uri"
 require "fileutils"
-require "sparql/client"
 
 def as_proper_date(date)
   return unless date
@@ -44,46 +43,22 @@ def instrument(task)
 end
 
 def movies_claims_file
-  file = Rails.root.join("tmp/wikibase-dump-filter-movies-claim")
+  file = Pathname(output_dir).join("wikibase-dump-filter-movies-claim")
 
   unless file.exist?
-    sparql = <<~SPARQL.strip
-    SELECT DISTINCT ?film ?filmLabel WHERE {
-      {
-        ?film wdt:P279* wd:Q11424 .
-      }
-      UNION
-      {
-        ?film wdt:P279* wd:Q5398426 .
-      }
-    }
-    SPARQL
-
-    client = SPARQL::Client.new(
-      "https://query.wikidata.org/sparql",
-      method: :get,
-      headers: { "User-Agent" => "ShouldIWatchThisBot/0.0 (https://www.should-i-watch-this.com; info@should-i-watch-this.com)" }
-    )
-    rows = client.query(sparql)
-
-    values = rows.map { |row| row.each_value.map { _1.to_s.split("/").last } }.flatten.sort
-    File.write(file, "P31:#{values.join(',')}")
+    claims = "P31:#{(wikidata.movies_classes + wikidata.series_classes).join(",")}"
+    file.write(claims)
   end
 
   puts "With movie claims:"
-  puts File.read(file)
+  puts file.read
 
   file
 end
 
-def humans_claim = "Q5"
-
-def all_claims
-  movies = File.read(movies_claims_file).strip.split(":").last.split(",")
-  [humans_claim] + movies
-end
-
 def output_dir = ENV.fetch("DIR")
+
+def wikidata = Wikidata.new(output_dir)
 
 desc "Executes all movies tasks 1-7"
 task movies: [
@@ -108,7 +83,7 @@ namespace :movies do
   desc "(2) Decompress the downloaded wiki data dump"
   task decompress: [:environment] do
     instrument(:decompress) do
-      system "(cd #{output_dir} && lbzcat latest-all.json.bz2 | rg '(#{all_claims.map { "\"#{_1}\"" }.join("|")})' > latest-all-reduced.json)"
+      system "(cd #{output_dir} && lbzcat latest-all.json.bz2 | rg '(#{wikidata.all_classes.map { "\"#{_1}\"" }.join("|")})' > latest-all-reduced.json)"
     end
   end
 
@@ -128,7 +103,7 @@ namespace :movies do
       input_file = File.join(output_dir, "latest-all-reduced.json")
       output_file = File.join(output_dir, "humans.json")
 
-      system %Q(cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim P31:#{humans_claim}" > #{output_file})
+      system %Q(cat #{input_file} | parallel --pipe --block 100M --line-buffer "npx wikibase-dump-filter --claim P31:#{Wikidata::HUMANS}" > #{output_file})
     end
   end
 
@@ -145,8 +120,6 @@ namespace :movies do
   desc "(6) Import movies from a wikidata json dump"
   task import: [:environment] do
     instrument(:import) do
-      series_classes = File.readlines(Rails.root.join("config/wikidata_series_classes")).map(&:strip)
-
       class Human < ActiveRecord::Base
         self.table_name = "humans"
       end
@@ -178,7 +151,7 @@ namespace :movies do
           json = JSON.parse(line)
 
           instance = json.dig("claims", "P31", 0, "mainsnak", "datavalue", "value", "id")
-          series = instance.in?(series_classes)
+          series = instance.in?(wikidata.series_classes)
 
           wiki_id = json.dig("id")
 
