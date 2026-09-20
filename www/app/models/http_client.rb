@@ -27,7 +27,6 @@ module HttpClient
 
   class Selenium
     def content(url, css_selector)
-      client.get(url)
       element(url, css_selector).attribute("content")
     end
 
