@@ -316,7 +316,8 @@ namespace :movies do
 
         print "."
         errors.delete(wiki_id)
-      rescue Net::ReadTimeout, Net::OpenTimeout, Selenium::WebDriver::Error::TimeoutError, Curl::Err::TimeoutError => error
+      rescue Net::ReadTimeout, Net::OpenTimeout, Selenium::WebDriver::Error::TimeoutError,
+             Curl::Err::TimeoutError, Curl::Err::HostResolutionError => error
         print "F"
         pp ["Get failed", { wiki_id:, imdb_id:, error: error }]
         errors << wiki_id
