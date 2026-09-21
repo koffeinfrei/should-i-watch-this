@@ -58,7 +58,9 @@ end
 
 def output_dir = ENV.fetch("DIR")
 
-def wikidata = Wikidata.new(output_dir)
+def wikidata
+  @wikidata ||= Wikidata.new(output_dir)
+end
 
 desc "Executes all movies tasks 1-7"
 task movies: [

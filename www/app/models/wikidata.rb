@@ -11,23 +11,29 @@ class Wikidata
   end
 
   def movies_classes
-    file = @output_dir.join("wikidata-movies-classes")
+    @movies_classes ||=
+      begin
+        file = @output_dir.join("wikidata-movies-classes")
 
-    if file.exist?
-      JSON.parse(file.read)
-    else
-      fetch_subclasses(FILM).tap { file.write(JSON.dump(_1)) }
-    end
+        if file.exist?
+          JSON.parse(file.read)
+        else
+          fetch_subclasses(FILM).tap { file.write(JSON.dump(_1)) }
+        end
+      end
   end
 
   def series_classes
-    file = @output_dir.join("wikidata-series-classes")
+    @series_classes ||=
+      begin
+        file = @output_dir.join("wikidata-series-classes")
 
-    if file.exist?
-      JSON.parse(file.read)
-    else
-      fetch_subclasses(SERIES).tap { file.write(JSON.dump(_1)) }
-    end
+        if file.exist?
+          JSON.parse(file.read)
+        else
+          fetch_subclasses(SERIES).tap { file.write(JSON.dump(_1)) }
+        end
+      end
   end
 
   def all_classes
