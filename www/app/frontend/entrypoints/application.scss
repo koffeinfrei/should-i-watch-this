@@ -228,6 +228,7 @@ button {
 
 main {
   margin: 0 auto $spacing-xl + 11px;
+  width: 100%;
 
   @media (min-width: $breakpoint-md) {
     width: $breakpoint-md;
