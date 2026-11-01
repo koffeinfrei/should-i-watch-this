@@ -6,8 +6,8 @@ module HttpGrabber
 
     def run(css_selector)
       HttpClient::Curl.new.content(@url, css_selector)
-    rescue StandardError => e
-      Rails.logger.tagged(Time.now.iso8601(4)) { Rails.logger.error("event=http_grabber_error url=\"#{@url}\" error=\"#{e.inspect}\"") }
+    rescue StandardError => error
+      Log.error(:http_grabber_error, error, url: @url, type: :curl)
       nil
     end
   end
@@ -22,8 +22,8 @@ module HttpGrabber
       content = selenium.inner_html(@url, css_selector)
       selenium.client.quit
       content
-    rescue StandardError => e
-      Rails.logger.tagged(Time.now.iso8601(4)) { Rails.logger.error("event=http_grabber_error url=\"#{@url}\" error=\"#{e.inspect}\"") }
+    rescue StandardError => error
+      Log.error(:http_grabber_error, error, url: @url, type: :selenium)
       nil
     end
   end
