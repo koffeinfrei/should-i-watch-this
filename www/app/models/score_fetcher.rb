@@ -5,7 +5,6 @@ class ScoreFetcher
 
   def run
     [
-      Thread.new { fetch_imdb },
       Thread.new { fetch_rotten_tomatoes },
       Thread.new { fetch_metacritic }
     ].each(&:join)
