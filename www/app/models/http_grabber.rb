@@ -23,6 +23,7 @@ module HttpGrabber
       selenium.client.quit
       content
     rescue StandardError => error
+      selenium.client.quit
       Log.error(:http_grabber_error, error, url: @url, type: :selenium)
       nil
     end
