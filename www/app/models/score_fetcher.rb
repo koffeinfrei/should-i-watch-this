@@ -58,14 +58,12 @@ class ScoreFetcher
     if html = HttpGrabber::Curl.new(url).run("#media-scorecard-json")
       data = JSON.parse(html)
 
-      if critics_score = data.dig("criticsScore", "score")
-        score = "#{critics_score}%"
-        @result.scores[:rotten_tomatoes] = Score.create(score, Score::Percentage)
+      if critics_score = data.dig("criticsScore", "scorePercent")
+        @result.scores[:rotten_tomatoes] = Score.create(critics_score, Score::Percentage)
       end
 
-      if audience_score = data.dig("audienceScore", "score")
-        score = "#{audience_score}%"
-        @result.scores[:rotten_tomatoes_audience] = Score.create(score, Score::Percentage)
+      if audience_score = data.dig("audienceScore", "scorePercent")
+        @result.scores[:rotten_tomatoes_audience] = Score.create(audience_score, Score::Percentage)
       end
     else
       @result.scores[:rotten_tomatoes] = Score::Incomplete.new
