@@ -26,6 +26,10 @@ module HttpClient
   end
 
   class Selenium
+    def initialize(tor: false)
+      @tor = tor
+    end
+
     def content(url, css_selector)
       element(url, css_selector).attribute("content")
     end
@@ -36,7 +40,7 @@ module HttpClient
 
     def element(url, css_selector)
       client.get(url)
-      wait = ::Selenium::WebDriver::Wait.new(timeout: TIMEOUT)
+      wait = ::Selenium::WebDriver::Wait.new(timeout: timeout)
       wait.until { client.find_element(css: css_selector) }
     end
 
@@ -47,14 +51,27 @@ module HttpClient
           options.add_argument("--headless=new")
           options.add_argument("--disable-blink-features=AutomationControlled")
           options.add_argument("user-agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0")
+          if @tor
+            options.proxy = ::Selenium::WebDriver::Proxy.new(type: :manual, socks: "127.0.0.1:9050", socks_version: 5)
+          end
 
           options.timeouts = {
-            page_load: TIMEOUT * 1000,
-            script: TIMEOUT * 1000
+            page_load: timeout * 1000,
+            script: timeout * 1000
           }
           options.page_load_strategy = :none
           ::Selenium::WebDriver.for(:chrome, options: options)
         end
+    end
+
+    private
+
+    def timeout
+      if @tor
+        TIMEOUT * 2
+      else
+        TIMEOUT
+      end
     end
   end
 end

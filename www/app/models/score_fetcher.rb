@@ -5,6 +5,7 @@ class ScoreFetcher
 
   def run
     [
+      Thread.new { fetch_imdb },
       Thread.new { fetch_rotten_tomatoes },
       Thread.new { fetch_metacritic }
     ].each(&:join)
@@ -20,7 +21,7 @@ class ScoreFetcher
     url = @result.movie.imdb_url
     return unless url
 
-    if html = HttpGrabber::Selenium.new(url).run('script[type="application/ld+json"]')
+    if html = HttpGrabber::Selenium.new(url, tor: true).run('script[type="application/ld+json"]')
       data = JSON.parse(html)
 
       if score = data.dig("aggregateRating", "ratingValue")

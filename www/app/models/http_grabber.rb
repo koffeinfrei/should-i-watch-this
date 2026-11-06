@@ -13,12 +13,13 @@ module HttpGrabber
   end
 
   class Selenium
-    def initialize(url)
+    def initialize(url, tor: false)
       @url = url
+      @tor = tor
     end
 
     def run(css_selector)
-      selenium = HttpClient::Selenium.new
+      selenium = HttpClient::Selenium.new(tor: @tor)
       content = selenium.inner_html(@url, css_selector)
       selenium.client.quit
       content
