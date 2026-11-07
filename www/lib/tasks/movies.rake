@@ -234,7 +234,7 @@ namespace :movies do
     desc "(7) Fetch movie posters from imdb"
     task imdb: [:environment] do
       curl = HttpClient::Curl.new
-      selenium = HttpClient::Selenium.new
+      selenium = HttpClient::Selenium.new(tor: true)
 
       out_dir = Rails.root.join("public/posters/original")
       out_dir_100 = Rails.root.join("public/posters/100")
