@@ -12,26 +12,26 @@ class Configuration
     STDOUT.sync = true
 
     puts <<-MESSAGE
-       Hi! 👋
+      Hi! 👋
 
-       I'll bother you only once with this.
+      I'll bother you only once with this.
 
-       You need to get an API key from OMDB first.
-       I'll open the website where you can get one for free.
-       After following the instructions from OMDB you can continue here and paste the key.
+      You need to get an API key from OMDB first.
+      I'll open the website where you can get one for free.
+      After following the instructions from OMDB you can continue here and paste the key.
 
 
-    MESSAGE
+      MESSAGE
     print "   ⟶  Please hit <ENTER> to open the website http://www.omdbapi.com/apikey.aspx "
     gets
     `$(which xdg-open || which open) http://www.omdbapi.com/apikey.aspx`
 
     puts <<-MESSAGE
 
-       Alright. If you did everything right you should now have an API key.
+      Alright. If you did everything right you should now have an API key.
 
 
-    MESSAGE
+      MESSAGE
     print "   ⟶  Please paste your API key: "
     key = gets
 
@@ -40,11 +40,11 @@ class Configuration
 
     puts <<-MESSAGE
 
-       That's it!
-       I'll now start the actual application...
+      That's it!
+      I'll now start the actual application...
 
 
 
-    MESSAGE
+      MESSAGE
   end
 end

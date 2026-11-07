@@ -3,14 +3,14 @@ require "inflector/core_ext"
 require "./score"
 
 class Movie
-  property title : String | Nil
-  property year : String | Nil
-  property director : String | Nil
-  property actors : String | Nil
-  property imdb_id : String | Nil
-  property tomato_url : String | Nil
-  property poster_url : String | Nil
-  property trailer_url : String | Nil
+  property title : String?
+  property year : String?
+  property director : String?
+  property actors : String?
+  property imdb_id : String?
+  property tomato_url : String?
+  property poster_url : String?
+  property trailer_url : String?
 
   getter score = {} of Symbol => Score
 
@@ -25,9 +25,9 @@ class Movie
 
   def self.parse(title_or_imdb_id)
     if title_or_imdb_id =~ /^tt\d+$/
-      self.new(imdb_id: title_or_imdb_id)
+      new(imdb_id: title_or_imdb_id)
     else
-      self.new(title: title_or_imdb_id)
+      new(title: title_or_imdb_id)
     end
   end
 end

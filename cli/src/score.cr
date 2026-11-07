@@ -100,7 +100,7 @@ class DecimalScore < Score
     10
   end
 
-  def value : Float64 | Nil
+  def value : Float64?
     score_value.value.try(&.to_f)
   end
 end
@@ -110,7 +110,7 @@ class PercentageScore < Score
     100
   end
 
-  def value : Int32 | Nil
+  def value : Int32?
     score_value.value.try(&.to_i)
   end
 end

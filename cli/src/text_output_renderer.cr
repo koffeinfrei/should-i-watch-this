@@ -3,39 +3,39 @@ require "./base_output_renderer"
 class TextOutputRenderer < BaseOutputRenderer
   def render_error
     <<-DOC
-           😢  #{error}
+      😢  #{error}
 
-    DOC
+      DOC
   end
 
   def render_success(recommendation)
     <<-DOC
-       year:             #{movie.year}
-       director:         #{movie.director}
-       actors:           #{movie.actors}
-       #{output_trailer}
+         year:             #{movie.year}
+         director:         #{movie.director}
+         actors:           #{movie.actors}
+         #{output_trailer}
 
 
-       🍅  Rotten Tomatoes
+         🍅  Rotten Tomatoes
 
-           score:        #{movie.score[:rotten_tomatoes]}
-           audience:     #{movie.score[:rotten_tomatoes_audience]}
+             score:        #{movie.score[:rotten_tomatoes]}
+             audience:     #{movie.score[:rotten_tomatoes_audience]}
 
-       🎬  IMDb
+         🎬  IMDb
 
-           rating:       #{movie.score[:imdb]}
+             rating:       #{movie.score[:imdb]}
 
-       📈  Metacritic
+         📈  Metacritic
 
-           score:        #{movie.score[:metacritic]}
+             score:        #{movie.score[:metacritic]}
 
 
 
-       Should I watch this?
+         Should I watch this?
 
-           #{recommendation.emoji}  #{recommendation.text}
-    #{output_links}
-    DOC
+             #{recommendation.emoji}  #{recommendation.text}
+      #{output_links}
+      DOC
   end
 
   def output_links

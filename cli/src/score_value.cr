@@ -1,6 +1,6 @@
 class ScoreValue
-  getter value : String | Nil
-  getter suffix : String | Nil
+  getter value : String?
+  getter suffix : String?
 
   def initialize(raw_value)
     if raw_value

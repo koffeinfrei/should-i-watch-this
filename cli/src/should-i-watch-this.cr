@@ -33,7 +33,7 @@ class ShouldIWatchThis < Cli::Supercommand
         default: false,
         desc: "Output links to movies on the different platforms"
       string ["-f", "--format"],
-        any_of: %w(terminal json),
+        any_of: %w[terminal json],
         default: "terminal",
         desc: "The output format"
       version

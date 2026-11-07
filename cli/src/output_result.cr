@@ -1,9 +1,9 @@
 class OutputResult
   getter movie : Movie
   getter links
-  property error : String | Nil
+  property error : String?
 
   def initialize(@movie)
-    @links = {} of Symbol => String | Nil
+    @links = {} of Symbol => String?
   end
 end

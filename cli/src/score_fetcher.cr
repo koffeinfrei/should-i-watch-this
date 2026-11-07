@@ -118,7 +118,7 @@ class ScoreFetcher
                "broken. Or the whole internet is down. Or just www.imdb.com.",
     }).run(->abort(String))
 
-    data = HtmlExtractor.json_content(imdb_html, %{script[type="application/ld+json"]})
+    data = HtmlExtractor.json_content(imdb_html, %(script[type="application/ld+json"]))
 
     # score
     score = data.dig?("aggregateRating", "ratingValue")
