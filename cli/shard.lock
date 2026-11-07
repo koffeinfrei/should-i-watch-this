@@ -3,7 +3,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 1.6.4
+    version: 1.7.0
 
   callback:
     git: https://github.com/amberframework/callback.git
@@ -13,9 +13,13 @@ shards:
     git: https://github.com/amberframework/cli.git
     version: 0.11.4
 
+  cookie_jar:
+    git: https://github.com/mamantoha/http-cookie_jar.git
+    version: 0.2.0
+
   crest:
     git: https://github.com/mamantoha/crest.git
-    version: 1.5.1
+    version: 1.9.0
 
   http-client-digest_auth:
     git: https://github.com/mamantoha/http-client-digest_auth.git
@@ -23,7 +27,7 @@ shards:
 
   http_proxy:
     git: https://github.com/mamantoha/http_proxy.git
-    version: 0.12.1
+    version: 0.17.0
 
   inflector:
     git: https://github.com/phoffer/inflector.cr.git
@@ -31,7 +35,7 @@ shards:
 
   lexbor:
     git: https://github.com/kostya/lexbor.git
-    version: 3.2.0
+    version: 3.6.4
 
   optarg: # Overridden
     git: https://github.com/xendk/optarg.git
