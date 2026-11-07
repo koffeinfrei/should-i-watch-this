@@ -24,6 +24,8 @@ development_dependencies:
 targets:
   should-i-watch-this:
     main: src/should-i-watch-this.cr
+  ameba:
+    main: lib/ameba/bin/ameba.cr
 
 crystal: 1.22.2
 

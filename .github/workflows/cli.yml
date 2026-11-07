@@ -31,7 +31,7 @@ jobs:
         run: cd cli && crystal tool format --check
 
       - name: Ameba (static code analysis)
-        run: cd cli && bin/ameba
+        run: cd cli && shards build ameba && bin/ameba
 
       - name: Spec
         run: cd cli && crystal spec
