@@ -1,6 +1,6 @@
 module MovieScore
   KEY_PREFIX = "#{KeyValueStore::KEY_PREFIX}:score:"
-  STD_TTL = 3.days
+  STD_TTL = 1.week
 
   def self.get(wiki_id)
     if scores = load(wiki_id)
