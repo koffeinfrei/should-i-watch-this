@@ -4,9 +4,9 @@ class MoviesController < ApplicationController
   def show
     wiki_id = params["wiki_id"]
 
-    @scores, @trailer_url = MovieScore.get_local(wiki_id)
-    if @scores
-      @recommendation = Recommender.new(@scores).run
+    @movie_score = MovieScore.get(wiki_id, fetch: false)
+    if @movie_score.recent?
+      @recommendation = Recommender.new(@movie_score.scores).run
       @movie = Movie.find_by(wiki_id: wiki_id)
       @page_title = "#{@movie.title} (#{@movie.year})"
 

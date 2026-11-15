@@ -1,16 +1,14 @@
 class ScoreFetcher
-  def initialize(movie)
-    @result = ScoreResult.new(movie)
+  def initialize(movie, sources)
+    @movie = movie
+    @result = {}
+    @sources = Array(sources)
   end
 
   def run
-    [
-      Thread.new { fetch_imdb },
-      Thread.new { fetch_rotten_tomatoes },
-      Thread.new { fetch_metacritic }
-    ].each(&:join)
-
-    missing_scores!
+    @sources.map do |source|
+      Thread.new { send("fetch_#{source}") }
+    end.each(&:join)
 
     @result
   end
@@ -18,63 +16,62 @@ class ScoreFetcher
   private
 
   def fetch_imdb
-    url = @result.movie.imdb_url
+    url = @movie.imdb_url
     return unless url
 
     if html = HttpGrabber::Selenium.new(url, tor: true).run('script[type="application/ld+json"]')
       data = JSON.parse(html)
 
       if score = data.dig("aggregateRating", "ratingValue")
-        @result.scores[:imdb] = Score.create("#{score.to_f}/10", Score::Decimal)
+        @result[:imdb] = parse_score(score)
       end
 
-      @result.trailer_url = data.dig("trailer", "embedUrl")
+      @result[:trailer_url] = data.dig("trailer", "embedUrl")
     else
-      @result.scores[:imdb] = Score::Incomplete.new
-      Log.error(:fetch_imdb_failed, wiki_id: @result.movie.wiki_id, url: url)
+      Log.error(:fetch_imdb_failed, wiki_id: @movie.wiki_id, url: url)
     end
   end
 
   def fetch_metacritic
-    url = @result.movie.metacritic_url
+    url = @movie.metacritic_url
     return unless url
 
     if html = HttpGrabber::Curl.new(url).run('script[type="application/ld+json"]')
       data = JSON.parse(html)
 
       if score = data.dig("aggregateRating", "ratingValue")
-        @result.scores[:metacritic] = Score.create("#{score.to_f}/100", Score::Percentage)
+        @result[:metacritic] = parse_score(score)
       end
     else
-      @result.scores[:metacritic] = Score::Incomplete.new
-      Log.error(:fetch_metacritic_failed, wiki_id: @result.movie.wiki_id, url: url)
+      Log.error(:fetch_metacritic_failed, wiki_id: @movie.wiki_id, url: url)
     end
   end
 
   def fetch_rotten_tomatoes
-    url = @result.movie.rotten_url
+    url = @movie.rotten_url
     return unless url
 
     if html = HttpGrabber::Curl.new(url).run("#media-scorecard-json")
       data = JSON.parse(html)
 
       if critics_score = data.dig("criticsScore", "scorePercent")
-        @result.scores[:rotten_tomatoes] = Score.create(critics_score, Score::Percentage)
+        @result[:rotten_tomatoes] = parse_score(critics_score)
       end
 
       if audience_score = data.dig("audienceScore", "scorePercent")
-        @result.scores[:rotten_tomatoes_audience] = Score.create(audience_score, Score::Percentage)
+        @result[:rotten_tomatoes_audience] = parse_score(audience_score)
       end
     else
-      @result.scores[:rotten_tomatoes] = Score::Incomplete.new
-      @result.scores[:rotten_tomatoes_audience] = Score::Incomplete.new
-      Log.error(:fetch_rotten_tomatoes_failed, wiki_id: @result.movie.wiki_id, url: url)
+      Log.error(:fetch_rotten_tomatoes_failed, wiki_id: @movie.wiki_id, url: url)
     end
   end
 
-  def missing_scores!
-    [:imdb, :rotten_tomatoes, :rotten_tomatoes_audience, :metacritic].each do |key|
-      @result.scores[key] ||= Score::Missing.new
+  # no-op, `#fetch_rotten_tomatoes` fetches both
+  def fetch_rotten_tomatoes_audience; end
+
+  def parse_score(value)
+    unless value.to_s&.include?("N/A")
+      value.to_d
     end
   end
 end

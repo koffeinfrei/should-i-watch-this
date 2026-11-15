@@ -104,10 +104,10 @@
       table.full-width
         tr
           td.label Score
-          td.value= @scores[:rotten_tomatoes]
+          td.value= @movie_score.rotten_tomatoes
         tr
           td.label Audience
-          td.value= @scores[:rotten_tomatoes_audience]
+          td.value= @movie_score.rotten_tomatoes_audience
 
     div.box
       h3.icon-label
@@ -118,7 +118,7 @@
       table.full-width
         tr
           td.label Rating
-          td.value= @scores[:imdb]
+          td.value= @movie_score.imdb
 
     div.box
       h3.icon-label
@@ -129,7 +129,7 @@
       table.full-width
         tr
           td.label Score
-          td.value= @scores[:metacritic]
+          td.value= @movie_score.metacritic
 
   - content_for :title do
     == @page_title

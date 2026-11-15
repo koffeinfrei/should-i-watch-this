@@ -160,7 +160,7 @@ class RecommenderTest < ActiveSupport::TestCase
 
   def get_score_instance(value, target_score_class)
     if value
-      target_score_class.new(value)
+      target_score_class.new(value, nil)
     else
       Score::Missing.new
     end
@@ -168,14 +168,14 @@ class RecommenderTest < ActiveSupport::TestCase
 
   SAMPLES.each do |(title, rating1, rating2, rating3, rating4, expected)|
     test "#run (#{title})" do
-      score = {
-        "1": get_score_instance(rating1, Score::Percentage),
-        "2": get_score_instance(rating2, Score::Percentage),
-        "3": get_score_instance(rating3, Score::Decimal),
-        "4": get_score_instance(rating4, Score::Percentage)
-      }
+      scores = [
+        get_score_instance(rating1, Score::Percentage),
+        get_score_instance(rating2, Score::Percentage),
+        get_score_instance(rating3, Score::Decimal),
+        get_score_instance(rating4, Score::Percentage)
+      ]
 
-      result = Recommender.new(score).run
+      result = Recommender.new(scores).run
 
       assert_equal expected, result.text
     end

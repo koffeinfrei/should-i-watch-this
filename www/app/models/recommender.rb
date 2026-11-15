@@ -1,7 +1,7 @@
 class Recommender
   def initialize(scores)
-    @incomplete = scores.values.any?(&:incomplete?)
-    @scores = scores.values.reject(&:missing?)
+    @incomplete = scores.any?(&:incomplete?)
+    @scores = scores.reject(&:missing?)
     @mostly_count = (@scores.size * 0.75).round.to_i
     @half_count = (@scores.size * 0.5).ceil.to_i
     @minor_count = (@scores.size * 0.25).ceil.to_i

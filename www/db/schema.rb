@@ -10,84 +10,84 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_29_201048) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_08_120112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "callback_priority"
-    t.text "callback_queue_name"
     t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.text "description"
-    t.datetime "discarded_at"
-    t.datetime "enqueued_at"
-    t.datetime "finished_at"
-    t.datetime "jobs_finished_at"
-    t.text "on_discard"
+    t.jsonb "serialized_properties"
     t.text "on_finish"
     t.text "on_success"
-    t.jsonb "serialized_properties"
-    t.datetime "updated_at", null: false
+    t.text "on_discard"
+    t.text "callback_queue_name"
+    t.integer "callback_priority"
+    t.datetime "enqueued_at"
+    t.datetime "discarded_at"
+    t.datetime "finished_at"
+    t.datetime "jobs_finished_at"
   end
 
   create_table "good_job_executions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "active_job_id", null: false
     t.datetime "created_at", null: false
-    t.interval "duration"
-    t.text "error"
-    t.text "error_backtrace", array: true
-    t.integer "error_event", limit: 2
-    t.datetime "finished_at"
-    t.text "job_class"
-    t.uuid "process_id"
-    t.text "queue_name"
-    t.datetime "scheduled_at"
-    t.jsonb "serialized_params"
     t.datetime "updated_at", null: false
+    t.uuid "active_job_id", null: false
+    t.text "job_class"
+    t.text "queue_name"
+    t.jsonb "serialized_params"
+    t.datetime "scheduled_at"
+    t.datetime "finished_at"
+    t.text "error"
+    t.integer "error_event", limit: 2
+    t.text "error_backtrace", array: true
+    t.uuid "process_id"
+    t.interval "duration"
     t.index ["active_job_id", "created_at"], name: "index_good_job_executions_on_active_job_id_and_created_at"
     t.index ["process_id", "created_at"], name: "index_good_job_executions_on_process_id_and_created_at"
   end
 
   create_table "good_job_processes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.integer "lock_type", limit: 2
-    t.jsonb "state"
     t.datetime "updated_at", null: false
+    t.jsonb "state"
+    t.integer "lock_type", limit: 2
   end
 
   create_table "good_job_settings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.text "key"
     t.datetime "updated_at", null: false
+    t.text "key"
     t.jsonb "value"
     t.index ["key"], name: "index_good_job_settings_on_key", unique: true
   end
 
   create_table "good_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "active_job_id"
-    t.uuid "batch_callback_id"
-    t.uuid "batch_id"
-    t.text "concurrency_key"
-    t.datetime "created_at", null: false
-    t.datetime "cron_at"
-    t.text "cron_key"
-    t.text "error"
-    t.integer "error_event", limit: 2
-    t.integer "executions_count"
-    t.datetime "finished_at"
-    t.boolean "is_discrete"
-    t.text "job_class"
-    t.text "labels", array: true
-    t.datetime "locked_at"
-    t.uuid "locked_by_id"
-    t.datetime "performed_at"
-    t.integer "priority"
     t.text "queue_name"
-    t.uuid "retried_good_job_id"
-    t.datetime "scheduled_at"
+    t.integer "priority"
     t.jsonb "serialized_params"
+    t.datetime "scheduled_at"
+    t.datetime "performed_at"
+    t.datetime "finished_at"
+    t.text "error"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "active_job_id"
+    t.text "concurrency_key"
+    t.text "cron_key"
+    t.uuid "retried_good_job_id"
+    t.datetime "cron_at"
+    t.uuid "batch_id"
+    t.uuid "batch_callback_id"
+    t.boolean "is_discrete"
+    t.integer "executions_count"
+    t.text "job_class"
+    t.integer "error_event", limit: 2
+    t.text "labels", array: true
+    t.uuid "locked_by_id"
+    t.datetime "locked_at"
     t.index ["active_job_id", "created_at"], name: "index_good_jobs_on_active_job_id_and_created_at"
     t.index ["batch_callback_id"], name: "index_good_jobs_on_batch_callback_id", where: "(batch_callback_id IS NOT NULL)"
     t.index ["batch_id"], name: "index_good_jobs_on_batch_id", where: "(batch_id IS NOT NULL)"
@@ -106,24 +106,36 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_29_201048) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
-  create_table "movies", force: :cascade do |t|
-    t.string "actors", array: true
+  create_table "movie_scores", force: :cascade do |t|
+    t.bigint "movie_id", null: false
+    t.decimal "imdb_value", precision: 5, scale: 2
+    t.decimal "rotten_tomatoes_value", precision: 5, scale: 2
+    t.decimal "rotten_tomatoes_audience_value", precision: 5, scale: 2
+    t.decimal "metacritic_value", precision: 5, scale: 2
+    t.string "trailer_url"
     t.datetime "created_at", null: false
-    t.string "directors", array: true
-    t.date "end_date"
-    t.string "imdb_id"
-    t.string "metacritic_id"
-    t.string "omdb_id"
-    t.date "release_date"
-    t.string "rotten_id"
-    t.boolean "series"
+    t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_movie_scores_on_movie_id"
+  end
+
+  create_table "movies", force: :cascade do |t|
     t.string "title"
+    t.string "wiki_id"
+    t.string "imdb_id"
+    t.string "rotten_id"
+    t.string "metacritic_id"
+    t.date "release_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "omdb_id"
     t.string "title_normalized"
     t.string "title_original"
+    t.string "directors", array: true
+    t.string "actors", array: true
     t.tsvector "tsv_title"
     t.tsvector "tsv_title_original"
-    t.datetime "updated_at", null: false
-    t.string "wiki_id"
+    t.boolean "series"
+    t.date "end_date"
     t.index ["imdb_id"], name: "index_movies_on_imdb_id"
     t.index ["title_normalized"], name: "index_movies_on_title_normalized", opclass: :gin_trgm_ops, using: :gin
     t.index ["title_normalized"], name: "index_movies_on_title_normalized_direct"
@@ -134,55 +146,56 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_29_201048) do
   end
 
   create_table "passwordless_sessions", force: :cascade do |t|
-    t.integer "authenticatable_id"
     t.string "authenticatable_type"
-    t.datetime "claimed_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "expires_at", precision: nil, null: false
-    t.string "identifier", null: false
+    t.integer "authenticatable_id"
     t.datetime "timeout_at", precision: nil, null: false
+    t.datetime "expires_at", precision: nil, null: false
+    t.datetime "claimed_at", precision: nil
     t.string "token_digest", null: false
+    t.string "identifier", null: false
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["authenticatable_type", "authenticatable_id"], name: "authenticatable"
     t.index ["identifier"], name: "index_passwordless_sessions_on_identifier", unique: true
   end
 
   create_table "quotes", force: :cascade do |t|
-    t.datetime "created_at", null: false
     t.bigint "movie_id", null: false
     t.string "quote"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["movie_id"], name: "index_quotes_on_movie_id"
   end
 
   create_table "ratings", force: :cascade do |t|
-    t.datetime "created_at", null: false
     t.bigint "movie_id", null: false
-    t.integer "score"
-    t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.integer "score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["movie_id", "user_id"], name: "index_ratings_on_movie_id_and_user_id", unique: true
     t.index ["movie_id"], name: "index_ratings_on_movie_id"
     t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.datetime "created_at", null: false
     t.string "email", null: false
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index "lower((email)::text)", name: "index_users_on_LOWER_email", unique: true
   end
 
   create_table "watchlist_items", force: :cascade do |t|
-    t.datetime "created_at", null: false
     t.bigint "movie_id", null: false
-    t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["movie_id", "user_id"], name: "index_watchlist_items_on_movie_id_and_user_id", unique: true
     t.index ["movie_id"], name: "index_watchlist_items_on_movie_id"
     t.index ["user_id"], name: "index_watchlist_items_on_user_id"
   end
 
+  add_foreign_key "movie_scores", "movies"
   add_foreign_key "quotes", "movies"
   add_foreign_key "ratings", "movies"
   add_foreign_key "ratings", "users"

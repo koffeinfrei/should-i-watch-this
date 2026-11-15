@@ -6,9 +6,9 @@ class WatchlistsTest < ApplicationSystemTestCase
   fixtures :movies
 
   test "rate a movie" do
-    MovieScore.save("Q788822", {}, nil)
-    user = User.create!(email: "user@example.com")
     movie = movies(:her)
+    MovieScore.create!(movie: movie)
+    user = User.create!(email: "user@example.com")
 
     sign_in user
 
@@ -74,7 +74,7 @@ class WatchlistsTest < ApplicationSystemTestCase
   end
 
   test "requires sign in to rate" do
-    MovieScore.save("Q788822", {}, nil)
+    MovieScore.create!(movie: movies(:her))
     movie = movies(:her)
     user = User.create!(email: "user@example.com")
 

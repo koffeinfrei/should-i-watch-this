@@ -7,16 +7,8 @@ class Score
 
   delegate :suffix, to: :@score_value
 
-  def initialize(raw_value)
-    @score_value = Value.new(raw_value)
-  end
-
-  def self.create(value, target_class)
-    if value.nil? || value.include?("N/A")
-      Missing.new
-    else
-      target_class.new(value)
-    end
+  def initialize(value, suffix)
+    @score_value = Value.new(value, suffix)
   end
 
   def excellent?
@@ -77,24 +69,9 @@ class Score
     yield scaled_value
   end
 
-  class Value
-    attr_reader :value
-    attr_reader :suffix
-
-    def initialize(raw_value)
-      if raw_value
-        value_parts = raw_value.match(/^([0-9\.]+)(.*)$/)
-        if value_parts
-          @value = value_parts[1]
-          @suffix = value_parts[2]
-        end
-      end
-    end
-  end
-
   class Missing < Score
     def initialize
-      super(nil)
+      super(nil, nil)
     end
 
     def max_value
@@ -136,4 +113,6 @@ class Score
       @score_value.value&.to_i
     end
   end
+
+  Value = Data.define(:value, :suffix)
 end

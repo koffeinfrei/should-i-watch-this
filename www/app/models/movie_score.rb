@@ -1,53 +1,89 @@
-module MovieScore
-  KEY_PREFIX = "#{KeyValueStore::KEY_PREFIX}:score:"
-  STD_TTL = 1.week
+class MovieScore < ApplicationRecord
+  SOURCES = [:imdb, :rotten_tomatoes, :rotten_tomatoes_audience, :metacritic]
 
-  def self.get(wiki_id)
-    if scores = load(wiki_id)
-      scores
+  belongs_to :movie
+
+  def imdb
+    if imdb_value
+      Score::Decimal.new(imdb_value, "/10")
+    elsif movie.imdb_id
+      Score::Incomplete.new
     else
-      result = fetch(wiki_id)
-
-      return unless result
-
-      ttl =
-        if result.incomplete?
-          5.seconds
-        else
-          STD_TTL
-        end
-
-      # TODO: the `trailer_url` is somewhat hacked in here
-      save(wiki_id, result.scores, result.trailer_url, ttl: ttl)
-
-      [result.scores, result.trailer_url]
+      Score::Missing.new
     end
   end
 
-  def self.get_local(wiki_id)
-    load(wiki_id)
+  def rotten_tomatoes
+    if rotten_tomatoes_value
+      Score::Percentage.new(rotten_tomatoes_value, "%")
+    elsif movie.rotten_id
+      Score::Incomplete.new
+    else
+      Score::Missing.new
+    end
   end
 
-  def self.save(wiki_id, scores, trailer_url, ttl: STD_TTL)
-    KeyValueStore.set_json(key(wiki_id), [scores, trailer_url], ex: ttl)
+  def rotten_tomatoes_audience
+    if rotten_tomatoes_audience_value
+      Score::Percentage.new(rotten_tomatoes_audience_value, "%")
+    elsif movie.rotten_id
+      Score::Incomplete.new
+    else
+      Score::Missing.new
+    end
   end
 
-  def self.load(wiki_id)
-    KeyValueStore.get_json(key(wiki_id))
+  def metacritic
+    if metacritic_value
+      Score::Percentage.new(metacritic_value, "/100")
+    elsif movie.metacritic_id
+      Score::Incomplete.new
+    else
+      Score::Missing.new
+    end
   end
 
-  def self.fetch(wiki_id)
+  def recent?
+    complete? || updated_at&.after?(5.minutes.ago)
+  end
+
+  def complete?
+    incomplete_sources.empty?
+  end
+
+  def incomplete_sources
+    SOURCES.filter_map do |platform|
+      score = send(platform)
+      if score.incomplete?
+        platform
+      end
+    end
+  end
+
+  def scores
+    SOURCES.map { send(_1) }
+  end
+
+  def self.get(wiki_id, fetch: true)
+    record = find_or_initialize_by(movie: Movie.find_by(wiki_id: wiki_id))
+
+    if record.recent? || !fetch
+      record
+    else
+      result = fetch(wiki_id, record.incomplete_sources)
+      # `compact`: Don't overwrite existing values on update
+      record.assign_attributes(result.compact.slice(*MovieScore::SOURCES).to_h { ["#{_1}_value", _2] })
+      # TODO: add `trailer_url` is somewhat hacked in here
+      record.trailer_url = result[:trailer_url] if result[:trailer_url]
+      record.save
+      record
+    end
+  end
+
+  def self.fetch(wiki_id, sources)
     movie = Movie.find_by(wiki_id: wiki_id)
     if movie
-      ScoreFetcher.new(movie).run
+      ScoreFetcher.new(movie, sources).run
     end
-  end
-
-  def self.key(wiki_id)
-    "#{KEY_PREFIX}#{wiki_id}"
-  end
-
-  def self.delete_all
-    KeyValueStore.delete_all("#{KEY_PREFIX}*")
   end
 end

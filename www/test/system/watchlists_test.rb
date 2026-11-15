@@ -6,18 +6,14 @@ class WatchlistsTest < ApplicationSystemTestCase
   fixtures :movies
 
   test "add a movie to and remove it from the watchlist" do
-    MovieScore.save(
-      "Q788822",
-      {
-        rotten_tomatoes: Score::Percentage.new("95"),
-        rotten_tomatoes_audience: Score::Percentage.new("82"),
-        imdb: Score::Decimal.new("8.0"),
-        metacritic: Score::Percentage.new("91.0")
-      },
-      nil
+    movie = movies(:her)
+    MovieScore.create!(
+      movie: movie,
+      rotten_tomatoes_audience_value: 82,
+      imdb_value: 8.0,
+      metacritic_value: 91.0
     )
     user = User.create!(email: "user@example.com")
-    movie = movies(:her)
 
     sign_in user
 
@@ -125,15 +121,12 @@ class WatchlistsTest < ApplicationSystemTestCase
   end
 
   test "requires sign in to add to watchlist" do
-    MovieScore.save(
-      "Q788822",
-      {
-        rotten_tomatoes: Score::Percentage.new("95"),
-        rotten_tomatoes_audience: Score::Percentage.new("82"),
-        imdb: Score::Decimal.new("8.0"),
-        metacritic: Score::Percentage.new("91.0")
-      },
-      nil
+    MovieScore.create!(
+      movie: movies(:her),
+      rotten_tomatoes_value: 95,
+      rotten_tomatoes_audience_value: 82,
+      imdb_value: 8.0,
+      metacritic_value: 91.0
     )
     user = User.create!(email: "user@example.com")
 

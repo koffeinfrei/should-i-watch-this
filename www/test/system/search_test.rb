@@ -6,7 +6,7 @@ class WatchlistsTest < ApplicationSystemTestCase
   fixtures :movies
 
   test "search for a movie" do
-    MovieScore.save("Q788822", {}, nil)
+    MovieScore.create!(movie: movies(:her))
 
     visit root_path
 

@@ -35,6 +35,7 @@ class Movie < ApplicationRecord
     order_within_rank: ORDER_SQL
 
   has_many :watchlist_items
+  has_one :score, class_name: "MovieScore"
 
   def imdb_url
     return unless imdb_id
