@@ -4,7 +4,8 @@ class MoviesController < ApplicationController
   def show
     wiki_id = params["wiki_id"]
 
-    @movie_score = MovieScore.get(wiki_id, fetch: false)
+    movie = Movie.find_by!(wiki_id: wiki_id)
+    @movie_score = MovieScore.get(movie, fetch: false)
     if @movie_score.recent?
       @recommendation = Recommender.new(@movie_score.scores).run
       @movie = Movie.find_by(wiki_id: wiki_id)
@@ -31,7 +32,8 @@ class MoviesController < ApplicationController
     title = params["title"]
     year = params["year"]
 
-    if MovieScore.get(wiki_id)
+    movie = Movie.find_by!(wiki_id: wiki_id)
+    if MovieScore.get(movie)
       redirect_to movie_path(wiki_id, title, year)
     else
       redirect_to not_found_path

@@ -64,26 +64,19 @@ class MovieScore < ApplicationRecord
     SOURCES.map { send(_1) }
   end
 
-  def self.get(wiki_id, fetch: true)
-    record = find_or_initialize_by(movie: Movie.find_by(wiki_id: wiki_id))
+  def self.get(movie, fetch: true)
+    record = find_or_initialize_by(movie: movie)
 
     if record.recent? || !fetch
       record
     else
-      result = fetch(wiki_id, record.incomplete_sources)
+      result = ScoreFetcher.new(movie, record.incomplete_sources).run
       # `compact`: Don't overwrite existing values on update
       record.assign_attributes(result.compact.slice(*MovieScore::SOURCES).to_h { ["#{_1}_value", _2] })
       # TODO: add `trailer_url` is somewhat hacked in here
       record.trailer_url = result[:trailer_url] if result[:trailer_url]
       record.save
       record
-    end
-  end
-
-  def self.fetch(wiki_id, sources)
-    movie = Movie.find_by(wiki_id: wiki_id)
-    if movie
-      ScoreFetcher.new(movie, sources).run
     end
   end
 end
