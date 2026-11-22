@@ -173,6 +173,8 @@ namespace :movies do
           rotten_id = parse_external_reference(json, "P1258")
           metacritic_id = parse_external_reference(json, "P1712")
           omdb_id = parse_external_reference(json, "P3302")
+          tmdb_id = parse_external_reference(json, "P4947")
+          tmdb_series_id = parse_external_reference(json, "P4983")
 
           directors = (json.dig("claims", "P57") || []).map { _1.dig("mainsnak", "datavalue", "value", "id") }
           actors = (json.dig("claims", "P161") || []).map { _1.dig("mainsnak", "datavalue", "value", "id") }
@@ -192,6 +194,7 @@ namespace :movies do
             rotten_id: rotten_id,
             metacritic_id: metacritic_id,
             omdb_id: omdb_id,
+            tmdb_id: series ? tmdb_series_id : tmdb_id,
             series: series,
             release_date: start_date || release_date,
             end_date: end_date,
